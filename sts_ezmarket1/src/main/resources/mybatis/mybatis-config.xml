@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<typeAliases>
+		<typeAlias type="ezmarket.BoardDTO" alias="boarddto"/>
+		<typeAlias type="ezmarket.CartDTO" alias="cartdto"/>
+		<typeAlias type="ezmarket.CategoryDTO" alias="categorydto"/>
+		<typeAlias type="ezmarket.MemberDTO" alias="memberdto"/>
+		<typeAlias type="ezmarket.OrderDTO" alias="orderdto"/>
+		<typeAlias type="ezmarket.QnaDTO" alias="qnadto"/>
+		<typeAlias type="ezmarket.ReviewDTO" alias="reviewdto"/>
+	</typeAliases>
+</configuration>
+
+
+
+
+
