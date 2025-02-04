@@ -71,33 +71,34 @@ public class MemberController {
     
 	//로그인
 		//로그인
-		@GetMapping("/login")
-		public ModelAndView login(String username, String password, HttpServletRequest request) {
-			ModelAndView mv = new ModelAndView();
-			HttpSession session = request.getSession(false);
-			
-			if (session != null && session.getAttribute("sessionid") != null) {
-				mv.setViewName("redirect:/?result=exist");
-			} else {
-				mv.setViewName("login");
-			}
-			
-			return mv;
-		}
+	    @GetMapping("/login")
+	    public ResponseEntity<String> login(HttpServletRequest request) {
+	        HttpSession session = request.getSession(false);
+	        
+	        if (session != null && session.getAttribute("sessionid") != null) {
+	            return ResponseEntity.status(HttpStatus.FOUND).header("Location", "/my").build();
+	        } else {
+	            return ResponseEntity.ok("");
+	        }
+	    }
 		
-		@PostMapping("/login")
-		public ModelAndView loginform(@RequestParam String username, @RequestParam String password, HttpServletRequest request) {
-			ModelAndView mv = new ModelAndView();
-			MemberDTO dto = memberService.getMember(username);
-			if (dto != null && dto.getPassword().equals(password)) {
-				HttpSession session = request.getSession();
-				session.setAttribute("sessionid", username);
-				mv.addObject("member",dto);
-			} else {
-				mv.setViewName("redirect:/login?result=wrong");
-			}
-			return mv;
-		}
+	    @PostMapping("/login")
+	    public ResponseEntity<String> loginform(@RequestParam String username, @RequestParam String password, HttpServletRequest request) {
+	        MemberDTO dto = memberService.getMember(username);
+	        
+	        if (dto != null && dto.getPassword().equals(password)) {
+	            HttpSession session = request.getSession();
+	            session.setAttribute("sessionid", username);
+	            return ResponseEntity.ok("로그인 성공"); 
+	        } else if (dto == null) {
+	        	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디가 틀렸습니다.");
+	        } else if (dto != null && !dto.getPassword().equals(password)){
+	        	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 틀렸습니다."); 
+	        }
+	        else {
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패."); 
+	        }
+	    }
 		
 		//로그아웃
 		@GetMapping("/logout")
@@ -114,12 +115,8 @@ public class MemberController {
 		    HttpSession session = request.getSession(false);
 		    if (session != null) {
 		        String username = (String) session.getAttribute("sessionid"); 
-		        if (username != null) {
-		            MemberDTO dto = memberService.getMember(username);
-		            if (dto != null) {
-		                return ResponseEntity.ok(dto);
-		            }
-		        }
+		        MemberDTO dto = memberService.getMember(username);
+		        return ResponseEntity.ok(dto);
 		    }
 		    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); 
 		}

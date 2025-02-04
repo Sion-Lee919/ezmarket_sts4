@@ -11,7 +11,7 @@
 	<!-- 회원가입 -->
 	<insert id="insertMember" parameterType="memberdto">
 		insert into member (member_id, username, realname, nickname, password, email, phone, address, join_date) 
-		values (#{member_id},#{username}, #{realname}, #{nickname}, #{password}, #{email}, #{phone}, #{address}, sysdate)
+		values (#{member_id},#{username}, #{realname}, #{nickname}, #{password}, #{email, jdbcType=VARCHAR}, #{phone}, #{address}, sysdate)
 	</insert>
 	
 	<!-- 중복확인 -->
