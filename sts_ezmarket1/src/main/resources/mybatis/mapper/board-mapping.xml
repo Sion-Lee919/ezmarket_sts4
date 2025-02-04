@@ -3,5 +3,14 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="ezmarket.BoardMapper">
+  <select id="getItemDetail" resultType="boarddto" parameterType="int">
+  	select *
+  	from product
+  	where product_id=#{product_id}
+  </select>
   
+  <select id="getAllItems" resultType="boarddto" >
+  	select *
+  	from product
+  </select>
 </mapper>
