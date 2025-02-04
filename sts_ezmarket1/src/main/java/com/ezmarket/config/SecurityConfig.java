@@ -29,8 +29,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // CSRF 비활성화
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 요청 허용
-                .requestMatchers("/oauth2/**", "/login/oauth2/**", "/user").permitAll() // `/user`도 인증 없이 허용
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
             .exceptionHandling(exception -> exception
                 .authenticationEntryPoint((request, response, authException) -> {
