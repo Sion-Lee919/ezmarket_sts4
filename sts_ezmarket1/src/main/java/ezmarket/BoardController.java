@@ -19,9 +19,7 @@ public class BoardController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/item/{itemid}")
 	public BoardDTO GetItemDetail(@PathVariable("itemid") int product_id) {
-		System.out.println("hwre1==>"+product_id);
 		BoardDTO dto = boardService.getItemDetail(product_id);
-		System.out.println("hwre1==>"+dto);
 		return dto;
 		
 	}
@@ -30,11 +28,17 @@ public class BoardController {
 	@GetMapping("/getallitemsforsearch")
 	public ArrayList<BoardDTO> GetAllItems(){
 		ArrayList<BoardDTO> dtoList = boardService.getAllItems();
+
 		System.out.println(dtoList);
+
 		return dtoList;
 		
 	}
 
 	
 	
+
 }
+
+
+

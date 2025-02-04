@@ -9,7 +9,7 @@ Thumbs.db
 *.settings/
 bin/
 target/
-sts_ezmarket1/pom.xml
+
 
 ### 3. IntelliJ IDEA 관련 파일 무시 (혹시 사용한다면) ###
 .idea/
