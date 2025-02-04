@@ -1,5 +1,7 @@
 package ezmarket;
 
+import java.util.ArrayList;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -8,5 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface BoardMapper {
 
 	BoardDTO getItemDetail(int product_id);
+
+	ArrayList<BoardDTO> getAllItems();
 
 }

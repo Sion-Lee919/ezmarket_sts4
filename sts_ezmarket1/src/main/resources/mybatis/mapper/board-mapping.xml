@@ -8,4 +8,9 @@
   	from product
   	where product_id=#{product_id}
   </select>
+  
+  <select id="getAllItems" resultType="boarddto" >
+  	select *
+  	from product
+  </select>
 </mapper>

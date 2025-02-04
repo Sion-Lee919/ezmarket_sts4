@@ -16,5 +16,6 @@ public class EzmarketApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EzmarketApplication.class, args);
 	}
+	
 
 }
