@@ -8,4 +8,6 @@ public interface BoardService {
 
 	ArrayList<BoardDTO> getAllItems();
 
+
 }
+

@@ -28,10 +28,17 @@ public class BoardController {
 	@GetMapping("/getallitemsforsearch")
 	public ArrayList<BoardDTO> GetAllItems(){
 		ArrayList<BoardDTO> dtoList = boardService.getAllItems();
+
+		System.out.println(dtoList);
+
 		return dtoList;
 		
 	}
 
 	
 	
+
 }
+
+
+

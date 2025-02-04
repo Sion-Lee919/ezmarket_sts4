@@ -21,4 +21,6 @@ public class BoardMapperService implements BoardService {
 		return mapper.getAllItems();
 	}
 
+
 }
+

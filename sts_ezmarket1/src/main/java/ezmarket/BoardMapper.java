@@ -13,4 +13,8 @@ public interface BoardMapper {
 
 	ArrayList<BoardDTO> getAllItems();
 
+
 }
+
+
+

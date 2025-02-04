@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberDTO {
-	String member_id;
+	Long member_id;
 	String username;
 	String realname;
 	String nickname;
@@ -22,7 +24,7 @@ public class MemberDTO {
 	String member_kick_comment;
 	
 	//판매자
-	String brand_id;
+	Long brand_id;
 	String brandname;
 	String brandlogo_url;
 	String brand_number;
