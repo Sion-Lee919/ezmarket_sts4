@@ -37,14 +37,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
+		
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-oauth2-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-oauth2-client</artifactId>
+</dependency>
+
+	
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -90,11 +89,12 @@
 			<version>3.0.4</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+		
+		<!--<dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>-->
+		
 		<!-- 추가 -->
 		<!-- for servlet -->		
 <!--		<dependency>-->
@@ -104,11 +104,11 @@
 <!--		    <scope>provided</scope>-->
 <!--		</dependency>		-->
 		<!-- for jsp -->
-		<dependency>
+		<!--<dependency>
 	        <groupId>org.apache.tomcat.embed</groupId>
 	        <artifactId>tomcat-embed-jasper</artifactId>
 	        <scope>provided</scope>
-	    </dependency>
+	    </dependency>-->
 		<!-- for jsp jstl -->
 		<dependency>
 		    <groupId>org.glassfish.web</groupId>
@@ -128,11 +128,11 @@
 		</dependency>
 		
 		<!--구글 의존성-->
-		<dependency>
+		<!--<dependency>
     <groupId>com.google.api-client</groupId>
     <artifactId>google-api-client</artifactId>
     <version>2.2.0</version>
-</dependency>
+</dependency>-->
 
 <dependency>
     <groupId>com.google.http-client</groupId>
@@ -140,11 +140,11 @@
     <version>1.43.3</version>
 </dependency>
 
-<dependency>
+<!--<dependency>
     <groupId>com.google.oauth-client</groupId>
     <artifactId>google-oauth-client</artifactId>
     <version>1.34.1</version>
-</dependency>
+</dependency>-->
 
 <dependency>
     <groupId>com.google.oauth-client</groupId>
@@ -177,6 +177,8 @@
     <version>0.11.5</version>
     <scope>runtime</scope>
 </dependency>
+
+
 
 		
 	</dependencies>
