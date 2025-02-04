@@ -7,6 +7,4 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface BoardMapper {
 
-	BoardDTO getItemDetail(int product_id);
-
 }
