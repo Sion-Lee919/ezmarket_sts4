@@ -29,8 +29,6 @@ pom.xml.next
 release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
-.mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
 
 ### 6. Spring Boot 환경 설정 파일 무시 ###
 application-*.properties
