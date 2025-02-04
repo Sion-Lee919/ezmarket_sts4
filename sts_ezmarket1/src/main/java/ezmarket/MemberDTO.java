@@ -2,11 +2,15 @@ package ezmarket;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberDTO {
-	String member_id;
+	Long member_id;
 	String username;
 	String realname;
 	String nickname;
@@ -22,8 +26,8 @@ public class MemberDTO {
 	String member_kick_comment;
 	
 	//판매자
-	String brand_id;
-	String brandname;
+	Integer brand_id;
+	Long brandname;
 	String brandlogo_url;
 	String brand_number;
 	String brandlicense_url;
