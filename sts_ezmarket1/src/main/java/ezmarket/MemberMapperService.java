@@ -42,26 +42,4 @@ public class MemberMapperService implements MemberService {
 		public boolean isPhoneAvailable(String phone) {
 			return mapper.checkPhone(phone) == 0;
 		}
-	
-	@Override
-	@Transactional
-	public String updateMember(MemberDTO dto) {
-		mapper.updateMember(dto);
-		return "success";
-	}
-
-//// 수정전	
-	
-	//계정 삭제
-	@Override
-	public void deleteMember(String username) {
-		mapper.deleteMember(username);
-	}
-	
-	//관리자 - 회원 관리
-	@Override
-	public List<MemberDTO> getAllMembers() {
-		return mapper.getAllMembers();
-	}
-	
 }

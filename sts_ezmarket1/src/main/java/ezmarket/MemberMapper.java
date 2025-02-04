@@ -20,11 +20,4 @@ public interface MemberMapper {
 		int checkNickname(String nickname);
 		int checkEmail(String email);
 		int checkPhone(String phone);
-		
-//// 수정전	
-	int updateMember(MemberDTO dto);
-
-	void deleteMember(String username);
-
-	List<MemberDTO> getAllMembers();
 }

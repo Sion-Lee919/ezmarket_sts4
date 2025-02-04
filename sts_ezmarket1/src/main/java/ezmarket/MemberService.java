@@ -1,7 +1,5 @@
 package ezmarket;
 
-import java.util.List;
-
 public interface MemberService {
 	
 	//회원가입
@@ -15,13 +13,4 @@ public interface MemberService {
 	  	boolean isNicknameAvailable(String nickname);
 	  	boolean isEmailAvailable(String email);
 	  	boolean isPhoneAvailable(String phone);
-
-//// 수정전
-	    String updateMember(MemberDTO dto);
-	
-		List<MemberDTO> getAllMembers();
-
-	
-
-	void deleteMember(String username);
 }
