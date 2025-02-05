@@ -85,6 +85,8 @@ public class MemberController {
 	    @PostMapping("/login")
 	    public ResponseEntity<String> loginform(@RequestParam String username, @RequestParam String password, HttpServletRequest request) {
 	        MemberDTO dto = memberService.getMember(username);
+        	System.out.println(dto);
+
 	        
 	        if (dto != null && dto.getPassword().equals(password)) {
 	            HttpSession session = request.getSession();
