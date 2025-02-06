@@ -21,6 +21,18 @@ public class BoardMapperService implements BoardService {
 		return mapper.getAllItems();
 	}
 
+	@Override
+	public ArrayList<BoardDTO> getBrandItems(int member_id) {
+		// TODO Auto-generated method stub
+		return mapper.getBrandItems(member_id);
+	}
+
+	@Override
+	public boolean registerItem(BoardDTO dto) {
+		// TODO Auto-generated method stub
+		return mapper.registerItem(dto);
+	}
+
 
 }
 

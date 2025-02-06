@@ -36,7 +36,6 @@ public class MemberController {
 	    @PostMapping("/joinN")
 	    public String join(@RequestBody MemberDTO dto) {
 	        String result = memberService.joinMember(dto);
-	        System.out.println(result);
 	        return "redirect:login";
 	    }
 	    
@@ -85,7 +84,6 @@ public class MemberController {
 	    @PostMapping("/login")
 	    public ResponseEntity<String> loginform(@RequestParam String username, @RequestParam String password, HttpServletRequest request) {
 	        MemberDTO dto = memberService.getMember(username);
-        	System.out.println(dto);
 
 	        
 	        if (dto != null && dto.getPassword().equals(password)) {
@@ -117,6 +115,7 @@ public class MemberController {
 		    HttpSession session = request.getSession(false);
 		    if (session != null) {
 		        String username = (String) session.getAttribute("sessionid"); 
+		        System.out.println(username);
 		        MemberDTO dto = memberService.getMember(username);
 		        return ResponseEntity.ok(dto);
 		    }

@@ -8,6 +8,11 @@ public interface BoardService {
 
 	ArrayList<BoardDTO> getAllItems();
 
+	ArrayList<BoardDTO> getBrandItems(int member_id);
+
+	boolean registerItem(BoardDTO dto);
+
+
 
 }
 
