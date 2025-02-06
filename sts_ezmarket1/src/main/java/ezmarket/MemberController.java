@@ -1,25 +1,27 @@
 package ezmarket;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.ezmarket.cookie.JWTUtil;
+
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletResponse;
 
-@Controller
+@RestController
 public class MemberController {
 
 	@Autowired
@@ -28,11 +30,6 @@ public class MemberController {
 	
 	//회원가입
 		//회원가입
-	    @GetMapping("/joinN")
-	    public String showJoinrForm() {
-	        return "joinN"; 
-	    }
-	
 	    @PostMapping("/joinN")
 	    public String join(@RequestBody MemberDTO dto) {
 	        String result = memberService.joinMember(dto);
@@ -71,55 +68,70 @@ public class MemberController {
     
 	//로그인
 		//로그인
-	    @GetMapping("/login")
-	    public ResponseEntity<String> login(HttpServletRequest request) {
-	        HttpSession session = request.getSession(false);
-	        
-	        if (session != null && session.getAttribute("sessionid") != null) {
-	            return ResponseEntity.status(HttpStatus.FOUND).header("Location", "/my").build();
-	        } else {
-	            return ResponseEntity.ok("");
-	        }
-	    }
-		
 	    @PostMapping("/login")
-	    public ResponseEntity<String> loginform(@RequestParam String username, @RequestParam String password, HttpServletRequest request) {
-	        MemberDTO dto = memberService.getMember(username);
-        	System.out.println(dto);
+	    public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO, HttpServletResponse response) {
+	        MemberDTO dto = memberService.getMember(memberDTO.getUsername());
 
-	        
-	        if (dto != null && dto.getPassword().equals(password)) {
-	            HttpSession session = request.getSession();
-	            session.setAttribute("sessionid", username);
-	            return ResponseEntity.ok("로그인 성공"); 
-	        } else if (dto == null) {
-	        	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디가 틀렸습니다.");
-	        } else if (dto != null && !dto.getPassword().equals(password)){
-	        	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 틀렸습니다."); 
-	        }
-	        else {
-	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패."); 
+	        if (dto != null && dto.getPassword().equals(memberDTO.getPassword())) {
+	        	String token = JWTUtil.generateToken(dto);
+	        	
+	            Cookie cookie = new Cookie("jwt_token", token);
+	            cookie.setPath("/"); 
+	            cookie.setMaxAge(24 * 60 * 60); 
+	            response.addCookie(cookie);
+	            cookie.setAttribute("SameSite", "None");
+
+	            Map<String, String> responseBody = new HashMap<>();
+	            responseBody.put("message", "로그인 성공"); 
+	            return ResponseEntity.ok(responseBody);
+	            
+	        } else {
+	            Map<String, String> errorResponse = new HashMap<>();
+
+	            if (dto == null) {
+	                errorResponse.put("message", "아이디가 틀렸습니다.");
+	            } else {
+	                errorResponse.put("message", "비밀번호가 틀렸습니다.");
+	            }
+
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
 	        }
 	    }
 		
 		//로그아웃
-		@GetMapping("/logout")
-		public String logout(HttpServletRequest request) {
-			HttpSession session = request.getSession();
-			session.removeAttribute("sessionid");
-			return "redirect:/login";
-		}
+	    @PostMapping("/logout")
+	    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+	    	System.out.println("로그아웃");
+	        Cookie jwtCookie = new Cookie("jwt_token", null); 
+	        jwtCookie.setMaxAge(0);
+	        jwtCookie.setPath("/");
+	        
+	        return ResponseEntity.ok("로그아웃 성공");
+	    }
 	
 	//내정보
 		//내정보
-		@GetMapping("/userinfo")
-		public ResponseEntity<MemberDTO> getUserInfo(HttpServletRequest request) {
-		    HttpSession session = request.getSession(false);
-		    if (session != null) {
-		        String username = (String) session.getAttribute("sessionid"); 
-		        MemberDTO dto = memberService.getMember(username);
-		        return ResponseEntity.ok(dto);
-		    }
-		    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); 
-		}
+	    @GetMapping("/userinfo")
+	    public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
+	        String token = request.getHeader("Authorization");
+
+	        if (token!= null && token.startsWith("Bearer")) {
+	            token = token.substring(7);
+
+	            String username = JWTUtil.validateAndGetUserId(token); 
+
+	            if (username!= null) { 
+	                MemberDTO dto = memberService.getMember(username);
+	                return ResponseEntity.ok(dto);
+	            } else { 
+	                Map<String, String> errorResponse = new HashMap<>();
+	                errorResponse.put("message", "토큰이 유효하지 않습니다.");
+	                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+	            }
+	        } else { 
+	            Map<String, String> errorResponse = new HashMap<>();
+	            errorResponse.put("message", "Authorization 헤더 오류.");
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+	        }
+	    }
 }
