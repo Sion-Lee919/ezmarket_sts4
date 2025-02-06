@@ -33,7 +33,6 @@ public class MemberController {
 	    @PostMapping("/joinN")
 	    public String join(@RequestBody MemberDTO dto) {
 	        String result = memberService.joinMember(dto);
-	        System.out.println(result);
 	        return "redirect:login";
 	    }
 	    
@@ -69,8 +68,10 @@ public class MemberController {
 	//로그인
 		//로그인
 	    @PostMapping("/login")
+
 	    public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO, HttpServletResponse response) {
 	        MemberDTO dto = memberService.getMember(memberDTO.getUsername());
+
 
 	        if (dto != null && dto.getPassword().equals(memberDTO.getPassword())) {
 	        	String token = JWTUtil.generateToken(dto);
@@ -110,7 +111,7 @@ public class MemberController {
 	    }
 	
 	//내정보
-		//내정보
+
 	    @GetMapping("/userinfo")
 	    public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
 	        String token = request.getHeader("Authorization");
@@ -134,4 +135,5 @@ public class MemberController {
 	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
 	        }
 	    }
+
 }
