@@ -13,10 +13,4 @@ public interface MemberService {
 	  	boolean isNicknameAvailable(String nickname);
 	  	boolean isEmailAvailable(String email);
 	  	boolean isPhoneAvailable(String phone);
-	  	
-	  	//Id, Pw 찾기
-	  	MemberDTO findId(String emailOrPhone);
-	  	MemberDTO findPw(String username, String realname, String email, String phone);
-	  	boolean resetPw(String username, String newPassword);
-
 }

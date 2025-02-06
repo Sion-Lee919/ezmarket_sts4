@@ -1,5 +1,7 @@
 package ezmarket;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -18,11 +20,4 @@ public interface MemberMapper {
 		int checkNickname(String nickname);
 		int checkEmail(String email);
 		int checkPhone(String phone);
-		
-		//Id, Pw 찾기
-		MemberDTO findIdByEmailOrPhone(String emailOrphone);
-		MemberDTO findPwByUsernameAndRealnameAndEmailAndPhone(String username, String realname, String email, String phone);
-		int resetPwOnly(String username, String newPassword);
-		
-		//회원정보수정
 }

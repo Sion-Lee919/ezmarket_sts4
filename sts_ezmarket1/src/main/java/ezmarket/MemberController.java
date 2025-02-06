@@ -1,6 +1,5 @@
 package ezmarket;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +20,6 @@ import com.ezmarket.cookie.JWTUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 @RestController
 public class MemberController {
@@ -39,7 +37,7 @@ public class MemberController {
 	        return "redirect:login";
 	    }
 	    
-	    //중복 확인 - 아이디 확인
+	    //중복 확인
 	    @GetMapping("/checkId")
 	    @ResponseBody
 	    public String checkDuplicatedId(@RequestParam("username") String username) {
@@ -47,7 +45,6 @@ public class MemberController {
 	        return isAvailable ? "사용 가능한 아이디입니다." : "중복된 아이디입니다."; 
 	    }
 	    
-	    //중복 확인 - 닉네임 확인
 	    @GetMapping("/checkNickname")
 	    @ResponseBody
 	    public String checkDuplicatedNickname(@RequestParam("nickname") String nickname) {
@@ -55,7 +52,6 @@ public class MemberController {
 	        return isAvailable ? "사용 가능한 닉네임입니다." : "중복된 닉네임입니다."; 
 	    }
 	    
-	    //중복 확인 - 이메일 확인
 	    @GetMapping("/checkEmail")
 	    @ResponseBody
 	    public String checkDuplicatedEmail(@RequestParam("email") String email) {
@@ -63,7 +59,6 @@ public class MemberController {
 	        return isAvailable ? "사용 가능한 이메일입니다." : "중복된 이메일입니다."; 
 	    }
 	    
-	    //중복 확인 - 전화번호 확인
 	    @GetMapping("/checkPhone")
 	    @ResponseBody
 	    public String checkDuplicatedPhone(@RequestParam("phone") String phone) {
@@ -82,7 +77,7 @@ public class MemberController {
 	        	
 	            Cookie cookie = new Cookie("jwt_token", token);
 	            cookie.setPath("/"); 
-	            cookie.setMaxAge(60 * 60); 
+	            cookie.setMaxAge(24 * 60 * 60); 
 	            response.addCookie(cookie);
 	            cookie.setAttribute("SameSite", "None");
 
@@ -113,66 +108,6 @@ public class MemberController {
 	        
 	        return ResponseEntity.ok("로그아웃 성공");
 	    }
-	    
-	    //아이디 찾기
-	    @PostMapping("/findId")
-	    public ResponseEntity<?> findId(@RequestBody Map<String, String> requestBody) {
-	    	String emailOrPhone = requestBody.get("emailOrPhone");
-	        MemberDTO dto = memberService.findId(emailOrPhone);
-
-	        if (dto != null) {
-	            Map<String, String> responseBody = new HashMap<>();
-	            responseBody.put("username", dto.getUsername()); 
-	            return ResponseEntity.ok(responseBody);
-	        } else {
-	            Map<String, String> errorResponse = new HashMap<>();
-	            errorResponse.put("message", "해당 이메일 또는 전화번호로 가입된 계정이 없습니다.");
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-	        }
-	    }
-	    
-	    //비밀번호 찾기 -> 일단은 정보들 다 확인되면 재설정되게 -> 가능하면 이메일 인증 API 넣기[넣는다면 회원가입도](아이디, 이메일 동일한 경우)
-	    @PostMapping("/findPw")
-	    public ResponseEntity<?> findPw(@RequestBody Map<String, String> requestBody, HttpSession session) {
-	    	String username = requestBody.get("username");
-	        String realname = requestBody.get("realname");
-	        String email = requestBody.get("email");
-	        String phone = requestBody.get("phone");
-	        
-	        MemberDTO dto = memberService.findPw(username, realname, email, phone);
-
-	        if (dto != null) {
-	        	session.setAttribute("canResetPw", true);
-	        	Map<String, String> responseBody = new HashMap<>();
-	            responseBody.put("message", "계정 확인 완료. 비밀번호를 재설정해주세요.");
-	            return ResponseEntity.ok(responseBody);
-	        } else {
-	        	session.removeAttribute("canResetPw");
-	        	Map<String, String> errorResponse = new HashMap<>();
-	            errorResponse.put("message", "해당 정보로 가입된 계정이 없습니다.");
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-	        }
-	    }
-	    
-	    //비밀번호 재설정
-	    @PostMapping("/resetPw")
-	    public ResponseEntity<?> resetPw(@RequestBody Map<String, String> requestBody, HttpSession session) {
-	    	String username = requestBody.get("username");
-	    	String newPassword = requestBody.get("newPassword");
-	    	
-	    	boolean isUpdated = memberService.resetPw(username, newPassword);
-	    	
-	    	if (isUpdated) {
-	    		Map<String, String> responseBody = new HashMap<>();
-	    		responseBody.put("message", "비밀번호가 변경되었습니다. 로그인 창으로 이동합니다.");
-	    		return ResponseEntity.ok(responseBody);
-	    	} else { 
-	            Map<String, String> errorResponse = new HashMap<>();
-	            errorResponse.put("message", "비밀번호 변경에 실패했습니다. 다시 시도해주세요.");
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse); 
-	    	}
-	    }
-	    
 	
 	//내정보
 		//내정보

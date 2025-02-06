@@ -30,18 +30,6 @@
 	<select id="checkPhone" resultType="int" parameterType="String"> 
 		select count(*) from member where phone = #{phone}
 	</select>
-	
-	<select id="findIdByEmailOrPhone" resultType="memberdto" parameterType="String">
-		select username from member where email = #{emailOrPhone} OR phone = #{emailOrPhone}
-	</select>
-	
-	<select id="findPwByUsernameAndRealnameAndEmailAndPhone" resultType="memberdto" parameterType="map">
-    	select * from member where username = #{username} and realname = #{realname} and email = #{email} and phone = #{phone}
-	</select>
-	
-	<update id="resetPwOnly" parameterType="map">
-		update member set password = #{newPassword} where username = #{username}
-	</update> 
 
 <!-- 수정전 -->	
 	<update id="updateMember" parameterType="memberdto">
