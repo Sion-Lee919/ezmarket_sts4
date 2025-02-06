@@ -27,7 +27,7 @@ public class HomeController {
     public RedirectView home(@AuthenticationPrincipal OAuth2User user) {
         if (user == null) {
             logger.info("User is null, redirecting to login page.");
-            return new RedirectView("http://localhost:4000/login");
+            return new RedirectView("http://localhost:3000/loginn");
         }
         System.out.println(" HomeController에서 saveUser() 호출");
         userService.saveUser(user);
