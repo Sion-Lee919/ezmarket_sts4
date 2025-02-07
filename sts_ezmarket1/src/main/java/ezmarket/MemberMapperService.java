@@ -42,4 +42,9 @@ public class MemberMapperService implements MemberService {
 		public boolean isPhoneAvailable(String phone) {
 			return mapper.checkPhone(phone) == 0;
 		}
+		
+		@Override
+		public BrandDTO getBrand(int member_id) {
+			return mapper.getBrand(member_id);
+		}
 }

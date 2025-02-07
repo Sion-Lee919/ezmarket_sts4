@@ -13,4 +13,6 @@ public interface MemberService {
 	  	boolean isNicknameAvailable(String nickname);
 	  	boolean isEmailAvailable(String email);
 	  	boolean isPhoneAvailable(String phone);
+
+		BrandDTO getBrand(int member_id);
 }

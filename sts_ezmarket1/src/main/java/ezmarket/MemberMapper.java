@@ -20,4 +20,6 @@ public interface MemberMapper {
 		int checkNickname(String nickname);
 		int checkEmail(String email);
 		int checkPhone(String phone);
+
+		BrandDTO getBrand(int member_id);
 }
