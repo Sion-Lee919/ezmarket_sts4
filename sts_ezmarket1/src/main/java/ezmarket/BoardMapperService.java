@@ -33,6 +33,18 @@ public class BoardMapperService implements BoardService {
 		return mapper.registerItem(dto);
 	}
 
+	@Override
+	public boolean updateItem(BoardDTO dto) {
+		// TODO Auto-generated method stub
+		return mapper.updateItem(dto) > 0;
+	}
+
+	@Override
+	public boolean deleteItem(int product_id) {
+		// TODO Auto-generated method stub
+		return mapper.deleteItem(product_id) > 0;
+	}
+
 
 }
 
