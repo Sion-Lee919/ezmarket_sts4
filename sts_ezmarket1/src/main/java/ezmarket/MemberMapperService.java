@@ -43,8 +43,27 @@ public class MemberMapperService implements MemberService {
 			return mapper.checkPhone(phone) == 0;
 		}
 		
+
 		@Override
 		public BrandDTO getBrand(int member_id) {
 			return mapper.getBrand(member_id);
 		}
+
+        //Id, Pw 찾기
+        @Override
+        public MemberDTO findId(String emailOrPhone) {
+            return mapper.findIdByEmailOrPhone(emailOrPhone);
+        }
+        
+        @Override
+        public MemberDTO findPw(String username, String realname, String email, String phone) {
+            return mapper.findPwByUsernameAndRealnameAndEmailAndPhone(username, realname, email, phone);
+        }
+        
+        @Override
+        public boolean resetPw(String username, String newPassword) {
+            int result = mapper.resetPwOnly(username, newPassword);
+            return result > 0;
+        }
+
 }

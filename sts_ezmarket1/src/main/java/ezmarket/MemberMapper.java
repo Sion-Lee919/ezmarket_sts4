@@ -22,4 +22,13 @@ public interface MemberMapper {
 		int checkPhone(String phone);
 
 		BrandDTO getBrand(int member_id);
+
+		
+        //Id, Pw 찾기
+        MemberDTO findIdByEmailOrPhone(String emailOrphone);
+        MemberDTO findPwByUsernameAndRealnameAndEmailAndPhone(String username, String realname, String email, String phone);
+        int resetPwOnly(String username, String newPassword);
+        
+        //회원정보수정
+
 }
