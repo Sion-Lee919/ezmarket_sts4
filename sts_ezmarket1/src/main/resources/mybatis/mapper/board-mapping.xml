@@ -25,4 +25,26 @@
   	insert into product 
   	values(#{product_id}, #{brand_id}, #{name} , #{description} , #{alcohol} ,#{volume}, #{price}, #{stock_quantity}, sysdate , sysdate ,#{product_ingredient} ,#{product_region},#{bigcategory} ,#{subcategory} , #{image_url})
   </insert>
+  
+  <update id="updateItem" parameterType="boarddto">
+        update product
+        set
+        name = #{name},
+        description = #{description},
+		alcohol = #{alcohol},
+		volume = #{volume},
+		price = #{price},
+		stock_quantity = #{stock_quantity},
+		product_ingredient = #{product_ingredient},
+		product_region = #{product_region},
+		bigcategory = #{bigcategory},
+		subcategory = #{subcategory},
+		image_url = #{image_url}
+        where product_id = #{product_id}
+    </update>
+  
+  	<delete id="deleteItem" parameterType="int">
+    	delete from product where product_id = #{product_id}
+	</delete>
+
 </mapper>
