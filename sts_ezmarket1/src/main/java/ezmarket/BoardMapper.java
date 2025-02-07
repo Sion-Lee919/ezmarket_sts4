@@ -13,7 +13,7 @@ public interface BoardMapper {
 
 	ArrayList<BoardDTO> getAllItems();
 
-	ArrayList<BoardDTO> getBrandItems(int member_id);
+	ArrayList<BoardDTO> getBrandItems(int brand_id);
 
 	boolean registerItem(BoardDTO dto);
 

@@ -18,11 +18,11 @@
   <select id="getBrandItems" resultType="boarddto" parameterType="int">
   select *
   from product
-  where seller_id=#{seller_id}
+  where brand_id=#{brand_id}
   </select>
   
   <insert id="registerItem" parameterType="boarddto">
   	insert into product 
-  	values(#{product_id}, #{seller_id}, #{name} , #{description} ,#{price}, #{stock_quantity}, sysdate , sysdate , #{image_url})
+  	values(#{product_id}, #{brand_id}, #{name} , #{description} , #{alcohol} ,#{volume}, #{price}, #{stock_quantity}, sysdate , sysdate ,#{product_ingredient} ,#{product_region},#{bigcategory} ,#{subcategory} , #{image_url})
   </insert>
 </mapper>

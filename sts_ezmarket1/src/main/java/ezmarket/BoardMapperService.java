@@ -22,9 +22,9 @@ public class BoardMapperService implements BoardService {
 	}
 
 	@Override
-	public ArrayList<BoardDTO> getBrandItems(int member_id) {
+	public ArrayList<BoardDTO> getBrandItems(int brand_id) {
 		// TODO Auto-generated method stub
-		return mapper.getBrandItems(member_id);
+		return mapper.getBrandItems(brand_id);
 	}
 
 	@Override

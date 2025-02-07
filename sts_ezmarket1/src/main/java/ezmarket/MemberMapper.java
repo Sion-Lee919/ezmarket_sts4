@@ -20,6 +20,9 @@ public interface MemberMapper {
 		int checkNickname(String nickname);
 		int checkEmail(String email);
 		int checkPhone(String phone);
+
+		BrandDTO getBrand(int member_id);
+
 		
         //Id, Pw 찾기
         MemberDTO findIdByEmailOrPhone(String emailOrphone);
@@ -27,4 +30,5 @@ public interface MemberMapper {
         int resetPwOnly(String username, String newPassword);
         
         //회원정보수정
+
 }

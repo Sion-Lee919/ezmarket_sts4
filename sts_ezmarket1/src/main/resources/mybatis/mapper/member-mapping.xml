@@ -56,6 +56,21 @@
 		select id, name, pw, phone from member
 	</select>
 	
+	<!-- brand table 불러오기 김민수 수정중 -->
+	<resultMap type="ezmarket.BrandDTO" id="brand">
+		<id property="member_id" column="member_id"/>
+		<result property="brand_id" column="brand_id"/>
+		
+		<association property="memberdto" javaType="ezmarket.MemberDTO">
+			<result property="member_id" column="member_id"/>
+		</association>
+	</resultMap>
+	<select id="getBrand" resultMap="brand">
+		select br.brand_id
+		from brand br join member m on br.member_id = m.member_id
+		where br.member_id = #{member_id}
+	</select>
+	
 </mapper>
 
 

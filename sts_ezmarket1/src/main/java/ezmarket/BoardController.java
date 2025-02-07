@@ -46,8 +46,9 @@ public class BoardController {
 	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/getbranditems/{brandid}")
-	public ArrayList<BoardDTO> getBrandItems(@PathVariable("brandid") int member_id) {
-		ArrayList<BoardDTO> dtoList = boardService.getBrandItems(member_id);
+	public ArrayList<BoardDTO> getBrandItems(@PathVariable("brandid") int brand_id) {
+		ArrayList<BoardDTO> dtoList = boardService.getBrandItems(brand_id);
+		System.out.println(dtoList);
 		return dtoList;
 		
 	}
@@ -74,7 +75,7 @@ public class BoardController {
 			file1.transferTo( new java.io.File(savePath +  newfilename1));
 			dto.setImage_url(newfilename1); // 업로드한 파일을 서버 저장에 이름 -- db insert
 		}
-		System.out.println(dto.getProduct_id());
+		System.out.println(dto.getVolume());
 		boolean result = boardService.registerItem(dto);
 	    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 	}

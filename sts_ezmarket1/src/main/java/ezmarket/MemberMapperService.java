@@ -43,6 +43,12 @@ public class MemberMapperService implements MemberService {
 			return mapper.checkPhone(phone) == 0;
 		}
 		
+
+		@Override
+		public BrandDTO getBrand(int member_id) {
+			return mapper.getBrand(member_id);
+		}
+
         //Id, Pw 찾기
         @Override
         public MemberDTO findId(String emailOrPhone) {
@@ -59,4 +65,5 @@ public class MemberMapperService implements MemberService {
             int result = mapper.resetPwOnly(username, newPassword);
             return result > 0;
         }
+
 }
