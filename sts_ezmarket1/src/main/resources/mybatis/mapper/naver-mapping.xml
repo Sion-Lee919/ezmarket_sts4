@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="google.NaverUserMapper">
+    <select id="countByNaverId" parameterType="string" resultType="int">
+        SELECT COUNT(*) FROM users_naver WHERE naver_id = #{naverId}
+    </select>
+
+    <insert id="saveUser" >
+    INSERT INTO users_naver (naver_id, email, name, picture)
+    VALUES (#{naverId}, #{email}, #{name}, #{picture})
+</insert>
+
+    <update id="updateUser">
+        UPDATE users_naver
+        SET email = #{email}, name = #{name}, picture = #{picture}
+        WHERE naver_id = #{naverId}
+    </update>
+</mapper>

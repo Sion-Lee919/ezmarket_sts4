@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"ezmarket", "google","com.ezmarket.config"})
+@ComponentScan(basePackages = {"ezmarket", "google", "com.ezmarket.config"})
 @MapperScan(basePackages = {"ezmarket", "google"})
 
 public class EzmarketApplication {

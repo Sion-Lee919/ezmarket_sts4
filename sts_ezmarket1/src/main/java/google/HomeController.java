@@ -31,10 +31,18 @@ public class HomeController {
     public RedirectView home(@AuthenticationPrincipal OAuth2User user) {
         if (user == null) {
             logger.info("User is null, redirecting to login page.");
-            return new RedirectView("http://localhost:3000/loginn");
+            return new RedirectView("http://localhost:3000/login");
         }
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String provider = "unknown";
+
+        if (authentication instanceof OAuth2AuthenticationToken) {
+            provider = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
+        }
+        
         System.out.println(" HomeController에서 saveUser() 호출");
-        userService.saveUser(user);
+        userService.saveUser(user, provider);
         return new RedirectView("http://localhost:3000/home"); // 로그인 후 리디렉트
     }
     
@@ -56,23 +64,34 @@ public class HomeController {
         System.out.println("로그인 : " + registrationId);//구분추가
         
         if ("google".equals(registrationId)) {
-            userService.saveUser(user);
+            userService.saveUser(user, "google");
+            Map<String, Object> userInfo = Map.of(
+                    "authenticated", true,
+                    "provider", registrationId,// 구분추가
+                    "name", user.getAttribute("name"),
+                    "email", user.getAttribute("email"),
+                    "picture", user.getAttribute("picture")
+                );
+                return ResponseEntity.ok(userInfo);
+        } else if ("naver".equals(registrationId)) {
+        	userService.saveUser(user, "naver");  
+            Map<String, Object> userInfo = Map.of(
+                    "authenticated", true,
+                    "provider", registrationId,
+                    "name", user.getAttribute("name"),
+                    "email", user.getAttribute("email"),
+                    "picture", user.getAttribute("profile_image")
+            );
+            return ResponseEntity.ok(userInfo);
+        } else if ("kakao".equals(registrationId)){
+        	System.out.println("카카오");
+        	return null;
+        } else if ("github".equals(registrationId)) {
+        	System.out.println("깃허브");
+        	return null;
         } else {
-            System.out.println("네이버 개발중");
-            return null;
+        	return null;
         }
-        
-        
-        
-        userService.saveUser(user);
-        Map<String, Object> userInfo = Map.of(
-            "authenticated", true,
-            "provider", registrationId,// 구분추가
-            "name", user.getAttribute("name"),
-            "email", user.getAttribute("email"),
-            "picture", user.getAttribute("picture")
-        );
-        return ResponseEntity.ok(userInfo);
     }
 
 }
