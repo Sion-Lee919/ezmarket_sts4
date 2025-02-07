@@ -1,6 +1,9 @@
 package ezmarket;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -9,17 +12,19 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 @RestController
@@ -60,26 +65,65 @@ public class BoardController {
 		String savePath = "";
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {
-        	savePath = "c:/ezwel/ezmarketupload/";        	
+        	savePath = "c:/ezwel/ezmarketupload/";   	
         } else {
         	savePath = "/Users/minsu/Documents/ezwel/ezmarketupload/";}
 		String newfilename1 = null;
 		MultipartFile file1 = dto.getImage();
-		if(!file1.isEmpty()) {//f1해당파일선택했다면
-			//이름랜덤문자열포함
+		if(!file1.isEmpty()) {
 			String originalfilename1 = file1.getOriginalFilename();
 			String before1 = originalfilename1.substring(0, originalfilename1.indexOf("."));
 			String ext1 = originalfilename1.substring(originalfilename1.indexOf("."));
 			newfilename1 = before1 + "(" + UUID.randomUUID() + ")" + ext1;
 			//서버내부 지정경로에 파일내용 저장
 			file1.transferTo( new java.io.File(savePath +  newfilename1));
-			dto.setImage_url(newfilename1); // 업로드한 파일을 서버 저장에 이름 -- db insert
+			dto.setImage_url(newfilename1);
 		}
-		System.out.println(dto.getVolume());
 		boolean result = boardService.registerItem(dto);
 	    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 	}
+
 	
+	@CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/showimage")
+    public void showImg(String filename, HttpServletResponse response) throws IOException {
+        String osName = System.getProperty("os.name").toLowerCase();
+        String path = "";
+        
+        // 운영체제에 맞는 파일 경로 설정
+        if (osName.contains("win")) {
+            path = "c:/ezwel/Desktop/downloaded_images/";
+        } else { 
+            path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/";
+        }
+        
+        // 파일을 열기
+        File file = new File(path + filename);
+        FileInputStream fin = new FileInputStream(file);
+        
+        // 파일 이름 인코딩 처리
+        filename = new String(filename.getBytes("utf-8"), "iso-8859-1");
+
+        // 파일의 MIME 타입을 설정 (이미지일 경우)
+        String guessedType = URLConnection.guessContentTypeFromName(filename);
+        if (guessedType == null) {
+        	guessedType = "application/octet-stream"; // MIME 타입이 없다면 기본 값 설정
+        }
+        // HTTP 응답 헤더 설정
+        response.setContentType(guessedType);
+        response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
+        
+        // 파일 데이터를 클라이언트에게 전송
+        ServletOutputStream out = response.getOutputStream();
+        FileCopyUtils.copy(fin, out);
+        
+        // 스트림 닫기
+        fin.close();
+        out.close();
+    }
+    
+
+
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping(value="/brand/id/updateitem", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Boolean> updateItem(@ModelAttribute BoardDTO dto) throws IOException{
