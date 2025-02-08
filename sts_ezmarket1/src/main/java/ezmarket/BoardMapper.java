@@ -16,7 +16,10 @@ public interface BoardMapper {
 	ArrayList<BoardDTO> getBrandItems(int brand_id);
 
 	boolean registerItem(BoardDTO dto);
-
+	
+	int updateItem(BoardDTO dto);
+	
+	int deleteItem(int product_id);
 
 }
 

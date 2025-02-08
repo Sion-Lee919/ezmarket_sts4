@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -81,6 +82,7 @@ public class BoardController {
 		boolean result = boardService.registerItem(dto);
 	    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 	}
+
 	
 	@CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/showimage")
@@ -121,7 +123,57 @@ public class BoardController {
     }
     
 
+
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping(value="/brand/id/updateitem", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Boolean> updateItem(@ModelAttribute BoardDTO dto) throws IOException{
+		
+		 String savePath = "";
+		    String osName = System.getProperty("os.name").toLowerCase();
+		    if (osName.contains("win")) {
+		        savePath = "c:/ezwel/ezmarketupload/";        
+		    } else {
+		        savePath = "/Users/minsu/Documents/ezwel/ezmarketupload/";
+		    }
+		    
+		    BoardDTO existingItem = boardService.getItemDetail(dto.getProduct_id());
+		    if (existingItem == null) {
+		        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+		    }
+		    
+		    String newFileName = null;
+		    MultipartFile file = dto.getImage();
+		    
+		    if (file != null && !file.isEmpty()) {
+		        // 기존 이미지 삭제
+		        if (existingItem.getImage_url() != null) {
+		            java.io.File oldFile = new java.io.File(savePath + existingItem.getImage_url());
+		            if (oldFile.exists()) {
+		                oldFile.delete();
+		            }
+		        }
+		    
+		        String originalFileName = file.getOriginalFilename();
+		        String before = originalFileName.substring(0, originalFileName.indexOf("."));
+		        String ext = originalFileName.substring(originalFileName.indexOf("."));
+		        newFileName = before + "(" + UUID.randomUUID() + ")" + ext;
+		        file.transferTo(new java.io.File(savePath + newFileName));
+		        dto.setImage_url(newFileName);  // 새로운 이미지 URL 업데이트
+		    } else {
+		        // 이미지 변경이 없으면 기존 이미지 URL 유지
+		        dto.setImage_url(existingItem.getImage_url());
+		    }
+		    boolean result = boardService.updateItem(dto);
+		    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+	}
 	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@DeleteMapping("/brand/{brandid}/delete/{productid}")
+	public ResponseEntity<Boolean> deleteItem(@PathVariable("brandid") int brand_id, @PathVariable("productid") int product_id) {
+	    boolean result = boardService.deleteItem(product_id);
+	    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+	}
+
 	
 
 }
