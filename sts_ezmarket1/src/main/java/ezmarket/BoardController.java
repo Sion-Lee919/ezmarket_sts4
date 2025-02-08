@@ -64,9 +64,9 @@ public class BoardController {
 		String savePath = "";
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {
-        	savePath = "c:/ezwel/ezmarketupload/";   	
+        	savePath = "c:/ezwel/Desktop/downloaded_images/";   	
         } else {
-        	savePath = "/Users/minsu/Documents/ezwel/ezmarketupload/";}
+        	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/";}
 		String newfilename1 = null;
 		MultipartFile file1 = dto.getImage();
 		if(!file1.isEmpty()) {
