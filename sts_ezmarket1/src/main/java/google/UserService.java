@@ -77,23 +77,23 @@ public class UserService {
             } else if ("github".equals(provider)){
 
             	Integer idInt = oauth2User.getAttribute("id");
-                id = String.valueOf(idInt);
+            	username = String.valueOf(idInt);
                 if (oauth2User.getAttribute("email") != null) {
                 	email = oauth2User.getAttribute("email");                	
                 } else {
-                	email = "noneemail";
+                	email = username + "@github.com";
                 }
-            	name = oauth2User.getAttribute("login");
+                realname = oauth2User.getAttribute("login");
             	picture = oauth2User.getAttribute("avatar_url");
-            	System.out.println(id + " : " + email + " : " + name + " : " + picture);
+            	System.out.println(username + " : " + email + " : " + realname + " : " + picture);
             	
-            	if (githubUserMapper.countByGithubId(id) > 0) {
+            	if (githubUserMapper.countByGithubId(username) > 0) {
                     logger.info("기존 사용자, 업데이트 진행");
-                    int updatedRows = githubUserMapper.updateUser(id, email, name, picture);
+                    int updatedRows = githubUserMapper.updateUser(username, email, realname, picture);
                     logger.info("업데이트된 행 수: {}", updatedRows);
                 } else {
                     logger.info(" 신규 사용자, 데이터 삽입");
-                    int insertedRows = githubUserMapper.saveUser(id, email, name, picture);
+                    int insertedRows = githubUserMapper.saveUser(username, email, realname, picture);
                     logger.info("삽입된 행 수: {}", insertedRows);
                 }
 

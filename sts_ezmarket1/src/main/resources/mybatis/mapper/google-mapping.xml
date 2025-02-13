@@ -15,7 +15,7 @@
 
     <update id="updateUser">
         UPDATE member
-        SET email = #{email}, name = #{name}
+        SET email = #{email}, realname = #{name}
         WHERE username = #{googleId}
     </update>
 </mapper>
