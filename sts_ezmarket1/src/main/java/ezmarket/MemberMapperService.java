@@ -1,7 +1,5 @@
 package ezmarket;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +41,7 @@ public class MemberMapperService implements MemberService {
 			return mapper.checkPhone(phone) == 0;
 		}
 		
-
+		//판매자 페이지
 		@Override
 		public BrandDTO getBrand(int member_id) {
 			return mapper.getBrand(member_id);
@@ -65,5 +63,10 @@ public class MemberMapperService implements MemberService {
             int result = mapper.resetPwOnly(username, newPassword);
             return result > 0;
         }
-
+        
+        //회원정보수정
+        @Override
+        public void modify(String username, String password, String nickname, String address) {
+        	mapper.modifyInfo(username, password, nickname, address);
+        }
 }

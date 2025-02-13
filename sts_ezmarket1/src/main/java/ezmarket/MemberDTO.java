@@ -20,8 +20,10 @@ public class MemberDTO {
 	String update_date;
 	String userauthor;
 	String points;
+	String ezpay;
 	String member_status;
 	String member_kick_comment;
+	String social;
 	
 	//판매자
 	Long brand_id;

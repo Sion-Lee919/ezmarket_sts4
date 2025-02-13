@@ -43,11 +43,11 @@
         update member set password = #{newPassword} where username = #{username}
     </update> 
 
-<!-- 수정전 -->	
-	<update id="updateMember" parameterType="memberdto">
-		update member set password = #{password}, phone = #{phone} where username = #{username}
+	<update id="modifyInfo" parameterType="memberdto">
+		update member set password = #{password}, nickname = #{nickname}, address = #{address} where username = #{username}
 	</update>
 	
+	<!-- 수정 전 -->
 	<delete id="deleteMember" parameterType="String">
 		delete from member where member_id = #{member_id}
 	</delete>
