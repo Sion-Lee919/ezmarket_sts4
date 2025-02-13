@@ -14,14 +14,14 @@ public interface MemberService {
 	  	boolean isEmailAvailable(String email);
 	  	boolean isPhoneAvailable(String phone);
 
-
+	  	//판매자 페이지
 		BrandDTO getBrand(int member_id);
-
 	  	
         //Id, Pw 찾기
         MemberDTO findId(String emailOrPhone);
         MemberDTO findPw(String username, String realname, String email, String phone);
         boolean resetPw(String username, String newPassword);
-
-
+        
+        //회원정보수정
+        void modify(String username, String password, String nickname, String address);
 }
