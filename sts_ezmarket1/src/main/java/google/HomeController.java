@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
 @RestController
 @RequestMapping("/")
@@ -64,17 +64,15 @@ public class HomeController {
         System.out.println("로그인 : " + registrationId);//구분추가
         
         if ("google".equals(registrationId)) {
-            userService.saveUser(user, "google");
             Map<String, Object> userInfo = Map.of(
                     "authenticated", true,
                     "provider", registrationId,// 구분추가
                     "name", user.getAttribute("name"),
                     "email", user.getAttribute("email"),
                     "picture", user.getAttribute("picture")
-                );
-                return ResponseEntity.ok(userInfo);
+            );
+            return ResponseEntity.ok(userInfo);
         } else if ("naver".equals(registrationId)) {
-        	userService.saveUser(user, "naver");  
             Map<String, Object> userInfo = Map.of(
                     "authenticated", true,
                     "provider", registrationId,
@@ -102,6 +100,5 @@ public class HomeController {
         	return null;
         }
     }
-
 }
 

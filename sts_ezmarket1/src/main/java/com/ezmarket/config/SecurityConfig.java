@@ -5,9 +5,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import google.UserService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
@@ -15,9 +19,11 @@ import jakarta.servlet.http.HttpServletResponse;
 public class SecurityConfig {
 
     private final CorsConfig corsConfig;
+    private final UserService userService;
 
-    public SecurityConfig(CorsConfig corsConfig) {
+    public SecurityConfig(CorsConfig corsConfig, UserService userService) {
         this.corsConfig = corsConfig;
+        this.userService = userService;
     }
 
     @Bean
@@ -39,14 +45,27 @@ public class SecurityConfig {
                     response.getWriter().write("{\"error\": \"User not authenticated\"}");
                 })
             )
+            .sessionManagement((sessionManagement) ->
+            sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
             .oauth2Login(oauth2 -> oauth2
-                .defaultSuccessUrl("http://localhost:3000/home", true)
+                .defaultSuccessUrl("http://localhost:3000/", true)
+                .successHandler((request, response, authentication) -> {
+                	OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
+                    String provider = authToken.getAuthorizedClientRegistrationId();        
+                    
+                    String token = userService.saveUser(authToken.getPrincipal(), provider); 
+                    
+                    Cookie cookie = new Cookie("jwt_token", token);
+    	            cookie.setPath("/"); 
+    	            cookie.setMaxAge(60 * 60); 
+    	            response.addCookie(cookie);
+                    
+                    response.setHeader("Authorization", "Bearer " + token);  
+                    response.sendRedirect("http://localhost:3000/");
+                })
             );
-
+        
         return http.build();
     }
-
-
-
-
 }
