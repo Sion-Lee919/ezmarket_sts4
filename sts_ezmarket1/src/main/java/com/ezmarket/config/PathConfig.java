@@ -13,7 +13,7 @@ public class PathConfig implements WebMvcConfigurer {
 		
 		if (System.getProperty("os.name").contains("Win")) {
 			registry.addResourceHandler("/ezmarketimage/**")
-			.addResourceLocations("file:///c:/ezwel/Desktop/downloaded_images/");		
+			.addResourceLocations("file:///C:/ezwel/ezmarketupload/");		
 		} else {
 			registry.addResourceHandler("/ezmarketimage/**")
 			.addResourceLocations("file:////Users/minsu/Documents/ezwel/Desktop/downloaded_images/");
