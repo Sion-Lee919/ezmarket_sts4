@@ -92,7 +92,7 @@ public class BoardController {
         
         // 운영체제에 맞는 파일 경로 설정
         if (osName.contains("win")) {
-            path = "c:/ezwel/Desktop/downloaded_images/";
+            path = "c:/ezwel/ezmarketupload/";
         } else { 
             path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/";
         }
