@@ -12,4 +12,11 @@ public interface UserMapper {
                   @Param("name") String name, @Param("picture") String picture);
     int updateUser(@Param("googleId") String googleId, @Param("email") String email,
                     @Param("name") String name, @Param("picture") String picture);
+
+    
+    int countByKakaoId(@Param("kakaoId") String kakaoId);
+    int saveKakaoUser(@Param("kakaoId") String kakaoId, @Param("email") String email,
+                      @Param("name") String name, @Param("picture") String picture);
+    int updateKakaoUser(@Param("kakaoId") String kakaoId, @Param("email") String email,
+                        @Param("name") String name, @Param("picture") String picture);
 }

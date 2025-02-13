@@ -3,14 +3,14 @@ package com.ezmarket.cookie;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
-
 import ezmarket.MemberDTO;
-
 import java.security.Key;
 import java.util.Date;
 
+@Component
 public class JWTUtil {
     private static final String SECRET = "Hd5HJsDA5d5SDd523adfDF4233AFHd5HJsDA5d5SDd523adfDF4233AFFssdf42124fADSFa";
     private static final long EXPIRATION_TIME = 86400000;
@@ -28,17 +28,17 @@ public class JWTUtil {
                 .claim("address", dto.getAddress())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SECRET_KEY, SignatureAlgorithm.HS512)  
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS512)
                 .compact();
     }
 
     public static String validateAndGetUserId(String token) {
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY)  
+                .setSigningKey(SECRET_KEY)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims.getSubject(); 
+        return claims.getSubject();
     }
 }

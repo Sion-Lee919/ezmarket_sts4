@@ -18,54 +18,40 @@ import jakarta.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final CorsConfig corsConfig;
     private final UserService userService;
 
-    public SecurityConfig(CorsConfig corsConfig, UserService userService) {
-        this.corsConfig = corsConfig;
+    public SecurityConfig(UserService userService) {
         this.userService = userService;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        System.out.println("SecurityConfig: SecurityFilterChain 설정 시작됨."); // 확인용 로그 추가
         http
-            .cors(cors -> cors.disable()) // 기본 CORS 정책 비활성화
-            .addFilterBefore(corsConfig.corsFilter(), UsernamePasswordAuthenticationFilter.class) // CORS 필터 적용
-            .csrf(csrf -> csrf.disable()) // CSRF 비활성화
+            .cors(cors -> cors.disable()) 
+            .csrf(csrf -> csrf.disable()) 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 요청 허용
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().permitAll()
             )
-            .exceptionHandling(exception -> exception
-                .authenticationEntryPoint((request, response, authException) -> {
-                    System.out.println("SecurityConfig: 인증되지 않은 요청 감지 (401 Unauthorized)"); // 확인용 로그 추가
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    response.setContentType("application/json");
-                    response.getWriter().write("{\"error\": \"User not authenticated\"}");
-                })
-            )
-            .sessionManagement((sessionManagement) ->
-            sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .oauth2Login(oauth2 -> oauth2
                 .defaultSuccessUrl("http://localhost:3000/", true)
                 .successHandler((request, response, authentication) -> {
-                	OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
+                    OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
                     String provider = authToken.getAuthorizedClientRegistrationId();        
                     
                     String token = userService.saveUser(authToken.getPrincipal(), provider); 
-                    
+
                     Cookie cookie = new Cookie("jwt_token", token);
-    	            cookie.setPath("/"); 
-    	            cookie.setMaxAge(60 * 60); 
-    	            response.addCookie(cookie);
-                    
-                    response.setHeader("Authorization", "Bearer " + token);  
+                    cookie.setPath("/");
+                    cookie.setMaxAge(60 * 60);
+                    response.addCookie(cookie);
+
+                    response.setHeader("Authorization", "Bearer " + token);
                     response.sendRedirect("http://localhost:3000/");
                 })
             );
-        
+
         return http.build();
     }
 }
