@@ -5,17 +5,17 @@
 
 <mapper namespace="google.UserMapper">
     <select id="countByGoogleId" parameterType="string" resultType="int">
-        SELECT COUNT(*) FROM users_google WHERE google_id = #{googleId}
+        SELECT COUNT(*) FROM member WHERE username = #{googleId}
     </select>
 
     <insert id="saveUser" >
-    INSERT INTO users_google (google_id, email, name, picture)
-    VALUES (#{googleId}, #{email}, #{name}, #{picture})
+    INSERT INTO member (member_id, username, realname, password, email, nickname, phone)
+    VALUES (TRUNC(DBMS_RANDOM.VALUE(100000000000000, 999999999999999)), #{googleId}, #{name}, TRUNC(DBMS_RANDOM.VALUE(100000000000000, 999999999999999)), #{email}, '닉네임을 변경해주세요', '010-0000-0000')
 </insert>
 
     <update id="updateUser">
-        UPDATE users_google 
-        SET email = #{email}, name = #{name}, picture = #{picture}
-        WHERE google_id = #{googleId}
+        UPDATE member
+        SET email = #{email}, name = #{name}
+        WHERE username = #{googleId}
     </update>
 </mapper>
