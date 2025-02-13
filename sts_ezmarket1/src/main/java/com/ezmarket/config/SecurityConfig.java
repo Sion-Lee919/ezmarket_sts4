@@ -45,7 +45,7 @@ public class SecurityConfig {
                     response.getWriter().write("{\"error\": \"User not authenticated\"}");
                 })
             )
-            .sessionManagement((sessionManagement) ->
+            .sessionManagement(sessionManagement -> 
             sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .oauth2Login(oauth2 -> oauth2
@@ -60,7 +60,13 @@ public class SecurityConfig {
     	            cookie.setPath("/"); 
     	            cookie.setMaxAge(60 * 60); 
     	            response.addCookie(cookie);
-                    
+    	            
+    	            //기존 jsessionid 삭제 이시온
+    	            Cookie sessionCookie = new Cookie("JSESSIONID", null);
+    	            sessionCookie.setPath("/");
+    	            sessionCookie.setMaxAge(0);
+    	            response.addCookie(sessionCookie);
+
                     response.setHeader("Authorization", "Bearer " + token);  
                     response.sendRedirect("http://localhost:3000/");
                 })
