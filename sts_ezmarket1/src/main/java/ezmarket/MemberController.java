@@ -72,7 +72,6 @@ public class MemberController {
 	//로그인
 		//로그인
 	    @PostMapping("/login")
-
 	    public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO, HttpServletResponse response) {
 	        MemberDTO dto = memberService.getMember(memberDTO.getUsername());
 
