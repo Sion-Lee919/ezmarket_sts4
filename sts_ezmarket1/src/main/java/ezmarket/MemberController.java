@@ -1,6 +1,5 @@
 package ezmarket;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,7 +72,6 @@ public class MemberController {
 	    @PostMapping("/login")
 	    public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO, HttpServletResponse response) {
 	        MemberDTO dto = memberService.getMember(memberDTO.getUsername());
-
 
 	        if (dto != null && dto.getPassword().equals(memberDTO.getPassword())) {
 	        	String token = JWTUtil.generateToken(dto);
@@ -171,10 +168,7 @@ public class MemberController {
             }
         }
         
-	    
-	
 	//내정보
-
 	    @GetMapping("/userinfo")
 	    public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
 	        String token = request.getHeader("Authorization");
@@ -183,8 +177,8 @@ public class MemberController {
 	            token = token.substring(7);
 
 	            String username = JWTUtil.validateAndGetUserId(token); 
-
-	            if (username!= null) { 
+	            System.out.println(username);
+	            if (username != null) { 
 	                MemberDTO dto = memberService.getMember(username);
 	                return ResponseEntity.ok(dto);
 	            } else { 
@@ -204,5 +198,4 @@ public class MemberController {
 			BrandDTO dto = memberService.getBrand(member_id);
 			return dto;
 		}
-
 }

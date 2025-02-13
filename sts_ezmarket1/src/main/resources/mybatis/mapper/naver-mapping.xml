@@ -5,17 +5,17 @@
 
 <mapper namespace="google.NaverUserMapper">
     <select id="countByNaverId" parameterType="string" resultType="int">
-        SELECT COUNT(*) FROM users_naver WHERE naver_id = #{naverId}
+        SELECT COUNT(*) FROM member WHERE username = #{naverId}
     </select>
 
     <insert id="saveUser" >
-    INSERT INTO users_naver (naver_id, email, name, picture)
-    VALUES (#{naverId}, #{email}, #{name}, #{picture})
+    INSERT INTO member (member_id, username, realname, password, email, nickname, phone)
+    VALUES (TRUNC(DBMS_RANDOM.VALUE(100000000000000, 999999999999999)), #{naverId}, #{name}, TRUNC(DBMS_RANDOM.VALUE(100000000000000, 999999999999999)), #{email}, '닉네임을 변경해주세요', '010-0000-0000')
 </insert>
 
     <update id="updateUser">
-        UPDATE users_naver
-        SET email = #{email}, name = #{name}, picture = #{picture}
-        WHERE naver_id = #{naverId}
+        UPDATE member
+        SET email = #{email}, realname = #{name}
+        WHERE username = #{naverId}
     </update>
 </mapper>
