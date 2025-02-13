@@ -14,7 +14,7 @@
 </insert>
 
     <update id="updateUser">
-        UPDATE users_github
+        UPDATE member
         SET email = #{email}, realname = #{name}
         WHERE username = #{githubId}
     </update>
