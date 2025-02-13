@@ -86,7 +86,7 @@ public class UserService {
             memberDTO.setRealname(realname);
           	//memberDTO.setPicture(picture);
             
-            String token = JWTUtil.generateToken(memberDTO); 
+            String token = JWTUtil.generateToken(memberDTO);
             return token;
             
         } catch (Exception e) {

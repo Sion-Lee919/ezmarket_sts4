@@ -21,7 +21,11 @@ public class JWTUtil {
         Date expiryDate = new Date(now.getTime() + EXPIRATION_TIME);
 
         return Jwts.builder()
-                .setSubject(dto.getUsername())  
+                .setSubject(dto.getUsername()) 
+                .claim("realname", dto.getRealname())
+                .claim("phone", dto.getPhone())
+                .claim("email", dto.getEmail())
+                .claim("address", dto.getAddress())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS512)  

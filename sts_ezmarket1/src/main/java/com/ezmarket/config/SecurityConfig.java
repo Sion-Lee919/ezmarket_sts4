@@ -52,14 +52,14 @@ public class SecurityConfig {
                 .defaultSuccessUrl("http://localhost:3000/", true)
                 .successHandler((request, response, authentication) -> {
                 	OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
-                    String provider = authToken.getAuthorizedClientRegistrationId();
+                    String provider = authToken.getAuthorizedClientRegistrationId();        
                     
                     String token = userService.saveUser(authToken.getPrincipal(), provider); 
+                    
                     Cookie cookie = new Cookie("jwt_token", token);
     	            cookie.setPath("/"); 
     	            cookie.setMaxAge(60 * 60); 
     	            response.addCookie(cookie);
-    	            cookie.setAttribute("SameSite", "None");
                     
                     response.setHeader("Authorization", "Bearer " + token);  
                     response.sendRedirect("http://localhost:3000/");

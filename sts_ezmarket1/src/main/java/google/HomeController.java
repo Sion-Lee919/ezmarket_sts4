@@ -64,7 +64,6 @@ public class HomeController {
         System.out.println("로그인 : " + registrationId);//구분추가
         
         if ("google".equals(registrationId)) {
-
             Map<String, Object> userInfo = Map.of(
                     "authenticated", true,
                     "provider", registrationId,// 구분추가
@@ -74,7 +73,6 @@ public class HomeController {
             );
             return ResponseEntity.ok(userInfo);
         } else if ("naver".equals(registrationId)) {
-
             Map<String, Object> userInfo = Map.of(
                     "authenticated", true,
                     "provider", registrationId,
