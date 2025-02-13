@@ -30,5 +30,5 @@ public interface MemberMapper {
         int resetPwOnly(String username, String newPassword);
         
         //회원정보수정
-
+        void modifyInfo(String username, String password, String nickname, String address);
 }
