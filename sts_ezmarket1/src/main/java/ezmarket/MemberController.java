@@ -80,10 +80,9 @@ public class MemberController {
 	            cookie.setPath("/"); 
 	            cookie.setMaxAge(60 * 60); 
 	            response.addCookie(cookie);
-	            cookie.setAttribute("SameSite", "None");
 
 	            Map<String, String> responseBody = new HashMap<>();
-	            responseBody.put("message", "로그인 성공"); 
+	            responseBody.put("message", "로그인에 성공했습니다."); 
 	            return ResponseEntity.ok(responseBody);
 	            
 	        } else {
@@ -192,10 +191,35 @@ public class MemberController {
 	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
 	        }
 	    }
-	    
+
+	    //판매자 페이지
 		@GetMapping("/brandinfo")
 		public BrandDTO getBrandInfo(@RequestParam("memberid") Integer member_id) {
 			BrandDTO dto = memberService.getBrand(member_id);
 			return dto;
 		}
+		
+		//회원 정보 수정
+		@PostMapping("/modify")
+		public ResponseEntity<?> modify(@RequestBody MemberDTO memberDTO, HttpServletRequest request) {
+			String token = request.getHeader("Authorization");
+		    if (token != null && token.startsWith("Bearer")) {
+		        token = token.substring(7);
+		        String username = JWTUtil.validateAndGetUserId(token);
+
+		        if (username != null && memberDTO.getUsername().equals(username)) {
+		            memberService.modify(memberDTO.getUsername(), memberDTO.getPassword(), memberDTO.getNickname(), memberDTO.getAddress());
+		            return ResponseEntity.ok("회원 정보가 수정되었습니다.");
+		        } else {
+		            Map<String, String> errorResponse = new HashMap<>();
+		            errorResponse.put("message", "토큰이 유효하지 않거나 권한이 없습니다.");
+		            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+		        }
+		    } else {
+		        Map<String, String> errorResponse = new HashMap<>();
+		        errorResponse.put("message", "Authorization 헤더 오류.");
+		        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+		    }
+		}
 }
+		
