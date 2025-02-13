@@ -15,10 +15,12 @@ import java.util.Map;
 public class UserService {
     private final UserMapper userMapper;
     private final NaverUserMapper naverUserMapper;
+    private final GithubUserMapper githubUserMapper;
 
-    public UserService(UserMapper userMapper, NaverUserMapper naverUserMapper) {
+    public UserService(UserMapper userMapper, NaverUserMapper naverUserMapper, GithubUserMapper githubUserMapper) {
         this.userMapper = userMapper;
         this.naverUserMapper = naverUserMapper;
+        this.githubUserMapper = githubUserMapper;
     }
     
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
@@ -73,7 +75,28 @@ public class UserService {
             } else if ("kakao".equals(provider)){
             	return "";
             } else if ("github".equals(provider)){
-            	return "";
+
+            	Integer idInt = oauth2User.getAttribute("id");
+                id = String.valueOf(idInt);
+                if (oauth2User.getAttribute("email") != null) {
+                	email = oauth2User.getAttribute("email");                	
+                } else {
+                	email = "noneemail";
+                }
+            	name = oauth2User.getAttribute("login");
+            	picture = oauth2User.getAttribute("avatar_url");
+            	System.out.println(id + " : " + email + " : " + name + " : " + picture);
+            	
+            	if (githubUserMapper.countByGithubId(id) > 0) {
+                    logger.info("기존 사용자, 업데이트 진행");
+                    int updatedRows = githubUserMapper.updateUser(id, email, name, picture);
+                    logger.info("업데이트된 행 수: {}", updatedRows);
+                } else {
+                    logger.info(" 신규 사용자, 데이터 삽입");
+                    int insertedRows = githubUserMapper.saveUser(id, email, name, picture);
+                    logger.info("삽입된 행 수: {}", insertedRows);
+                }
+
             } else {
             	return "";
             }

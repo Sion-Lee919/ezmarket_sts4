@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="google.GithubUserMapper">
+    <select id="countByGithubId" parameterType="string" resultType="int">
+        SELECT COUNT(*) FROM users_github WHERE github_id = #{githubId}
+    </select>
+
+    <insert id="saveUser" >
+    INSERT INTO users_github (github_id, email, name, picture)
+    VALUES (#{githubId}, #{email}, #{name}, #{picture})
+</insert>
+
+    <update id="updateUser">
+        UPDATE users_github
+        SET email = #{email}, name = #{name}, picture = #{picture}
+        WHERE github_id = #{githubId}
+    </update>
+</mapper>
