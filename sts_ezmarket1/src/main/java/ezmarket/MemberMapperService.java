@@ -69,4 +69,10 @@ public class MemberMapperService implements MemberService {
         public void modify(String username, String password, String nickname, String address) {
         	mapper.modifyInfo(username, password, nickname, address);
         }
+        
+        //회원 탈퇴
+        @Override
+        public void resign(String member_status) {
+        	mapper.resignMember(member_status);
+        }
 }
