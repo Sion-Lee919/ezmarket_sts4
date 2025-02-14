@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,7 @@ public class BoardController {
 		String savePath = "";
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {
-        	savePath = "c:/ezwel/Desktop/downloaded_images/";   	
+        	savePath = "c:/ezwel/ezmarketupload/";	
         } else {
         	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/";}
 		String newfilename1 = null;
@@ -131,7 +132,7 @@ public class BoardController {
 		 String savePath = "";
 		    String osName = System.getProperty("os.name").toLowerCase();
 		    if (osName.contains("win")) {
-		        savePath = "c:/ezwel/ezmarketupload/";        
+		        savePath = "c:/ezwel/ezmarketupload/";
 		    } else {
 		        savePath = "/Users/minsu/Documents/ezwel/ezmarketupload/";
 		    }
@@ -174,7 +175,17 @@ public class BoardController {
 	    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 	}
 
-	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/getitemsforrandom")
+	public ArrayList<BoardDTO> GetRandomItems(){
+		ArrayList<BoardDTO> dtoList = boardService.getAllItems();
+		Collections.shuffle(dtoList);
+	    ArrayList<BoardDTO> randomList = new ArrayList<>();
+	    for (int i = 0; i < 6 && i < dtoList.size(); i++) {
+	        randomList.add(dtoList.get(i));
+	    }
+		return randomList;
+	}
 
 }
 
