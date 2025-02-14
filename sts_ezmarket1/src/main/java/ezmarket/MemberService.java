@@ -24,4 +24,7 @@ public interface MemberService {
         
         //회원정보수정
         void modify(String username, String password, String nickname, String address);
+        
+        //회원 탈퇴
+        void resign(String member_status);
 }
