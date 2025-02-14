@@ -3,16 +3,16 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="google.UserMapper">
-    <select id="countByGoogleId" parameterType="string" resultType="int">
-        SELECT COUNT(*) FROM member WHERE username = #{googleId}
+<mapper namespace="google.KakaoUserMapper">
+    <select id="countByKakaoId" parameterType="string" resultType="int">
+        SELECT COUNT(*) FROM member WHERE username = #{kakaoId}
     </select>
 
-    <insert id="saveUser" >
+    <insert id="saveKakaoUser" >
 	    INSERT INTO member (member_id, username, realname, password, email, nickname, phone, social)
 	    VALUES (
 	    TRUNC(DBMS_RANDOM.VALUE(100000000000000, 999999999999999)), 
-	    #{googleId}, 
+	    #{kakaoId}, 
 	    #{name}, 
 	    TRUNC(DBMS_RANDOM.VALUE(100000000000000, 999999999999999)), 
 	    #{email},
@@ -37,9 +37,9 @@
 	    1)
 	</insert>
 
-    <update id="updateUser">
+    <update id="updateKakaoUser">
         UPDATE member
         SET email = #{email}, realname = #{name}
-        WHERE username = #{googleId}
+        WHERE username = #{kakaoId}
     </update>
 </mapper>

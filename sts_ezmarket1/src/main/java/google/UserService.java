@@ -16,11 +16,13 @@ public class UserService {
     private final UserMapper userMapper;
     private final NaverUserMapper naverUserMapper;
     private final GithubUserMapper githubUserMapper;
+    private final KakaoUserMapper kakaoUserMapper;
 
-    public UserService(UserMapper userMapper, NaverUserMapper naverUserMapper, GithubUserMapper githubUserMapper) {
+    public UserService(UserMapper userMapper, NaverUserMapper naverUserMapper, GithubUserMapper githubUserMapper, KakaoUserMapper kakaoUserMapper) {
         this.userMapper = userMapper;
         this.naverUserMapper = naverUserMapper;
         this.githubUserMapper = githubUserMapper;
+        this.kakaoUserMapper = kakaoUserMapper;
     }
     
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
@@ -73,17 +75,31 @@ public class UserService {
                     logger.info("삽입된 행 수: {}", insertedRows);
                 }
             } else if ("kakao".equals(provider)){
-            	return "";
+            	Map<String, Object> kakaoAccount = (Map<String, Object>) oauth2User.getAttribute("kakao_account");
+                Map<String, Object> properties = (Map<String, Object>) oauth2User.getAttribute("properties");
+
+                username = oauth2User.getAttribute("id").toString();
+                email = kakaoAccount.get("email") != null ? kakaoAccount.get("email").toString() : username + "@kakao.com";
+                realname = properties.get("nickname") != null ? properties.get("nickname").toString() : "카카오 사용자";
+                picture = properties.get("profile_image") != null ? properties.get("profile_image").toString() : "";
+
+                if (kakaoUserMapper.countByKakaoId(username) > 0) {
+                    logger.info("기존 Kakao 사용자, 업데이트 진행");
+                    kakaoUserMapper.updateKakaoUser(username, email, realname, picture);
+                } else {
+                    logger.info("신규 Kakao 사용자, 데이터 삽입");
+                    kakaoUserMapper.saveKakaoUser(username, email, realname, picture);
+                }
             } else if ("github".equals(provider)){
 
             	Integer idInt = oauth2User.getAttribute("id");
             	username = String.valueOf(idInt);
+                realname = oauth2User.getAttribute("login");
                 if (oauth2User.getAttribute("email") != null) {
                 	email = oauth2User.getAttribute("email");                	
                 } else {
-                	email = username + "@github.com";
+                	email = realname.toLowerCase() + "@github.com";
                 }
-                realname = oauth2User.getAttribute("login");
             	picture = oauth2User.getAttribute("avatar_url");
             	System.out.println(username + " : " + email + " : " + realname + " : " + picture);
             	
