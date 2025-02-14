@@ -60,11 +60,11 @@ public class UserService {
                 email = (String) response.get("email");
                 realname = (String) response.get("name");
                 picture = (String) response.get("profile_image");
-                
                 if (picture == null) {
                     picture = "https://ssl.pstatic.net/static/pwe/address/img_profile.png";
                 }
                 
+                System.out.println(username);
                 if (naverUserMapper.countByNaverId(username) > 0) {
                     logger.info("기존 사용자, 업데이트 진행");
                     int updatedRows = naverUserMapper.updateUser(username, email, realname, picture);
@@ -94,11 +94,13 @@ public class UserService {
 
             	Integer idInt = oauth2User.getAttribute("id");
             	username = String.valueOf(idInt);
+
                 realname = oauth2User.getAttribute("login");
                 if (oauth2User.getAttribute("email") != null) {
                 	email = oauth2User.getAttribute("email");                	
                 } else {
                 	email = realname.toLowerCase() + "@github.com";
+
                 }
             	picture = oauth2User.getAttribute("avatar_url");
             	System.out.println(username + " : " + email + " : " + realname + " : " + picture);
