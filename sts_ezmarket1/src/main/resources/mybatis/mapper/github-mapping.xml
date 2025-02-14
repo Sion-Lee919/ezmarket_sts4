@@ -9,9 +9,33 @@
     </select>
 
     <insert id="saveUser" >
-    INSERT INTO member (member_id, username, realname, password, email, nickname, phone, social)
-    VALUES (TRUNC(DBMS_RANDOM.VALUE(100000000000000, 999999999999999)), #{githubId}, #{name}, TRUNC(DBMS_RANDOM.VALUE(100000000000000, 999999999999999)), #{email}, '닉네임을 변경해주세요', '010-0000-0000', 1)
-</insert>
+	    INSERT INTO member (member_id, username, realname, password, email, nickname, phone, social)
+	    VALUES (
+	    TRUNC(DBMS_RANDOM.VALUE(100000000000000, 999999999999999)), 
+	    #{githubId}, 
+	    #{name}, 
+	    TRUNC(DBMS_RANDOM.VALUE(100000000000000, 999999999999999)), 
+	    #{email},
+	    (CASE 
+                WHEN TRUNC(DBMS_RANDOM.VALUE(1, 6)) = 1 THEN '빨간'
+                WHEN TRUNC(DBMS_RANDOM.VALUE(1, 6)) = 2 THEN '파란'
+                WHEN TRUNC(DBMS_RANDOM.VALUE(1, 6)) = 3 THEN '노란'
+                WHEN TRUNC(DBMS_RANDOM.VALUE(1, 6)) = 4 THEN '초록'
+                WHEN TRUNC(DBMS_RANDOM.VALUE(1, 6)) = 5 THEN '보라'
+                ELSE '푸른'
+            END) || 
+            (CASE 
+                WHEN TRUNC(DBMS_RANDOM.VALUE(1, 6)) = 1 THEN '갈매기'
+                WHEN TRUNC(DBMS_RANDOM.VALUE(1, 6)) = 2 THEN '호랑이'
+                WHEN TRUNC(DBMS_RANDOM.VALUE(1, 6)) = 3 THEN '강아지'
+                WHEN TRUNC(DBMS_RANDOM.VALUE(1, 6)) = 4 THEN '고양이'
+                WHEN TRUNC(DBMS_RANDOM.VALUE(1, 6)) = 5 THEN '뻐꾸기'
+                ELSE '사조'
+            END) || 
+            TRUNC(DBMS_RANDOM.VALUE(1000, 9999)),
+        '010-0000-0000',  
+	    1)
+	</insert>
 
     <update id="updateUser">
         UPDATE member

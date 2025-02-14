@@ -82,8 +82,14 @@ public class HomeController {
             );
             return ResponseEntity.ok(userInfo);
         } else if ("kakao".equals(registrationId)){
-        	System.out.println("카카오");
-        	return null;
+            Map<String, Object> userInfo = Map.of(
+                    "authenticated", true,
+                    "provider", registrationId,
+                    "name", user.getAttribute("name"),
+                    "email", user.getAttribute("email"),
+                    "picture", user.getAttribute("profile_image")
+            );
+            return ResponseEntity.ok(userInfo);
         } else if ("github".equals(registrationId)) {
             userService.saveUser(user, "github");
             String email = user.getAttribute("email") != null ? user.getAttribute("email") : "no-email@example.com";

@@ -66,7 +66,9 @@ public class BoardController {
 		String savePath = "";
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {
+
         	savePath = "c:/ezwel/ezmarketupload/";	
+
         } else {
         	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/";}
 		String newfilename1 = null;

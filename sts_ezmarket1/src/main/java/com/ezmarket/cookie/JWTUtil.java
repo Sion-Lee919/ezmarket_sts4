@@ -32,6 +32,8 @@ public class JWTUtil {
                 .claim("userauthor", dto.getUserauthor())
                 .claim("points", dto.getPoints())
                 .claim("ezpay", dto.getEzpay())
+                .claim("member_status", dto.getMember_status())
+                .claim("member_kick_comment", dto.getMember_kick_comment())
                 .claim("social", dto.getSocial())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
