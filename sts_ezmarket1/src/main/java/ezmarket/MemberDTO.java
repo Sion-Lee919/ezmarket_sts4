@@ -18,12 +18,12 @@ public class MemberDTO {
 	String address;
 	String join_date;
 	String update_date;
-	String userauthor;
-	String points;
-	String ezpay;
+	Integer userauthor;
+	Long points;
+	Long ezpay;
 	String member_status;
 	String member_kick_comment;
-	String social;
+	Integer social;
 	
 	//판매자
 	Long brand_id;

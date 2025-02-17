@@ -198,13 +198,6 @@ public class MemberController {
 	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
 	        }
 	    }
-
-	    //판매자 페이지
-		@GetMapping("/brandinfo")
-		public BrandDTO getBrandInfo(@RequestParam("memberid") Integer member_id) {
-			BrandDTO dto = memberService.getBrand(member_id);
-			return dto;
-		}
 		
 		//회원 정보 수정
 		@PostMapping("/modify")
@@ -231,9 +224,38 @@ public class MemberController {
 		
 		//회원 탈퇴 요청
 		@PostMapping("/resign")
-		 public ResponseEntity<String> resign(@RequestParam("username") String username) {
+		public ResponseEntity<String> resign(@RequestParam("username") String username) {
 			memberService.resign(username);
 	        return ResponseEntity.ok("탈퇴가 완료되었습니다. 정보 유지기 기간은 1년이며, 회원 탈퇴 취소를 희망한다면 관리자에게 문의해주세요.");
 	    }
+		
+	//판매자
+	    //판매자 페이지
+		@GetMapping("/brandinfo")
+		public BrandDTO getBrandInfo(@RequestParam("memberid") Integer member_id) {
+			BrandDTO dto = memberService.getBrand(member_id);
+			return dto;
+		}
+		
+		//판매자 신청
+		@PostMapping("/sell_application")
+		public ResponseEntity<String> sell_application(@RequestBody MemberDTO dto) {
+			memberService.sell_application(dto);
+	        return ResponseEntity.ok("판매자 신청 완료.");
+	    }
+		
+		//판매자 신청 수락
+		@PostMapping("/sell_accept")
+		public ResponseEntity<String> sell_accept(@RequestParam("username") String userauthor, String brand_status) {
+			memberService.sell_accept(userauthor, brand_status);
+	        return ResponseEntity.ok("판매자 신청 승인.");
+	    }
+		
+		//판매자 신청 거절
+		@PostMapping("/sell_refuse")
+		public ResponseEntity<String> sell_refuse(@RequestParam("username") String brand_status, String brand_refusal_comment) {
+			memberService.sell_refuse(brand_status, brand_refusal_comment);
+			return ResponseEntity.ok("판매자 신청 거절.");
+		}
 }
 		
