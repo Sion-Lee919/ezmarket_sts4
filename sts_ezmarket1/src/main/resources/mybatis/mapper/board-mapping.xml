@@ -47,4 +47,57 @@
     	delete from product where product_id = #{product_id}
 	</delete>
 
+<!-- 필터기능 -->
+<select id="getFilteredItems" resultType="boarddto">
+    SELECT * FROM product
+    WHERE 1=1
+    <if test="searchKeyword != null and searchKeyword != ''">
+        AND (name LIKE '%' || #{searchKeyword} || '%' OR description LIKE '%' || #{searchKeyword} || '%')
+    </if>
+    <if test="bigcategory != null and bigcategory != ''">
+        AND bigcategory = #{bigcategory}
+    </if>
+    <if test="subcategories != null and subcategories.size() > 0">
+        <foreach item="sub" collection="subcategories" open="AND (" separator=" AND " close=")">
+            subcategory = #{sub}
+        </foreach>
+    </if>
+    <if test="alcoholRanges != null and alcoholRanges.size() > 0">
+        <foreach item="range" collection="alcoholRanges" open="AND (" separator=" OR " close=")">
+            alcohol BETWEEN #{range.min} AND #{range.max}
+        </foreach>
+    </if>
+    <if test="regions != null and regions.size() > 0">
+        <foreach item="region" collection="regions" open="AND (" separator=" OR " close=")">
+            product_region LIKE '%' || #{region} || '%'
+        </foreach>
+    </if>
+    <if test="priceRanges != null and priceRanges.size() > 0">
+        <foreach item="range" collection="priceRanges" open="AND (" separator=" OR " close=")">
+            price BETWEEN #{range.min} AND #{range.max}
+        </foreach>
+    </if>
+    <if test="newProduct == true">
+        AND created_at >= ADD_MONTHS(SYSDATE, -3)
+    </if>
+    <choose>
+        <when test="sortType == 'latest'">
+            ORDER BY created_at DESC
+        </when>
+        <when test="sortType == 'oldest'">
+            ORDER BY created_at ASC
+        </when>
+        <when test="sortType == 'lowPrice'">
+            ORDER BY price ASC
+        </when>
+        <when test="sortType == 'highPrice'">
+            ORDER BY price DESC
+        </when>
+        <otherwise>
+            ORDER BY created_at DESC
+        </otherwise>
+    </choose>
+</select>
+
+
 </mapper>
