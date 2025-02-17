@@ -47,14 +47,14 @@
 		update member set password = #{password}, nickname = #{nickname}, address = #{address} where username = #{username}
 	</update>
 	
-	<!-- 수정 전 -->
-	<delete id="deleteMember" parameterType="String">
-		delete from member where member_id = #{member_id}
-	</delete>
+	<update id="resignMember" parameterType="memberdto">
+		update member set member_status = 'kick', member_kick_comment = '탈퇴한 회원입니다.' where username = #{username}
+	</update>
 	
-	<select id="getAllMembers" resultType="memberdto">
-		select id, name, pw, phone from member
-	</select>
+	<!-- 수정 전, 강퇴 처리 할 때 사용, kick_comment 설정 -->
+	<update id="kickMember" parameterType="memberdto">
+		update member set member_status = 'kick', member_kick_comment = #{kick_comment} where username = #{username}
+	</update>
 	
 	<!-- brand table 불러오기 김민수 수정중 -->
 	<resultMap type="ezmarket.BrandDTO" id="brand">

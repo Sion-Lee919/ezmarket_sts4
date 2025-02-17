@@ -70,11 +70,18 @@ public class MemberController {
 	//로그인
 		//로그인
 	    @PostMapping("/login")
-
 	    public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO, HttpServletResponse response) {
 	        MemberDTO dto = memberService.getMember(memberDTO.getUsername());
 
 	        if (dto != null && dto.getPassword().equals(memberDTO.getPassword())) {
+	        	
+	        	//회원 탈퇴 -> 로그인 불가
+	        	if("kick".equals(dto.getMember_status())) {
+	        		Map<String, String> errorResponse = new HashMap<>();
+	                errorResponse.put("message", "로그인 할 수 없는 계정입니다. \n사유: " + dto.getMember_kick_comment());
+	                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+	        	}
+	        	
 	        	String token = JWTUtil.generateToken(dto);
 	        	
 	            Cookie cookie = new Cookie("jwt_token", token);
@@ -88,7 +95,6 @@ public class MemberController {
 	            
 	        } else {
 	            Map<String, String> errorResponse = new HashMap<>();
-
 	            if (dto == null) {
 	                errorResponse.put("message", "아이디가 틀렸습니다.");
 	            } else {
@@ -222,5 +228,12 @@ public class MemberController {
 		        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
 		    }
 		}
+		
+		//회원 탈퇴 요청
+		@PostMapping("/resign")
+		 public ResponseEntity<String> resign(@RequestParam("username") String username) {
+			memberService.resign(username);
+	        return ResponseEntity.ok("탈퇴가 완료되었습니다. 정보 유지기 기간은 1년이며, 회원 탈퇴 취소를 희망한다면 관리자에게 문의해주세요.");
+	    }
 }
 		
