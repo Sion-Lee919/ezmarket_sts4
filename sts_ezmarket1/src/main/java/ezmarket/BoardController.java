@@ -194,6 +194,7 @@ public class BoardController {
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/getitemsforrandom")
+
 	public ArrayList<BoardDTO> GetRandomItems(){
 		ArrayList<BoardDTO> dtoList = boardService.getAllItems();
 		Collections.shuffle(dtoList);
