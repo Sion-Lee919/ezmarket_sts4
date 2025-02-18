@@ -93,6 +93,34 @@ public class MemberMapperService implements MemberService {
 			return mapper.checkBrandNumber(brand_number) == 0;
 		}
 		
+		
+	//관리자
+		//유저 정보 가져오기
+		@Override
+		public List<MemberDTO> getAllUsers() {
+			List<MemberDTO> allUsers = mapper.getAllUsersMember(); 
+			return allUsers;
+		}
+		
+		//사용자 강퇴
+		@Override
+		public void kick(long member_id, String member_kick_comment) {
+			mapper.kickMember(member_id, member_kick_comment);
+		}
+		
+		//사용자 복구
+		@Override
+		public void restore(long member_id, String member_kick_comment) {
+			mapper.restoreMember(member_id, member_kick_comment);
+		}
+				
+		//판매자 정보 가져오기
+		@Override
+		public List<MemberDTO> getAllBrands() {
+	        List<MemberDTO> allBrands = mapper.getAllBrandsMember(); 
+	        return allBrands;
+	    }
+		
 		//판매자 수락
 		@Override
 		public void sellAccept(long brand_id) {
@@ -106,12 +134,4 @@ public class MemberMapperService implements MemberService {
 			mapper.sellApplicationRefuse(brand_id, brand_refusal_comment);
 			mapper.sellApplicationRefuseAuthor(brand_id, brand_refusal_comment);
 		}
-		
-	//관리자
-		//판매자 정보 가져오기
-		@Override
-		public List<MemberDTO> getAllBrands() {
-	        List<MemberDTO> allBrands = mapper.getAllBrandsMember(); 
-	        return allBrands;
-	    }
 }

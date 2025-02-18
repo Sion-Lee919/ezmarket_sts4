@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLConnection;
 import java.util.ArrayList;
-
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -185,10 +186,27 @@ public class BoardController {
 
 	//필터
 	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/filtered-items")
-	public List<BoardDTO> getFilteredItems(@RequestParam Map<String, Object> filters) {
-		return boardService.getFilteredItems(filters);
+	@PostMapping("/filtered-items")
+	public List<BoardDTO> getFilteredItems(@RequestBody FilterRequestDTO filters) {
+	    System.out.println("필터 요청: " + filters);
+
+	    if (filters.getSubcategories() == null) {
+	        filters.setSubcategories(List.of());
+	    }
+	    if (filters.getAlcoholRanges() == null) {
+	        filters.setAlcoholRanges(List.of());
+	    }
+	    if (filters.getRegions() == null) {
+	        filters.setRegions(List.of());
+	    }
+	    if (filters.getPriceRanges() == null) {
+	        filters.setPriceRanges(List.of());
+	    }
+
+	    return boardService.getFilteredItems(filters);
 	}
+
+
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/getitemsforrandom")
