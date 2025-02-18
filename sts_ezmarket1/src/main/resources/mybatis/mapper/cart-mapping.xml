@@ -1,18 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="ezmarket.CartMapper">
+    <!-- 장바구니 조회 -->
+    <select id="getCartByUsername" resultType="ezmarket.CartDTO">
+        SELECT 
+            c.cart_id as cartId,
+            c.username,
+            c.product_id as productId,
+            c.quantity,
+            p.name as productName,
+            p.price,
+            p.image_url as image
+        FROM CART c
+        JOIN PRODUCT p ON c.product_id = p.product_id
+        WHERE c.username = #{username}
+    </select>
 
+    <!-- 장바구니에 해당 상품이 있는지 확인 -->
+    <select id="checkExistingCart" resultType="int">
+        SELECT COUNT(*)
+        FROM CART
+        WHERE username = #{username}
+        AND product_id = #{productId}
+    </select>
+
+    <!-- 장바구니에 새 상품 추가 -->
+    <insert id="insertNewCart">
+        INSERT INTO CART (
+            cart_id,
+            username,
+            product_id,
+            quantity
+        ) VALUES (
+            (SELECT NVL(MAX(cart_id), 0) + 1 FROM CART),
+            #{username},
+            #{productId},
+            #{quantity}
+        )
+    </insert>
+
+    <!-- 기존 상품 수량 업데이트 -->
+    <update id="updateExistingCartQuantity">
+        UPDATE CART 
+        SET quantity = quantity + #{quantity}
+        WHERE username = #{username}
+        AND product_id = #{productId}
+    </update>
+
+    <!-- 상품 삭제 -->
+    <delete id="removeFromCart">
+        DELETE FROM CART 
+        WHERE cart_id = #{cartId}
+    </delete>
+
+    <!-- 장바구니 상품 수량 변경 -->
+    <update id="updateCartQuantity">
+        UPDATE CART 
+        SET quantity = #{quantity}
+        WHERE cart_id = #{cartId}
+    </update>
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
