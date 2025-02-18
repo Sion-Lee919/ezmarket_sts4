@@ -39,12 +39,12 @@ public class UserService {
             String picture;
             
             if ("google".equals(provider)) {
-            	username = oauth2User.getAttribute("sub");
-            	email = oauth2User.getAttribute("email");
-            	realname = oauth2User.getAttribute("name");
-            	picture = oauth2User.getAttribute("picture");
-            	
-            	if (userMapper.countByGoogleId(username) > 0) {
+               username = oauth2User.getAttribute("sub");
+               email = oauth2User.getAttribute("email");
+               realname = oauth2User.getAttribute("name");
+               picture = oauth2User.getAttribute("picture");
+               
+               if (userMapper.countByGoogleId(username) > 0) {
                     logger.info("기존 사용자, 업데이트 진행");
                     int updatedRows = userMapper.updateUser(username, email, realname, picture);
                     logger.info("업데이트된 행 수: {}", updatedRows);
@@ -54,9 +54,9 @@ public class UserService {
                     logger.info("삽입된 행 수: {}", insertedRows);
                 }
             } else if ("naver".equals(provider)) {
-            	Map<String, Object> response = (Map<String, Object>) oauth2User.getAttribute("response");
-            	
-            	username = (String) response.get("id");
+               Map<String, Object> response = (Map<String, Object>) oauth2User.getAttribute("response");
+               
+               username = (String) response.get("id");
                 email = (String) response.get("email");
                 realname = (String) response.get("name");
                 picture = (String) response.get("profile_image");
@@ -75,7 +75,7 @@ public class UserService {
                     logger.info("삽입된 행 수: {}", insertedRows);
                 }
             } else if ("kakao".equals(provider)){
-            	Map<String, Object> kakaoAccount = (Map<String, Object>) oauth2User.getAttribute("kakao_account");
+               Map<String, Object> kakaoAccount = (Map<String, Object>) oauth2User.getAttribute("kakao_account");
                 Map<String, Object> properties = (Map<String, Object>) oauth2User.getAttribute("properties");
 
                 username = oauth2User.getAttribute("id").toString();
@@ -92,20 +92,20 @@ public class UserService {
                 }
             } else if ("github".equals(provider)){
 
-            	Integer idInt = oauth2User.getAttribute("id");
-            	username = String.valueOf(idInt);
+               Integer idInt = oauth2User.getAttribute("id");
+               username = String.valueOf(idInt);
 
                 realname = oauth2User.getAttribute("login");
                 if (oauth2User.getAttribute("email") != null) {
-                	email = oauth2User.getAttribute("email");                	
+                   email = oauth2User.getAttribute("email");                   
                 } else {
-                	email = realname.toLowerCase() + "@github.com";
+                   email = realname.toLowerCase() + "@github.com";
 
                 }
-            	picture = oauth2User.getAttribute("avatar_url");
-            	System.out.println(username + " : " + email + " : " + realname + " : " + picture);
-            	
-            	if (githubUserMapper.countByGithubId(username) > 0) {
+               picture = oauth2User.getAttribute("avatar_url");
+               System.out.println(username + " : " + email + " : " + realname + " : " + picture);
+               
+               if (githubUserMapper.countByGithubId(username) > 0) {
                     logger.info("기존 사용자, 업데이트 진행");
                     int updatedRows = githubUserMapper.updateUser(username, email, realname, picture);
                     logger.info("업데이트된 행 수: {}", updatedRows);
@@ -116,7 +116,7 @@ public class UserService {
                 }
 
             } else {
-            	return "";
+               return "";
             }
             
             logger.info("saveUser() 호출됨: {}, {}, {}", username, email, realname);
@@ -125,7 +125,7 @@ public class UserService {
             memberDTO.setUsername(username);
             memberDTO.setEmail(email);
             memberDTO.setRealname(realname);
-          	//memberDTO.setPicture(picture);
+             //memberDTO.setPicture(picture);
             
             String token = JWTUtil.generateToken(memberDTO);
             return token;
