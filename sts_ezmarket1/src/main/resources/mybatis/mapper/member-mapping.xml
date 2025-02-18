@@ -11,7 +11,7 @@
 	<!-- 회원가입 -->
 	<insert id="insertMember" parameterType="memberdto">
 		insert into member (member_id, username, realname, nickname, password, email, phone, address, join_date) 
-		values (#{member_id},#{username}, #{realname}, #{nickname}, #{password}, #{email, jdbcType=VARCHAR}, #{phone}, #{address}, sysdate)
+		values (#{member_id}, #{username}, #{realname}, #{nickname}, #{password}, #{email, jdbcType=VARCHAR}, #{phone}, #{address}, sysdate)
 	</insert>
 	
 	<!-- 중복확인 -->
@@ -49,6 +49,19 @@
 	
 	<update id="resignMember" parameterType="memberdto">
 		update member set member_status = 'kick', member_kick_comment = '탈퇴한 회원입니다.' where username = #{username}
+	</update>
+	
+	<insert id="sellApplicationSubmit" parameterType="memberdto">
+		insert into brand (brand_id, member_id, brandname, brand_number, brand_join_date) values (#{brand_id}, #{member_id}, #{brandname}, #{brand_number}, sysdate)
+	</insert>
+	
+	<update id="sellApplicationAccept" parameterType="memberdto">
+		update member set userauthor = 2 where username = #{username};
+		update brand set brand_status = '검토 중' where username = #{username};
+	</update>
+	
+	<update id="sellApplicationRefuse" parameterType="memberdto">
+		update brand set brand_status = '거절', brand_refusal_comment = #{brand_refusal_comment} where username = #{username};
 	</update>
 	
 	<!-- 수정 전, 강퇴 처리 할 때 사용, kick_comment 설정 -->
