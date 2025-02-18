@@ -1,5 +1,8 @@
 package ezmarket;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
@@ -26,4 +29,11 @@ public class BoardDTO {
 	String subcategory;
 	String image_url;
 	MultipartFile image;
+	
+	List<String> subcategories;
+    List<Map<String, Integer>> alcoholRanges;
+    List<String> regions;
+    List<Map<String, Integer>> priceRanges;
+    Boolean newProduct;
+    String sortType;
 }

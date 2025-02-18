@@ -1,5 +1,7 @@
 package ezmarket;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,12 +42,6 @@ public class MemberMapperService implements MemberService {
 		public boolean isPhoneAvailable(String phone) {
 			return mapper.checkPhone(phone) == 0;
 		}
-		
-		//판매자 페이지
-		@Override
-		public BrandDTO getBrand(int member_id) {
-			return mapper.getBrand(member_id);
-		}
 
         //Id, Pw 찾기
         @Override
@@ -64,6 +60,7 @@ public class MemberMapperService implements MemberService {
             return result > 0;
         }
         
+    //내정보
         //회원정보수정
         @Override
         public void modify(String username, String password, String nickname, String address) {
@@ -75,4 +72,46 @@ public class MemberMapperService implements MemberService {
         public void resign(String member_status) {
         	mapper.resignMember(member_status);
         }
+        
+    //판매자
+		//판매자 페이지
+		@Override
+		public BrandDTO getBrand(int member_id) {
+			return mapper.getBrand(member_id);
+		}
+		
+		//판매자 신청
+		@Override
+		 public String sellApplication(MemberDTO dto) {
+	        int result = mapper.sellApplicationSubmit(dto);
+	        return result == 1 ? "success" : "fail";
+	    }
+		
+		//중복 확인
+		@Override
+		public boolean isBrandNumberAvailable(String brand_number) {
+			return mapper.checkBrandNumber(brand_number) == 0;
+		}
+		
+		//판매자 수락
+		@Override
+		public void sellAccept(long brand_id) {
+			mapper.sellApplicationAccept(brand_id);
+			mapper.sellApplicationAcceptAuthor(brand_id);
+		}
+		
+		//판매자 거절
+		@Override
+		public void sellRefuse(long brand_id, String brand_refusal_comment) {
+			mapper.sellApplicationRefuse(brand_id, brand_refusal_comment);
+			mapper.sellApplicationRefuseAuthor(brand_id, brand_refusal_comment);
+		}
+		
+	//관리자
+		//판매자 정보 가져오기
+		@Override
+		public List<MemberDTO> getAllBrands() {
+	        List<MemberDTO> allBrands = mapper.getAllBrandsMember(); 
+	        return allBrands;
+	    }
 }

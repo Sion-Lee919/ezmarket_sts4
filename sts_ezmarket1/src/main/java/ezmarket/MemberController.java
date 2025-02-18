@@ -1,6 +1,7 @@
 package ezmarket;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,7 +109,6 @@ public class MemberController {
 		//로그아웃
 	    @PostMapping("/logout")
 	    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-	    	System.out.println("로그아웃");
 	        Cookie jwtCookie = new Cookie("jwt_token", null); 
 	        jwtCookie.setMaxAge(0);
 	        jwtCookie.setPath("/");
@@ -183,7 +183,6 @@ public class MemberController {
 	            token = token.substring(7);
 
 	            String username = JWTUtil.validateAndGetUserId(token); 
-	            System.out.println(username);
 	            if (username != null) { 
 	                MemberDTO dto = memberService.getMember(username);
 	                return ResponseEntity.ok(dto);
@@ -198,13 +197,6 @@ public class MemberController {
 	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
 	        }
 	    }
-
-	    //판매자 페이지
-		@GetMapping("/brandinfo")
-		public BrandDTO getBrandInfo(@RequestParam("memberid") Integer member_id) {
-			BrandDTO dto = memberService.getBrand(member_id);
-			return dto;
-		}
 		
 		//회원 정보 수정
 		@PostMapping("/modify")
@@ -231,9 +223,54 @@ public class MemberController {
 		
 		//회원 탈퇴 요청
 		@PostMapping("/resign")
-		 public ResponseEntity<String> resign(@RequestParam("username") String username) {
+		public ResponseEntity<String> resign(@RequestParam("username") String username) {
 			memberService.resign(username);
 	        return ResponseEntity.ok("탈퇴가 완료되었습니다. 정보 유지기 기간은 1년이며, 회원 탈퇴 취소를 희망한다면 관리자에게 문의해주세요.");
+	    }
+		
+	//판매자
+	    //판매자 페이지
+		@GetMapping("/brandinfo")
+		public BrandDTO getBrandInfo(@RequestParam("memberid") Integer member_id) {
+			BrandDTO dto = memberService.getBrand(member_id);
+			return dto;
+		}
+		
+		//판매자 신청
+		@PostMapping("/sellApplication")
+		public ResponseEntity<String> sellApplication(@RequestBody MemberDTO dto) {
+			memberService.sellApplication(dto);
+	        return ResponseEntity.ok("판매자 신청 완료.");
+	    }
+		
+		//중복 확인 - 사업자번호
+	    @GetMapping("/checkBrandNumber")
+	    @ResponseBody
+	    public String checkBrandNumber(@RequestParam("brand_number") String brand_number) {
+	        boolean isAvailable = memberService.isBrandNumberAvailable(brand_number);
+	        return isAvailable ? "사용 가능한 사업자 번호입니다." : "중복된 사업자 번호입니다."; 
+	    }
+		
+		//판매자 신청 수락
+		@PostMapping("/sellAccept")
+		public ResponseEntity<String> sellAccept(@RequestParam("brand_id") long brand_id) {
+			memberService.sellAccept(brand_id);
+	        return ResponseEntity.ok("판매자 신청 승인.");
+	    }
+		
+		//판매자 신청 거절
+		@PostMapping("/sellRefuse")
+		public ResponseEntity<String> sellRefuse(@RequestParam("brand_id") long brand_id, @RequestParam("brand_refusal_comment") String brand_refusal_comment) {
+			memberService.sellRefuse(brand_id, brand_refusal_comment);
+			return ResponseEntity.ok("판매자 신청 거절.");
+		}
+		
+	//관리자
+		//판매자 정보 가져오기
+	    @GetMapping("/getAllBrands")
+	    public ResponseEntity<List<MemberDTO>> getAllBrands() {
+	        List<MemberDTO> allBrands = memberService.getAllBrands();
+	        return ResponseEntity.ok(allBrands);
 	    }
 }
 		

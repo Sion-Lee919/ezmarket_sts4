@@ -4,10 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CartDTO {
-	String cart_id;
-	String member_id;
-	String product_id;
-	String quantity;
+    private Long cartId;
+    private String username;
+    private Long productId;
+    private int quantity;
+    
+    private String productName;
+    private int price;
+    private String image;
 }
