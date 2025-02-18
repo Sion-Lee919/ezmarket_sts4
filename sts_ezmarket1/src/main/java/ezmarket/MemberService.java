@@ -1,5 +1,7 @@
 package ezmarket;
 
+import java.util.List;
+
 public interface MemberService {
 	
 	//회원가입
@@ -31,11 +33,18 @@ public interface MemberService {
 		BrandDTO getBrand(int member_id);
 		
 		//판매자 신청
-		String sell_application(MemberDTO dto);
+		String sellApplication(MemberDTO dto);
+		
+		//중복 확인
+		boolean isBrandNumberAvailable(String brand_number);
 		
 		//판매자 승인
-		void sell_accept(String userauthor, String brand_status);
+		void sellAccept(long brand_id);
 		
 		//판매자 거절
-		void sell_refuse(String brand_status, String brand_refusal_comment);
+		void sellRefuse(long brand_id, String brand_refusal_comment);
+		
+	//판매자
+		//판매자 목록 가져오기
+		List<MemberDTO> getAllBrands();
 }
