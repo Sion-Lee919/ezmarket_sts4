@@ -38,13 +38,22 @@ public interface MemberService {
 		//중복 확인
 		boolean isBrandNumberAvailable(String brand_number);
 		
+	//관리자
+		//유저 목록 가져오기
+		List<MemberDTO> getAllUsers();
+		
+		//사용자 강퇴
+		void kick(long member_id, String member_kick_comment);
+		
+		//사용자 복구
+		void restore(long member_id, String member_kick_comment);
+				
+		//판매자 목록 가져오기
+		List<MemberDTO> getAllBrands();
+		
 		//판매자 승인
 		void sellAccept(long brand_id);
 		
 		//판매자 거절
 		void sellRefuse(long brand_id, String brand_refusal_comment);
-		
-	//판매자
-		//판매자 목록 가져오기
-		List<MemberDTO> getAllBrands();
 }
