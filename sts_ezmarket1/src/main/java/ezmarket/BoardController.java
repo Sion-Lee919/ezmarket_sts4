@@ -53,7 +53,6 @@ public class BoardController {
 	@GetMapping("/getallitemsforsearch")
 	public ArrayList<BoardDTO> GetAllItems(){
 		ArrayList<BoardDTO> dtoList = boardService.getAllItems();
-		System.out.println("getallitemsforsearch사용중");
 		return dtoList;
 	}
 
