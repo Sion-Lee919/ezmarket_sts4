@@ -1,6 +1,8 @@
 package ezmarket;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +46,11 @@ public class BoardMapperService implements BoardService {
 		// TODO Auto-generated method stub
 		return mapper.deleteItem(product_id) > 0;
 	}
+	
+	@Override
+    public List<BoardDTO> getFilteredItems(Map<String, Object> filters) {
+        return mapper.getFilteredItems(filters);
+    }
 
 
 }

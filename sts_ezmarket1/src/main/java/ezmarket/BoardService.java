@@ -1,6 +1,8 @@
 package ezmarket;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public interface BoardService {
 
@@ -15,6 +17,8 @@ public interface BoardService {
 	boolean updateItem(BoardDTO dto);
 	
 	boolean deleteItem(int product_id);
+	
+	List<BoardDTO> getFilteredItems(Map<String, Object> filters);
 
 
 }
