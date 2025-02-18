@@ -1,5 +1,7 @@
 package ezmarket;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,20 +82,36 @@ public class MemberMapperService implements MemberService {
 		
 		//판매자 신청
 		@Override
-		 public String sell_application(MemberDTO dto) {
+		 public String sellApplication(MemberDTO dto) {
 	        int result = mapper.sellApplicationSubmit(dto);
 	        return result == 1 ? "success" : "fail";
 	    }
 		
+		//중복 확인
+		@Override
+		public boolean isBrandNumberAvailable(String brand_number) {
+			return mapper.checkBrandNumber(brand_number) == 0;
+		}
+		
 		//판매자 수락
 		@Override
-		public void sell_accept(String userauthor, String brand_status) {
-			mapper.sellApplicationAccept(userauthor, brand_status);
+		public void sellAccept(long brand_id) {
+			mapper.sellApplicationAccept(brand_id);
+			mapper.sellApplicationAcceptAuthor(brand_id);
 		}
 		
 		//판매자 거절
 		@Override
-		public void sell_refuse(String brand_status, String brand_refusal_comment) {
-			mapper.sellApplicationRefuse(brand_status, brand_refusal_comment);
+		public void sellRefuse(long brand_id, String brand_refusal_comment) {
+			mapper.sellApplicationRefuse(brand_id, brand_refusal_comment);
+			mapper.sellApplicationRefuseAuthor(brand_id, brand_refusal_comment);
 		}
+		
+	//관리자
+		//판매자 정보 가져오기
+		@Override
+		public List<MemberDTO> getAllBrands() {
+	        List<MemberDTO> allBrands = mapper.getAllBrandsMember(); 
+	        return allBrands;
+	    }
 }

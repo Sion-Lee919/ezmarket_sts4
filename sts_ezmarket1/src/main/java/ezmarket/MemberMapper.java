@@ -39,9 +39,18 @@ public interface MemberMapper {
         //판매자 신청
         int sellApplicationSubmit(MemberDTO dto);
         
+        //중복확인
+        int checkBrandNumber(String brand_number);
+        
         //판매자 승인
-        void sellApplicationAccept(String userauthor, String brand_status);
+        void sellApplicationAccept(long brand_id);
+        void sellApplicationAcceptAuthor(long brand_id);
         
         //판매자 거절
-        void sellApplicationRefuse(String brand_status, String brand_refusal_comment);
+        void sellApplicationRefuse(long brand_id, String brand_refusal_comment);
+        void sellApplicationRefuseAuthor(long brand_id, String brand_refusal_comment);
+        
+    //관리자
+        //판매자 목록 가져오기
+        List<MemberDTO> getAllBrandsMember();
 }
