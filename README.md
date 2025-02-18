@@ -26,7 +26,7 @@ create table member ( --회원 테이블<br>
     <br>
     -- 중복 방지 제약 조건<br>
     constraint unq_username unique (username), -- 로그인 id 중복 방지<br>
-    /* constraint unq_email unique (email), -- 이메일 중복 방지 */<br>
+    constraint unq_email unique (email), -- 이메일 중복 방지 /<br>
     constraint unq_nickname unique (nickname), -- 닉네임 중복 방지<br>
     /* constraint unq_phone unique (phone), -- 전화번호 중복 방지 */<br>
     <br>
@@ -49,6 +49,7 @@ create table brand(--판매자 정보<br>
     brand_refusal_comment varchar2(4000), --거절 사유<br>
     brand_join_date date default sysdate, -- 판매자신청일<br>
     brand_update_date date default sysdate, -- 판매자정보수정일<br>
+    constraint unq_brand_number unique (brand_number)
     constraint fk_brand_member foreign key (member_id) references member(member_id)<br>
 );<br>
 <br>
