@@ -52,7 +52,6 @@ public class BoardController {
 	@GetMapping("/getallitemsforsearch")
 	public ArrayList<BoardDTO> GetAllItems(){
 		ArrayList<BoardDTO> dtoList = boardService.getAllItems();
-		System.out.println("getallitemsforsearch사용중");
 		return dtoList;
 	}
 
@@ -188,7 +187,6 @@ public class BoardController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/filtered-items")
 	public List<BoardDTO> getFilteredItems(@RequestParam Map<String, Object> filters) {
-		System.out.println(filters.toString());
 		return boardService.getFilteredItems(filters);
 	}
 
