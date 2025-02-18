@@ -23,7 +23,7 @@ public interface BoardMapper {
 	
 	int deleteItem(int product_id);
 	
-	List<BoardDTO> getFilteredItems(Map<String, Object> filters);
+	List<BoardDTO> getFilteredItems(FilterRequestDTO filters);
 
 }
 
