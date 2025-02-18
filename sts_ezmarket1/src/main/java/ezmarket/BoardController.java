@@ -177,8 +177,7 @@ public class BoardController {
 	    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/getitemsforrandom")
+	@GetMapping("/getitemsforrandom") // 
 	public ArrayList<BoardDTO> GetRandomItems(){
 		ArrayList<BoardDTO> dtoList = boardService.getAllItems();
 		Collections.shuffle(dtoList);
