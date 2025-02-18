@@ -45,7 +45,7 @@ create table brand(--판매자 정보<br>
     brandlogo_url VARCHAR2(500), --브랜드로고<br>
     brand_number varchar2(100) not null, --사업자 등록번호<br>
     brandlicense_url VARCHAR2(500), --사업자 등록증 파일 이미지<br>
-    brand_status varchar2(20) default '신청 중' check(brand_status in ('신청 중', '검토 중','거절')),--판매자신청상태<br>
+    brand_status varchar2(20) default '신청 중' check(brand_status in ('신청 중', '검토 중','승인')),--판매자신청상태<br>
     brand_refusal_comment varchar2(4000), --거절 사유<br>
     brand_join_date date default sysdate, -- 판매자신청일<br>
     brand_update_date date default sysdate, -- 판매자정보수정일<br>
