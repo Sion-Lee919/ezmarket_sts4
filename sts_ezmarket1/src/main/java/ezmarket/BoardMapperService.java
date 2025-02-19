@@ -46,11 +46,12 @@ public class BoardMapperService implements BoardService {
 		// TODO Auto-generated method stub
 		return mapper.deleteItem(product_id) > 0;
 	}
-	
+
 	@Override
-    public List<BoardDTO> getFilteredItems(Map<String, Object> filters) {
-        return mapper.getFilteredItems(filters);
-    }
+	public List<BoardDTO> getFilteredItems(FilterRequestDTO filters) {
+		return mapper.getFilteredItems(filters);
+	}
+	
 
 
 }

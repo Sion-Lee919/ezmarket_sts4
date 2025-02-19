@@ -175,6 +175,7 @@ public class MemberController {
         }
         
 	//내정보
+        //내정보
 	    @GetMapping("/userinfo")
 	    public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
 	        String token = request.getHeader("Authorization");
@@ -251,6 +252,36 @@ public class MemberController {
 	        return isAvailable ? "사용 가능한 사업자 번호입니다." : "중복된 사업자 번호입니다."; 
 	    }
 		
+		
+	//관리자
+		//유저 정보 가져오기
+	    @GetMapping("/getAllUsers")
+	    public ResponseEntity<List<MemberDTO>> getAllUsers() {
+	        List<MemberDTO> allUsers = memberService.getAllUsers();
+	        return ResponseEntity.ok(allUsers);
+	    }
+	    
+	    //사용자 강퇴
+	    @PostMapping("/kick")
+		public ResponseEntity<String> kick(@RequestParam("member_id") long member_id, @RequestParam("member_kick_comment") String member_kick_comment) {
+			memberService.kick(member_id, member_kick_comment);
+	        return ResponseEntity.ok("사용자 강퇴 완료.");
+	    }
+	    
+	    //사용자 복구
+	    @PostMapping("/restore")
+		public ResponseEntity<String> restore(@RequestParam("member_id") long member_id, @RequestParam("member_kick_comment") String member_kick_comment) {
+			memberService.restore(member_id, member_kick_comment);
+	        return ResponseEntity.ok("사용자 복구 완료.");
+	    }
+	    
+		//판매자 정보 가져오기
+	    @GetMapping("/getAllBrands")
+	    public ResponseEntity<List<MemberDTO>> getAllBrands() {
+	        List<MemberDTO> allBrands = memberService.getAllBrands();
+	        return ResponseEntity.ok(allBrands);
+	    }
+	    
 		//판매자 신청 수락
 		@PostMapping("/sellAccept")
 		public ResponseEntity<String> sellAccept(@RequestParam("brand_id") long brand_id) {
@@ -264,13 +295,5 @@ public class MemberController {
 			memberService.sellRefuse(brand_id, brand_refusal_comment);
 			return ResponseEntity.ok("판매자 신청 거절.");
 		}
-		
-	//관리자
-		//판매자 정보 가져오기
-	    @GetMapping("/getAllBrands")
-	    public ResponseEntity<List<MemberDTO>> getAllBrands() {
-	        List<MemberDTO> allBrands = memberService.getAllBrands();
-	        return ResponseEntity.ok(allBrands);
-	    }
 }
 		

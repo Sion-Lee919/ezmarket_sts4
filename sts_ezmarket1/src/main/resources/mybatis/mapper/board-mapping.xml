@@ -51,6 +51,7 @@
 <select id="getFilteredItems" resultType="boarddto">
     SELECT * FROM product
     WHERE 1=1
+    
     <if test="searchKeyword != null and searchKeyword != ''">
         AND (name LIKE '%' || #{searchKeyword} || '%' OR description LIKE '%' || #{searchKeyword} || '%')
     </if>
@@ -77,9 +78,10 @@
             price BETWEEN #{range.min} AND #{range.max}
         </foreach>
     </if>
-    <if test="newProduct == true">
+    <if test="newProduct != null and newProduct">
         AND created_at >= ADD_MONTHS(SYSDATE, -3)
     </if>
+    
     <choose>
         <when test="sortType == 'latest'">
             ORDER BY created_at DESC
@@ -98,6 +100,8 @@
         </otherwise>
     </choose>
 </select>
+
+
 
 
 </mapper>

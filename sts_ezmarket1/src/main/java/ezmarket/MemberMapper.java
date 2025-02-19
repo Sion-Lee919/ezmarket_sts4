@@ -42,6 +42,20 @@ public interface MemberMapper {
         //중복확인
         int checkBrandNumber(String brand_number);
         
+        
+    //관리자
+        //유저 목록 가져오기
+        List<MemberDTO> getAllUsersMember();
+        
+        //사용자 강퇴
+        void kickMember(long member_id, String member_kick_comment);
+        
+        //사용자 복구
+        void restoreMember(long member_id, String member_kick_comment);
+        
+        //판매자 목록 가져오기
+        List<MemberDTO> getAllBrandsMember();
+        
         //판매자 승인
         void sellApplicationAccept(long brand_id);
         void sellApplicationAcceptAuthor(long brand_id);
@@ -49,8 +63,4 @@ public interface MemberMapper {
         //판매자 거절
         void sellApplicationRefuse(long brand_id, String brand_refusal_comment);
         void sellApplicationRefuseAuthor(long brand_id, String brand_refusal_comment);
-        
-    //관리자
-        //판매자 목록 가져오기
-        List<MemberDTO> getAllBrandsMember();
 }

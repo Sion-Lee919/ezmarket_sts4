@@ -20,9 +20,10 @@ create table member ( --회원 테이블<br>
     userauthor number(1) default 1 not null check(userauthor in (0, 1, 2)) , -- 권한 (0: 관리자, 1: 일반회원, 2: 판매자) 기본값 1 일반회원<br>
     points number default 0 CHECK (points >= 0), -- 포인트<br>
     ezpay number(10) default 0 CHECK (ezpay >= 0), --충전금액<br>
-    member_status varchar2(20) default 'normal' check(member_status in ('normal', 'kick')), --맴버 상태 (일반,강퇴)<br>
+    member_status varchar2(20) default '정상' check(member_status in ('정상', '강퇴', '탈퇴')), --맴버 상태 (일반,강퇴)<br>
     member_kick_comment varchar2(4000), -- 강퇴당한 맴버 사유<br>
     social number(1) default 0 not null,<br>
+    kick_date date default sysdate,<br>
     <br>
     -- 중복 방지 제약 조건<br>
     constraint unq_username unique (username), -- 로그인 id 중복 방지<br>
@@ -129,3 +130,24 @@ create table cart( -- 장바구니 테이블<br>
     constraint fk_cart_product foreign key (product_id) references product(product_id)<br>
 );<br>
 <br>
+<br>
+##########여기부터는 aws 배포 후에 DB 설정하면서 해도 될 것 같아요. 탈퇴/강퇴 사용자 1년 후 자동 DB에서 삭제 스케줄러입니다.##########<br>
+/as sysdba 로그인 후<br>
+<br>
+GRANT CREATE JOB TO c##ezmarket;<br>
+GRANT MANAGE SCHEDULER TO c##ezmarket;<br>
+GRANT EXECUTE ON DBMS_SCHEDULER TO c##ezmarket;<br>
+<br>
+c##ezmarket에서<br>
+BEGIN<br>
+  DBMS_SCHEDULER.create_job (<br>
+    job_name        => 'DELETE_OLD_MEMBERS_KICK',<br>
+    job_type        => 'PLSQL_BLOCK',<br>
+    job_action      => 'BEGIN <br>
+                          DELETE FROM member WHERE kick_date <= ADD_MONTHS(SYSDATE, -12);<br>
+                        END;',<br>
+    start_date      => SYSTIMESTAMP,<br>
+    repeat_interval => 'FREQ=DAILY; BYHOUR=0; BYMINUTE=0; BYSECOND=0',<br>
+    enabled         => TRUE<br>
+  );<br>
+END;<br>
