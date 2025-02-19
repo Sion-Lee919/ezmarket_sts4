@@ -32,7 +32,6 @@ public class ReviewController {
 	
 	@PostMapping(value="review/registerreview", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Boolean> registerReview(@ModelAttribute ReviewDTO dto) throws IOException{
-		
 		String savePath = "";
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {
@@ -40,10 +39,12 @@ public class ReviewController {
         	savePath = "c:/ezwel/ezmarketupload/reviewimage";
 
         } else {
-        	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage";}
+        	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage";
+        }
 		String newfilename1 = null;
 		MultipartFile file1 = dto.getImage();
-		if(!file1.isEmpty()) {
+		
+		if (dto.getImage() != null && !file1.isEmpty()) {
 			String originalfilename1 = file1.getOriginalFilename();
 			String before1 = originalfilename1.substring(0, originalfilename1.indexOf("."));
 			String ext1 = originalfilename1.substring(originalfilename1.indexOf("."));
@@ -51,6 +52,8 @@ public class ReviewController {
 			//서버내부 지정경로에 파일내용 저장
 			file1.transferTo( new java.io.File(savePath +  newfilename1));
 			dto.setImage_url(newfilename1);
+		} else {
+			dto.setImage_url(null);
 		}
 		boolean result = reviewService.registerReview(dto);
 	    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);

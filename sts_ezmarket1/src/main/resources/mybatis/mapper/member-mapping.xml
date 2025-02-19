@@ -125,7 +125,6 @@
 			)
 		</update>
 	
-	<!-- brand table 불러오기 김민수 수정중 -->
 	<resultMap type="ezmarket.BrandDTO" id="brand">
 		<id property="member_id" column="member_id"/>
 		<result property="brand_id" column="brand_id"/>

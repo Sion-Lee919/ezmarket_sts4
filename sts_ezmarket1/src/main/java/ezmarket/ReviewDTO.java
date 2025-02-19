@@ -18,4 +18,6 @@ public class ReviewDTO {
 	String update_date;
 	String image_url;
 	MultipartFile image;
+	
+	String nickname; //from member
 }

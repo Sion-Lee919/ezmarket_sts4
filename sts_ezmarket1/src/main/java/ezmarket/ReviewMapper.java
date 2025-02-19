@@ -11,4 +11,6 @@ public interface ReviewMapper {
 
 	ArrayList<BoardDTO> getReview(int product_id);
 
+	boolean registerReview(ReviewDTO dto);
+
 }

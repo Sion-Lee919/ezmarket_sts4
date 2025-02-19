@@ -5,10 +5,23 @@
 <mapper namespace="ezmarket.ReviewMapper">
 
 	<select id="getReview" resultType="reviewdto" parameterType="int">
-  	select *
-  	from review
-  	where product_id=#{product_id}
+  	select r.*, m.nickname
+  	from review r
+    join member m on m.member_id = r.member_id
+  	where r.product_id =#{product_id}
+  	order by review_date desc
   	</select>
+  	
+  	
+  	
+  	 <insert id="registerReview" parameterType="reviewdto">
+    insert into review
+    (review_id, product_id, member_id, comments, review_date, update_date
+    <if test="image_url != null">, image_url</if>)
+    values
+    (#{review_id}, #{product_id}, #{member_id}, #{comments}, sysdate, sysdate
+    <if test="image_url != null">, #{image_url}</if>)
+</insert>
 
 </mapper>
 
