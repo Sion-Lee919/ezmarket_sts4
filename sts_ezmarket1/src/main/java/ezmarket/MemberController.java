@@ -77,7 +77,7 @@ public class MemberController {
 	        if (dto != null && dto.getPassword().equals(memberDTO.getPassword())) {
 	        	
 	        	//회원 탈퇴 -> 로그인 불가
-	        	if("kick".equals(dto.getMember_status())) {
+	        	if(!"정상".equals(dto.getMember_status())) {
 	        		Map<String, String> errorResponse = new HashMap<>();
 	                errorResponse.put("message", "로그인 할 수 없는 계정입니다. \n사유: " + dto.getMember_kick_comment());
 	                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
@@ -251,6 +251,29 @@ public class MemberController {
 	        boolean isAvailable = memberService.isBrandNumberAvailable(brand_number);
 	        return isAvailable ? "사용 가능한 사업자 번호입니다." : "중복된 사업자 번호입니다."; 
 	    }
+	    
+	  //판매자 정보 수정
+	  		@PostMapping("/sellmodify")
+	  		public ResponseEntity<?> sellmodify(@RequestBody MemberDTO memberDTO, HttpServletRequest request) {
+	  			String token = request.getHeader("Authorization");
+	  		    if (token != null && token.startsWith("Bearer")) {
+	  		        token = token.substring(7);
+	  		        String brand_id = JWTUtil.validateAndGetUserId(token);
+
+	  		        if (brand_id != null && memberDTO.getUsername().equals(username)) {
+	  		            memberService.modify(memberDTO.getBrandname(), memberDTO.getBrand_number(), memberDTO.getBrandlogo_url(), memberDTO.getBrandlicense_url());
+	  		            return ResponseEntity.ok("회원 정보가 수정되었습니다.");
+	  		        } else {
+	  		            Map<String, String> errorResponse = new HashMap<>();
+	  		            errorResponse.put("message", "토큰이 유효하지 않거나 권한이 없습니다.");
+	  		            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+	  		        }
+	  		    } else {
+	  		        Map<String, String> errorResponse = new HashMap<>();
+	  		        errorResponse.put("message", "Authorization 헤더 오류.");
+	  		        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+	  		    }
+	  		}
 		
 		
 	//관리자
