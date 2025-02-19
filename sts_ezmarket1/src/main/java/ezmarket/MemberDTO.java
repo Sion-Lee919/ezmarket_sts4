@@ -24,6 +24,7 @@ public class MemberDTO {
 	String member_status;
 	String member_kick_comment;
 	Integer social;
+	String kick_date;
 	
 	//판매자
 	Long brand_id;
