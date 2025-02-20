@@ -25,6 +25,8 @@ public interface BoardMapper {
 	
 	List<BoardDTO> getFilteredItems(FilterRequestDTO filters);
 
+	int getFilteredItemsCount(FilterRequestDTO filters);
+
 }
 
 

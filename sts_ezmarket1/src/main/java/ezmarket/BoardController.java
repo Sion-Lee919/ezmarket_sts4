@@ -183,28 +183,23 @@ public class BoardController {
 	    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 	}
 
-
 	//필터
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/filtered-items")
-	public List<BoardDTO> getFilteredItems(@RequestBody FilterRequestDTO filters) {
-	    System.out.println("필터 요청: " + filters);
+	public FilteredItemsResponseDTO getFilteredItems(@RequestBody FilterRequestDTO filters) {
+	    if (filters.getSubcategories() == null) filters.setSubcategories(List.of());
+	    if (filters.getAlcoholRanges() == null) filters.setAlcoholRanges(List.of());
+	    if (filters.getRegions() == null) filters.setRegions(List.of());
+	    if (filters.getPriceRanges() == null) filters.setPriceRanges(List.of());
 
-	    if (filters.getSubcategories() == null) {
-	        filters.setSubcategories(List.of());
-	    }
-	    if (filters.getAlcoholRanges() == null) {
-	        filters.setAlcoholRanges(List.of());
-	    }
-	    if (filters.getRegions() == null) {
-	        filters.setRegions(List.of());
-	    }
-	    if (filters.getPriceRanges() == null) {
-	        filters.setPriceRanges(List.of());
-	    }
+	    System.out.println("최종 요청 테스트중: " + filters);
 
-	    return boardService.getFilteredItems(filters);
+	    List<BoardDTO> items = boardService.getFilteredItems(filters);
+	    int totalCount = boardService.getFilteredItemsCount(filters);
+
+	    return new FilteredItemsResponseDTO(items, totalCount);
 	}
+
 
 
 
