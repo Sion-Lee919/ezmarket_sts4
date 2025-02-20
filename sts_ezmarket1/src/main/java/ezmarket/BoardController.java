@@ -95,15 +95,18 @@ public class BoardController {
 	
 	@CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/showimage")
-    public void showImg(String filename, HttpServletResponse response) throws IOException {
+    public void showImg(String filename, String obj, HttpServletResponse response) throws IOException {
+		//String obj = "product";
         String osName = System.getProperty("os.name").toLowerCase();
         String path = "";
         
         // 운영체제에 맞는 파일 경로 설정
         if (osName.contains("win")) {
-            path = "c:/ezwel/ezmarketupload/";
-        } else { 
-            path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/";
+        	if (obj.equals("product")) {path = "c:/ezwel/ezmarketupload/";}
+        	else if (obj.equals("review")) {path = "c:/ezwel/ezmarketupload/reviewimage";}
+        } else {
+            if (obj.equals("product")) {path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/";}
+        	else if (obj.equals("review")) {path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage";}
         }
         
         // 파일을 열기
