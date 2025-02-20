@@ -16,10 +16,10 @@
   	
   	 <insert id="registerReview" parameterType="reviewdto">
     insert into review
-    (review_id, product_id, member_id, comments, review_date, update_date
+    (review_id, product_id, member_id, comments, review_date, update_date, rating
     <if test="image_url != null">, image_url</if>)
     values
-    (#{review_id}, #{product_id}, #{member_id}, #{comments}, sysdate, sysdate
+    (#{review_id}, #{product_id}, #{member_id}, #{comments}, sysdate, sysdate, #{rating}
     <if test="image_url != null">, #{image_url}</if>)
 </insert>
 
