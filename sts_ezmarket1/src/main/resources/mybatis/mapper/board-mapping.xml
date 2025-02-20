@@ -14,7 +14,6 @@
   	from product
   </select>
   
-  
   <select id="getBrandItems" resultType="boarddto" parameterType="int">
   select *
   from product
@@ -99,9 +98,48 @@
             ORDER BY created_at DESC
         </otherwise>
     </choose>
+    
+    <if test="limit != null and offset != null">
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+    </if>
 </select>
 
-
+<!-- 페이지네이션을 위한 개수처리 -->
+<!-- 필터링된 상품 개수를 가져오는 쿼리 -->
+<select id="getFilteredItemsCount" resultType="int">
+    SELECT COUNT(*) FROM product
+    WHERE 1=1
+    
+    <if test="searchKeyword != null and searchKeyword != ''">
+        AND (name LIKE '%' || #{searchKeyword} || '%' OR description LIKE '%' || #{searchKeyword} || '%')
+    </if>
+    <if test="bigcategory != null and bigcategory != ''">
+        AND bigcategory = #{bigcategory}
+    </if>
+    <if test="subcategories != null and subcategories.size() > 0">
+        <foreach item="sub" collection="subcategories" open="AND (" separator=" AND " close=")">
+            subcategory = #{sub}
+        </foreach>
+    </if>
+    <if test="alcoholRanges != null and alcoholRanges.size() > 0">
+        <foreach item="range" collection="alcoholRanges" open="AND (" separator=" OR " close=")">
+            alcohol BETWEEN #{range.min} AND #{range.max}
+        </foreach>
+    </if>
+    <if test="regions != null and regions.size() > 0">
+        <foreach item="region" collection="regions" open="AND (" separator=" OR " close=")">
+            product_region LIKE '%' || #{region} || '%'
+        </foreach>
+    </if>
+    <if test="priceRanges != null and priceRanges.size() > 0">
+        <foreach item="range" collection="priceRanges" open="AND (" separator=" OR " close=")">
+            price BETWEEN #{range.min} AND #{range.max}
+        </foreach>
+    </if>
+    <if test="newProduct != null and newProduct">
+        AND created_at >= ADD_MONTHS(SYSDATE, -3)
+    </if>
+</select>
 
 
 </mapper>

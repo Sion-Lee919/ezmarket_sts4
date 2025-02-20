@@ -49,9 +49,15 @@ public class BoardMapperService implements BoardService {
 
 	@Override
 	public List<BoardDTO> getFilteredItems(FilterRequestDTO filters) {
+		filters.calculateOffset();
 		return mapper.getFilteredItems(filters);
 	}
 	
+	@Override
+	public int getFilteredItemsCount(FilterRequestDTO filters) {
+	    return mapper.getFilteredItemsCount(filters);
+	}
+
 
 
 }
