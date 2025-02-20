@@ -20,8 +20,6 @@ public interface MemberMapper {
 		int checkNickname(String nickname);
 		int checkEmail(String email);
 		int checkPhone(String phone);
-
-		BrandDTO getBrand(int member_id);
 	
         //Id, Pw 찾기
         MemberDTO findIdByEmailOrPhone(String emailOrphone);
@@ -36,6 +34,9 @@ public interface MemberMapper {
         void resignMember(String member_status);
         
     //판매자
+        //판매자 페이지
+		BrandDTO getBrand(int member_id);
+		
         //판매자 신청
         int sellApplicationSubmit(MemberDTO dto);
         

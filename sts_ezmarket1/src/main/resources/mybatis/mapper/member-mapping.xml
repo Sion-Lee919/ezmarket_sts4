@@ -7,7 +7,11 @@
 	<!-- 로그인 -->
 		<!-- 로그인 -->
 		<select id="getMember" resultType="memberdto" parameterType="String">
-			select * from member where username = #{username}
+			select m.*,
+			b.brand_id, b.brandname, b.brandlogo_url, b.brandlicense_url, b.brand_number, b.brand_status, b.brand_refusal_comment
+			from member m 
+			left join brand b on m.member_id = b.member_id 
+			where username = #{username}
 		</select>
 		
 		<!-- 회원가입 -->
@@ -125,7 +129,6 @@
 			)
 		</update>
 	
-	<!-- brand table 불러오기 김민수 수정중 -->
 	<resultMap type="ezmarket.BrandDTO" id="brand">
 		<id property="member_id" column="member_id"/>
 		<result property="brand_id" column="brand_id"/>

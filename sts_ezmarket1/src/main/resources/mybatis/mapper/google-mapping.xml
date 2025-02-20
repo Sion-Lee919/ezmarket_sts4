@@ -11,10 +11,10 @@
     <insert id="saveUser" >
 	    INSERT INTO member (member_id, username, realname, password, email, nickname, phone, social)
 	    VALUES (
-	    TRUNC(DBMS_RANDOM.VALUE(100000000000000, 999999999999999)), 
+	    TRUNC(DBMS_RANDOM.VALUE(1000000000, 9999999999)), 
 	    #{googleId}, 
 	    #{name}, 
-	    TRUNC(DBMS_RANDOM.VALUE(100000000000000, 999999999999999)), 
+	    TRUNC(DBMS_RANDOM.VALUE(1000000000, 9999999999)), 
 	    #{email},
 	    (CASE 
                 WHEN TRUNC(DBMS_RANDOM.VALUE(1, 6)) = 1 THEN '빨간'
