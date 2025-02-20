@@ -32,6 +32,9 @@ public class ReviewController {
 	
 	@PostMapping(value="review/registerreview", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Boolean> registerReview(@ModelAttribute ReviewDTO dto) throws IOException{
+		
+		System.out.println("registerReview - dto.getReview_id : " + dto.getReview_id());
+		
 		String savePath = "";
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {
