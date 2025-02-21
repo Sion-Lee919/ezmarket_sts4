@@ -20,9 +20,10 @@ public class JWTUtil {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + EXPIRATION_TIME);
 
-        return Jwts.builder()
+        return Jwts.builder()        		
                 .setSubject(dto.getUsername()) 
                 .claim("member_id", dto.getMember_id())
+                .claim("brandid", dto.getBrand_id())
                 .claim("realname", dto.getRealname())
                 .claim("nickname", dto.getNickname())
                 .claim("password", dto.getPassword())

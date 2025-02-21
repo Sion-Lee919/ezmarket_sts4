@@ -20,6 +20,8 @@ public interface BoardService {
 	
 	List<BoardDTO> getFilteredItems(FilterRequestDTO filters);
 
+	int getFilteredItemsCount(FilterRequestDTO filters);
+
 
 }
 

@@ -95,15 +95,18 @@ public class BoardController {
 	
 	@CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/showimage")
-    public void showImg(String filename, HttpServletResponse response) throws IOException {
+    public void showImg(String filename, String obj, HttpServletResponse response) throws IOException {
+		//String obj = "product";
         String osName = System.getProperty("os.name").toLowerCase();
         String path = "";
         
         // 운영체제에 맞는 파일 경로 설정
         if (osName.contains("win")) {
-            path = "c:/ezwel/ezmarketupload/";
-        } else { 
-            path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/";
+        	if (obj.equals("product")) { path = "c:/ezwel/ezmarketupload/";}
+        	else if (obj.equals("review")) { path = "c:/ezwel/ezmarketupload/reviewimage";}
+        } else {
+            if (obj.equals("product")) { path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/";}
+        	else if (obj.equals("review")) { path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage";}
         }
         
         // 파일을 열기
@@ -183,28 +186,23 @@ public class BoardController {
 	    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 	}
 
-
 	//필터
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/filtered-items")
-	public List<BoardDTO> getFilteredItems(@RequestBody FilterRequestDTO filters) {
-	    System.out.println("필터 요청: " + filters);
+	public FilteredItemsResponseDTO getFilteredItems(@RequestBody FilterRequestDTO filters) {
+	    if (filters.getSubcategories() == null) filters.setSubcategories(List.of());
+	    if (filters.getAlcoholRanges() == null) filters.setAlcoholRanges(List.of());
+	    if (filters.getRegions() == null) filters.setRegions(List.of());
+	    if (filters.getPriceRanges() == null) filters.setPriceRanges(List.of());
 
-	    if (filters.getSubcategories() == null) {
-	        filters.setSubcategories(List.of());
-	    }
-	    if (filters.getAlcoholRanges() == null) {
-	        filters.setAlcoholRanges(List.of());
-	    }
-	    if (filters.getRegions() == null) {
-	        filters.setRegions(List.of());
-	    }
-	    if (filters.getPriceRanges() == null) {
-	        filters.setPriceRanges(List.of());
-	    }
+	    System.out.println("최종 요청 테스트중: " + filters);
 
-	    return boardService.getFilteredItems(filters);
+	    List<BoardDTO> items = boardService.getFilteredItems(filters);
+	    int totalCount = boardService.getFilteredItemsCount(filters);
+
+	    return new FilteredItemsResponseDTO(items, totalCount);
 	}
+
 
 
 
