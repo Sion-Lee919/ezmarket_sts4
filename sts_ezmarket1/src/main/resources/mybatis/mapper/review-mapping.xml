@@ -21,7 +21,20 @@
     values
     (#{review_id}, #{product_id}, #{member_id}, #{comments}, sysdate, sysdate, #{rating}
     <if test="image_url != null">, #{image_url}</if>)
-</insert>
+	</insert>
+	
+	 <delete id="deleteReview" parameterType="int">
+    	delete from review where review_id = #{review_id}
+	</delete>
+	
+	  <update id="updateReview" parameterType="reviewdto">
+        update review
+        set
+        comments = #{comments},
+        rating = #{rating},
+		image_url = #{image_url}
+        where review_id = #{review_id}
+    </update>
 
 </mapper>
 
