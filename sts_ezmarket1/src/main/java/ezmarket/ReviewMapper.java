@@ -13,4 +13,8 @@ public interface ReviewMapper {
 
 	boolean registerReview(ReviewDTO dto);
 
+	boolean deleteReview(int review_id);
+
+	boolean updateReview(ReviewDTO dto);
+
 }

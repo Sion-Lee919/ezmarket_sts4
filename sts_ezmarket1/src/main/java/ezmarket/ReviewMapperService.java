@@ -21,4 +21,16 @@ public class ReviewMapperService implements ReviewService {
 		return mapper.registerReview(dto);
 	}
 
+	@Override
+	public boolean deleteReview(int review_id) {
+		
+		return mapper.deleteReview(review_id);
+	}
+
+	@Override
+	public boolean updateReview(ReviewDTO dto) {
+		// TODO Auto-generated method stub
+		return mapper.updateReview(dto);
+	}
+
 }
