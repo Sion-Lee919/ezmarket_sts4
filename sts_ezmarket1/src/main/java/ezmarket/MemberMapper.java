@@ -43,6 +43,9 @@ public interface MemberMapper {
         //중복확인
         int checkBrandNumber(String brand_number);
         
+        //판매자 정보 수정
+        void modifySeller(int brand_id, String brandname, String brandlogo_url);
+        
         
     //관리자
         //유저 목록 가져오기

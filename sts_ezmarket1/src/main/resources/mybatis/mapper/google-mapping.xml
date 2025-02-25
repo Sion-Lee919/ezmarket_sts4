@@ -11,7 +11,7 @@
     <insert id="saveUser" >
 	    INSERT INTO member (member_id, username, realname, password, email, nickname, phone, social)
 	    VALUES (
-	    TRUNC(DBMS_RANDOM.VALUE(1000000000, 9999999999)), 
+	    TRUNC(DBMS_RANDOM.VALUE(1000000000, 2147483647)), 
 	    #{googleId}, 
 	    #{name}, 
 	    TRUNC(DBMS_RANDOM.VALUE(1000000000, 9999999999)), 
