@@ -1,5 +1,6 @@
 package ezmarket;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,5 +134,12 @@ public class MemberMapperService implements MemberService {
 		public void sellRefuse(long brand_id, String brand_refusal_comment) {
 			mapper.sellApplicationRefuse(brand_id, brand_refusal_comment);
 			mapper.sellApplicationRefuseAuthor(brand_id, brand_refusal_comment);
+		}
+		
+		//브랜드주소가져오기
+		@Override
+		public ArrayList<String> getBrandAddr() {
+			
+			return mapper.getBrandAddr();
 		}
 }

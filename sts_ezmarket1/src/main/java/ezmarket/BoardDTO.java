@@ -30,6 +30,8 @@ public class BoardDTO {
 	String image_url;
 	MultipartFile image;
 	
+	String brandname; // from brand
+	
 	List<String> subcategories;
     List<Map<String, Integer>> alcoholRanges;
     List<String> regions;
