@@ -1,10 +1,15 @@
 package ezmarket;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service("membermapperservice")
 public class MemberMapperService implements MemberService {
@@ -91,6 +96,12 @@ public class MemberMapperService implements MemberService {
 		@Override
 		public boolean isBrandNumberAvailable(String brand_number) {
 			return mapper.checkBrandNumber(brand_number) == 0;
+		}
+		
+		//판매자 정보 수정
+		@Override
+		public void sellModify(int brand_id, String brand_name, String brandlogo_url) {
+			mapper.modifySeller(brand_id, brand_name, brandlogo_url);
 		}
 		
 		
