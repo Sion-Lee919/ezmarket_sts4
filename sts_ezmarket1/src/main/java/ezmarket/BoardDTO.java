@@ -30,10 +30,12 @@ public class BoardDTO {
 	String image_url;
 	MultipartFile image;
 	
+	String searchKeyword; 
+    int offset;            
+    int limit;
+	
 	List<String> subcategories;
-    List<Map<String, Integer>> alcoholRanges;
     List<String> regions;
-    List<Map<String, Integer>> priceRanges;
     Boolean newProduct;
     String sortType;
 }

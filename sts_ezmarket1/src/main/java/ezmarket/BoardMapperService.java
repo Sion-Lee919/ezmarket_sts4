@@ -46,17 +46,35 @@ public class BoardMapperService implements BoardService {
 		// TODO Auto-generated method stub
 		return mapper.deleteItem(product_id) > 0;
 	}
-
-	@Override
-	public List<BoardDTO> getFilteredItems(FilterRequestDTO filters) {
-		filters.calculateOffset();
-		return mapper.getFilteredItems(filters);
-	}
 	
 	@Override
-	public int getFilteredItemsCount(FilterRequestDTO filters) {
-	    return mapper.getFilteredItemsCount(filters);
+	public List<BoardDTO> getFilteredItems(BoardDTO filterCriteria) {
+	    return mapper.getFilteredItems(filterCriteria);
 	}
+
+	@Override
+	public int getFilteredItemsCount(BoardDTO filterCriteria) {
+	    return mapper.getFilteredItemsCount(filterCriteria);
+	}
+
+	@Override
+	public ArrayList<BoardDTO> getsearchItems(String searchKeyword) {
+		return mapper.getsearchItems(searchKeyword);
+	}
+
+	@Override
+	public List<BoardDTO> getBrand(BoardDTO filterCriteria) {
+		return mapper.getBrand(filterCriteria);
+	}
+
+	@Override
+	public int getBrandItemsCount(BoardDTO filterCriteria) {
+		return mapper.getBrandItemsCount(filterCriteria);
+	}
+
+
+
+
 
 
 
