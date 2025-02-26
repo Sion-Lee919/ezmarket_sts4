@@ -23,10 +23,15 @@ public interface BoardMapper {
 	
 	int deleteItem(int product_id);
 	
-	List<BoardDTO> getFilteredItems(FilterRequestDTO filters);
-
-	int getFilteredItemsCount(FilterRequestDTO filters);
-
+	List<BoardDTO> getFilteredItems(BoardDTO filterCriteria);
+	
+	int getFilteredItemsCount(BoardDTO filterCriteria);
+	
+	ArrayList<BoardDTO> getsearchItems(String searchKeyword);
+	
+	List<BoardDTO> getBrand(BoardDTO filterCriteria);
+	
+	int getBrandItemsCount(BoardDTO filterCriteria);
 }
 
 

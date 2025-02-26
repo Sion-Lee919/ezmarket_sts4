@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -185,30 +186,49 @@ public class BoardController {
 	    boolean result = boardService.deleteItem(product_id);
 	    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 	}
-
+	
 	//필터
 	@CrossOrigin(origins = "http://localhost:3000")
-	@PostMapping("/filtered-items")
-	public FilteredItemsResponseDTO getFilteredItems(@RequestBody FilterRequestDTO filters) {
-	    if (filters.getSubcategories() == null) filters.setSubcategories(List.of());
-	    if (filters.getAlcoholRanges() == null) filters.setAlcoholRanges(List.of());
-	    if (filters.getRegions() == null) filters.setRegions(List.of());
-	    if (filters.getPriceRanges() == null) filters.setPriceRanges(List.of());
+	@GetMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> getFilteredItems(
+	    @RequestParam(required = false) String searchKeyword,
+	    @RequestParam(required = false) String bigcategory,
+	    @RequestParam(required = false) List<String> subcategories,
+	    @RequestParam(required = false) List<String> regions,
+	    @RequestParam(required = false) Boolean newProduct,
+	    @RequestParam(defaultValue = "latest") String sortType,
+	    @RequestParam(defaultValue = "1") int page,
+	    @RequestParam(defaultValue = "10") int limit
+	) {
+	    int offset = (page - 1) * limit;
+	        
+	    BoardDTO filterCriteria = new BoardDTO();
+	    filterCriteria.setSearchKeyword(searchKeyword);
+	    filterCriteria.setBigcategory(bigcategory);
+	    filterCriteria.setSubcategories(subcategories);
+	    filterCriteria.setRegions(regions);
+	    filterCriteria.setNewProduct(newProduct);
+	    filterCriteria.setSortType(sortType);
+	    
+	    filterCriteria.setOffset(offset);
+	    filterCriteria.setLimit(limit);
 
-	    System.out.println("최종 요청 테스트중: " + filters);
+	    List<BoardDTO> items = boardService.getFilteredItems(filterCriteria);
+	    int totalCount = boardService.getFilteredItemsCount(filterCriteria);
+	    
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("items", items);
+	    response.put("totalCount", totalCount);
+	    response.put("currentPage", page);
+	    response.put("totalPages", (int) Math.ceil((double) totalCount / limit));
 
-	    List<BoardDTO> items = boardService.getFilteredItems(filters);
-	    int totalCount = boardService.getFilteredItemsCount(filters);
-
-	    return new FilteredItemsResponseDTO(items, totalCount);
+	    return response;
 	}
-
 
 
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/getitemsforrandom")
-
 	public ArrayList<BoardDTO> GetRandomItems(){
 		ArrayList<BoardDTO> dtoList = boardService.getAllItems();
 		Collections.shuffle(dtoList);
@@ -220,6 +240,52 @@ public class BoardController {
 	}
 
 
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping(value = "/searchitems", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ArrayList<BoardDTO> getsearchItems(@RequestParam String searchKeyword){
+		//System.out.println(searchKeyword);
+		return boardService.getsearchItems(searchKeyword);
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping(value = "/brandItems", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> getBrandFilteredItems(
+	    @RequestParam int brand_id,
+	    @RequestParam(required = false) String searchKeyword,
+	    @RequestParam(required = false) List<String> subcategories,
+	    @RequestParam(required = false) List<String> regions,
+	    @RequestParam(required = false) Boolean newProduct,
+	    @RequestParam(defaultValue = "latest") String sortType,
+	    @RequestParam(defaultValue = "1") int page,
+	    @RequestParam(defaultValue = "10") int limit
+	) {
+	    int offset = (page - 1) * limit;
+
+	    BoardDTO filterCriteria = new BoardDTO();
+	    filterCriteria.setBrand_id(brand_id);
+	    filterCriteria.setSearchKeyword(searchKeyword);
+	    filterCriteria.setSubcategories(subcategories);
+	    filterCriteria.setRegions(regions);
+	    filterCriteria.setNewProduct(newProduct);
+	    filterCriteria.setSortType(sortType);
+	    
+	    filterCriteria.setOffset(offset);
+	    filterCriteria.setLimit(limit);
+
+	    List<BoardDTO> items = boardService.getBrand(filterCriteria);
+	    int totalCount = boardService.getBrandItemsCount(filterCriteria);
+	    
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("items", items);
+	    response.put("totalCount", totalCount);
+	    response.put("currentPage", page);
+	    response.put("totalPages", (int) Math.ceil((double) totalCount / limit));
+
+	    return response;
+	}
+
+	
+	
 }
 
 
