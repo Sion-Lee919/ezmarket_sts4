@@ -55,7 +55,7 @@
 	<!--  내정보 -->
 		<!-- 회원 정보 수정 -->
 		<update id="modifyInfo" parameterType="memberdto">
-			update member set password = #{password}, nickname = #{nickname}, address = #{address}, update_date = sysdate, where username = #{username}
+			update member set password = #{password}, nickname = #{nickname}, address = #{address}, update_date = sysdate where username = #{username}
 		</update>
 		
 		<!-- 회원 탈퇴 -->
@@ -66,13 +66,18 @@
 	<!--  판매자 -->
 		<!-- 판매자 신청 -->
 		<insert id="sellApplicationSubmit" parameterType="memberdto">
-			insert into brand (brand_id, member_id, brandname, brand_number, brand_join_date, brand_status) values (#{brand_id}, #{member_id}, #{brandname}, #{brand_number}, sysdate, '검토 중')
+			insert into brand (brand_id, member_id, brandname, brand_number, brand_join_date, brand_status, brandlicense_url, brandlogo_url) values (#{brand_id}, #{member_id}, #{brandname}, #{brand_number}, sysdate, '검토 중', #{brandlicense_url}, #{brandlogo_url})
 		</insert>
 		
 		<!-- 중복확인 -->
 		<select id="checkBrandNumber" resultType="int" parameterType="String"> 
 			select count(*) from brand where brand_number = #{brand_number}
 		</select>
+		
+		<!-- 판매자 정보 수정 -->
+		<update id="modifySeller" parameterType="memberdto">
+			update brand set brandname = #{brandname}, brandlogo_url = #{brandlogo_url}, brand_update_date = sysdate where brand_id = #{brand_id}
+		</update>
 		
 	<!--  관리자 -->
 		<!-- 회원 목록 가져오기 -->
@@ -148,6 +153,3 @@
 	</select>
 	
 </mapper>
-
-
-

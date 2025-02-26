@@ -31,11 +31,13 @@ public class BoardDTO {
 	MultipartFile image;
 	
 	String brandname; // from brand
+
+	String searchKeyword; 
+    int offset;            
+    int limit;
 	
 	List<String> subcategories;
-    List<Map<String, Integer>> alcoholRanges;
     List<String> regions;
-    List<Map<String, Integer>> priceRanges;
     Boolean newProduct;
     String sortType;
 }

@@ -1,6 +1,9 @@
 package ezmarket;
 
+
 import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,11 +13,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ezmarket.cookie.JWTUtil;
 
@@ -247,10 +253,46 @@ public class MemberController {
 		
 		//판매자 신청
 		@PostMapping("/sellApplication")
-		public ResponseEntity<String> sellApplication(@RequestBody MemberDTO dto) {
-			memberService.sellApplication(dto);
-	        return ResponseEntity.ok("판매자 신청 완료.");
+		public ResponseEntity<String> sellApplication(
+	            @RequestParam("brand_id") Integer brand_id,
+	            @RequestParam("member_id") Integer member_id,
+	            @RequestParam("brandname") String brandname,
+	            @RequestParam("brand_number") String brand_number,
+	            @RequestParam("brandlogo_url") MultipartFile brandLogoFile,
+	            @RequestParam("brandlicense_url") MultipartFile brandLicenseFile) {
+
+	        try {
+	        	//aws 배포후 경로 재설정
+	            String brandLogoFileName = brand_id + "_" + brand_number + "_" + brandLogoFile.getOriginalFilename();
+	            String brandlogo_url = "C:/ezwel/ezmarketupload/brand/" + "brandlogo/" + brandLogoFileName;
+	            saveFile(brandLogoFile, brandlogo_url);
+	            
+	            //aws 배포후 경로 재설정
+	            String brandLicenseFileName = brand_id + "_" + brand_number + "_" + brandLicenseFile.getOriginalFilename();
+	            String brandlicense_url = "C:/ezwel/ezmarketupload/brand/" + "brandlicense/" + brandLicenseFileName;
+	            saveFile(brandLicenseFile, brandlicense_url);
+	            
+	            MemberDTO dto = new MemberDTO();
+	            dto.setBrand_id(brand_id);
+	            dto.setMember_id(member_id);
+	            dto.setBrandname(brandname);
+	            dto.setBrand_number(brand_number);
+	            dto.setBrandlogo_url(brandlogo_url); 
+	            dto.setBrandlicense_url(brandlicense_url);
+	            
+	            memberService.sellApplication(dto);
+
+	            return ResponseEntity.ok("판매자 신청 완료.");
+	        } catch (IOException e) {
+	            return ResponseEntity.status(500).body("파일 업로드 실패.");
+	        }
 	    }
+		    // 파일 저장
+		    private void saveFile(MultipartFile file, String path) throws IOException {
+		        File destinationFile = new File(path);
+		        destinationFile.getParentFile().mkdirs();
+		        file.transferTo(destinationFile);
+		    }
 		
 		//중복 확인 - 사업자번호
 	    @GetMapping("/checkBrandNumber")
@@ -260,29 +302,44 @@ public class MemberController {
 	        return isAvailable ? "사용 가능한 사업자 번호입니다." : "중복된 사업자 번호입니다."; 
 	    }
 	    
-	  //판매자 정보 수정
-//	  		@PostMapping("/sellmodify")
-//	  		public ResponseEntity<?> sellmodify(@RequestBody MemberDTO memberDTO, HttpServletRequest request) {
-//	  			String token = request.getHeader("Authorization");
-//	  		    if (token != null && token.startsWith("Bearer")) {
-//	  		        token = token.substring(7);
-//	  		        String brand_id = JWTUtil.validateAndGetUserId(token);
-//
-//	  		        if (brand_id != null && memberDTO.getUsername().equals(username)) {
-//	  		            memberService.modify(memberDTO.getBrandname(), memberDTO.getBrand_number(), memberDTO.getBrandlogo_url(), memberDTO.getBrandlicense_url());
-//	  		            return ResponseEntity.ok("회원 정보가 수정되었습니다.");
-//	  		        } else {
-//	  		            Map<String, String> errorResponse = new HashMap<>();
-//	  		            errorResponse.put("message", "토큰이 유효하지 않거나 권한이 없습니다.");
-//	  		            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-//	  		        }
-//	  		    } else {
-//	  		        Map<String, String> errorResponse = new HashMap<>();
-//	  		        errorResponse.put("message", "Authorization 헤더 오류.");
-//	  		        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-//	  		    }
-//	  		}
-		
+	    //판매자 정보 수정
+	    @PostMapping("/sellModify")
+	    public ResponseEntity<?> sellModify(
+	            @RequestParam("brandname") String brandname,
+	            @RequestParam("brand_id") Integer brand_id, 
+	            @RequestParam("brand_number") String brand_number,
+	            @RequestParam(value = "brandlogo_url", required = false) MultipartFile brandLogoFile,
+	            @RequestParam(value = "existing_brandlogo_url", required = false) String existBrandLogoUrl,
+	            HttpServletRequest request) {
+
+	        String token = request.getHeader("Authorization");
+	        if (token != null && token.startsWith("Bearer")) {
+	            token = token.substring(7);
+	            String username = JWTUtil.validateAndGetUserId(token);
+
+	            if (username != null) {
+	            	String brandlogo_url = null;
+	                if (brandLogoFile != null && !brandLogoFile.isEmpty()) {
+	                    String brandLogoFileName = brand_id + "_" + brand_number + "_" + brandLogoFile.getOriginalFilename();
+	                    brandlogo_url = "C:/ezwel/ezmarketupload/brand/brandlogo/" + brandLogoFileName;
+	                    try {
+	                        saveFile(brandLogoFile, brandlogo_url);
+	                    } catch (IOException e) {
+	                        return ResponseEntity.status(500).body("파일 저장 중 오류 발생");
+	                    }
+	                } else {
+	                	brandlogo_url = existBrandLogoUrl;
+	                }
+
+	                memberService.sellModify(brand_id, brandname, brandlogo_url);
+	                return ResponseEntity.ok("판매자 정보가 수정되었습니다.");
+	            } else {
+	                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰이 유효하지 않거나 권한이 없습니다.");
+	            }
+	        } else {
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization 헤더 오류.");
+	        }
+	    }
 		
 	//관리자
 		//유저 정보 가져오기

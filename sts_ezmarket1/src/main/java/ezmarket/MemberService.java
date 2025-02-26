@@ -1,7 +1,14 @@
 package ezmarket;
 
+
 import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {
 	
@@ -38,6 +45,9 @@ public interface MemberService {
 		
 		//중복 확인
 		boolean isBrandNumberAvailable(String brand_number);
+		
+		//판매자 정보 수정
+		void sellModify(int brand_id, String brand_name, String brandlogo_url);
 		
 	//관리자
 		//유저 목록 가져오기

@@ -18,10 +18,14 @@ public interface BoardService {
 	
 	boolean deleteItem(int product_id);
 	
-	List<BoardDTO> getFilteredItems(FilterRequestDTO filters);
+	List<BoardDTO> getFilteredItems(BoardDTO filterCriteria);
+	
+	int getFilteredItemsCount(BoardDTO filterCriteria);
 
-	int getFilteredItemsCount(FilterRequestDTO filters);
-
-
+	ArrayList<BoardDTO> getsearchItems(String searchKeyword);
+	
+	List<BoardDTO> getBrand(BoardDTO filterCriteria);
+	
+	int getBrandItemsCount(BoardDTO filterCriteria);
 }
 

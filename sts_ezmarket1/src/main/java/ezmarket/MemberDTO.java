@@ -1,5 +1,7 @@
 package ezmarket;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDTO {
-	Long member_id;
+	int member_id;
 	String username;
 	String realname;
 	String nickname;
@@ -27,10 +29,10 @@ public class MemberDTO {
 	String kick_date;
 	
 	//판매자
-	Long brand_id;
+	int brand_id;
 	String brandname;
-	String brandlogo_url;
 	String brand_number;
+	String brandlogo_url;
 	String brandlicense_url;
 	String brand_status;
 	String brand_refusal_comment;
