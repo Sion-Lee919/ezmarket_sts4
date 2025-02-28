@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +38,11 @@ public class MemberController {
 		//회원가입
 	    @PostMapping("/joinN")
 	    public String join(@RequestBody MemberDTO dto) {
+	    	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	    	
+	    	String hashedPassword = passwordEncoder.encode(dto.getPassword());
+	    	dto.setPassword(hashedPassword);
+	    	
 	        String result = memberService.joinMember(dto);
 	        return "redirect:login";
 	    }
@@ -78,8 +84,10 @@ public class MemberController {
 	    @PostMapping("/login")
 	    public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO, HttpServletResponse response) {
 	        MemberDTO dto = memberService.getMember(memberDTO.getUsername());
-
-	        if (dto != null && dto.getPassword().equals(memberDTO.getPassword())) {
+	        
+	        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	        
+	        if (dto != null && passwordEncoder.matches(memberDTO.getPassword(), dto.getPassword())) {
 	        	
 	        	//회원 탈퇴 -> 로그인 불가
 	        	if(!"정상".equals(dto.getMember_status())) {

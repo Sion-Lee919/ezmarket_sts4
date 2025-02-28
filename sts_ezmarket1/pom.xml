@@ -170,6 +170,12 @@
     <version>0.11.5</version>
     <scope>runtime</scope>
 </dependency>
+<!-- 비밀번호 암호화 추가 -->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-crypto</artifactId>
+    <version>5.4.5</version> <!-- 또는 최신 버전 -->
+</dependency>
 		
 	</dependencies>
 	
