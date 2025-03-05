@@ -15,7 +15,7 @@
   	</select>
   	
   	<select id="getChatHistory" resultType="chatdto" parameterType="string">
-  	  select * from chat where channel_id = #{channel_id}
+  	  select * from chat where channel_id = #{channel_id} order by created_at
   	</select>
   	
   	

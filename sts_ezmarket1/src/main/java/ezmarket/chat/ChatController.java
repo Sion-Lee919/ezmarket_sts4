@@ -27,7 +27,6 @@ public class ChatController {
     @MessageMapping("/chat")
     public void sendMessage(ChatDTO chatDto, SimpMessageHeaderAccessor accessor) {
     	boolean result = chatservice.registerChat(chatDto);
-    	System.out.println(chatDto.getChannel_id());
         simpMessagingTemplate.convertAndSend("/sub/chat/" + chatDto.getChannel_id(), chatDto);
 
     }
@@ -35,7 +34,6 @@ public class ChatController {
     @GetMapping("chatroom/getmemberlistinchatroom")
     public ArrayList<ChatDTO> getMemberListInChatRoom(@RequestParam("productId") int product_id){
     	ArrayList<ChatDTO> dtoList = chatservice.getMemberListInChatRoom(product_id);
-    	//System.out.println(dtoList);;
     	return dtoList;
     }
     
