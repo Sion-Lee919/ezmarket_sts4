@@ -11,6 +11,7 @@
 		<typeAlias type="ezmarket.OrderDTO" alias="orderdto"/>
 		<typeAlias type="ezmarket.QnaDTO" alias="qnadto"/>
 		<typeAlias type="ezmarket.ReviewDTO" alias="reviewdto"/>
+		<typeAlias type="ezmarket.chat.ChatDTO" alias="chatdto"/>
 	</typeAliases>
 </configuration>
 
