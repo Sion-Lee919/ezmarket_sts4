@@ -2,7 +2,6 @@ package ezmarket;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,11 @@ public class BoardMapperService implements BoardService {
 	@Override
 	public BoardDTO getItemDetail(int product_id) {
 		return mapper.getItemDetail(product_id);
+	}
+
+	@Override
+	public boolean viewCount(int product_id) {
+		return mapper.viewCount(product_id);	
 	}
 
 	@Override

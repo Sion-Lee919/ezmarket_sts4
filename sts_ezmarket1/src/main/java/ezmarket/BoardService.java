@@ -7,6 +7,8 @@ import java.util.Map;
 public interface BoardService {
 
 	BoardDTO getItemDetail(int product_id);
+	
+	boolean viewCount(int product_id);
 
 	ArrayList<BoardDTO> getAllItems();
 

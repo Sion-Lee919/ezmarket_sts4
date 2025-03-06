@@ -29,6 +29,8 @@ public class BoardDTO {
 	String subcategory;
 	String image_url;
 	MultipartFile image;
+	int view_count;
+	String brandname;
 	
 	String searchKeyword; 
     int offset;            
