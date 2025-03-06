@@ -11,11 +11,25 @@
 
 	
 	<select id="getMemberListInChatRoom" resultType="chatdto" parameterType="int">
-  	  select distinct member_id from chat where product_id = #{product_id}
+  	  select distinct c.member_id, m.nickname membernickname
+      from chat c 
+      join member m on m.member_id = c.member_id
+      where product_id = #{product_id}
   	</select>
   	
-  	<select id="getChatHistory" resultType="chatdto" parameterType="string">
+<!--   	<select id="getMemberListInChatRoom" resultType="chatdto" parameterType="int">
+  	  select distinct member_id from chat where product_id = #{product_id}
+  	</select> -->
+  	
+<!--   	<select id="getChatHistory" resultType="chatdto" parameterType="string">
   	  select * from chat where channel_id = #{channel_id} order by created_at
+  	</select> -->
+  	
+  	<select id="getChatHistory" resultType="chatdto" parameterType="string">
+  	  select c.*, m.nickname writernickname
+  	  from chat c 
+  	  join member m on m.member_id = c.writer_id
+  	  where channel_id = #{channel_id} order by created_at
   	</select>
   	
   	

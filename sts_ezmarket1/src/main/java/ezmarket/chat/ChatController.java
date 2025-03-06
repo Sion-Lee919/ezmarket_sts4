@@ -1,5 +1,7 @@
 package ezmarket.chat;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class ChatController {
     @MessageMapping("/chat")
     public void sendMessage(ChatDTO chatDto, SimpMessageHeaderAccessor accessor) {
     	boolean result = chatservice.registerChat(chatDto);
+    	String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        chatDto.setCreated_at(currentTime);  // ChatDTO에 현재 시간을 설정
+    	System.out.println(chatDto.getCreated_at());
         simpMessagingTemplate.convertAndSend("/sub/chat/" + chatDto.getChannel_id(), chatDto);
 
     }
