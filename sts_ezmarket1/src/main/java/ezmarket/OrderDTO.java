@@ -1,16 +1,27 @@
 package ezmarket;
 
-import lombok.AllArgsConstructor;
+import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-
+@Data
 public class OrderDTO {
-	String order_id;
-	String member_id;
-	String order_date;
-	String quantity;
-	String total_amount;
-	String status;
-	String shipping_address;
+    private int orderId;
+    private String memberId;
+
+    private List<OrderProductDTO> productInfo;
+    private int totalAmount;
+    private String status;
+    private String shippingAddress;
+    private String shippingMessage;
+    private String paymentMethod;
+    private String receiverName;
+    private String receiverPhone;
+    private String receiverEmail;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    private Date orderDate;
 }
