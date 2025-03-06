@@ -45,6 +45,7 @@ public class BoardController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/item/{itemid}")
 	public BoardDTO GetItemDetail(@PathVariable("itemid") int product_id) {
+		boardService.viewCount(product_id);
 		BoardDTO dto = boardService.getItemDetail(product_id);
 		return dto;
 		
@@ -105,9 +106,11 @@ public class BoardController {
         if (osName.contains("win")) {
         	if (obj.equals("product")) { path = "c:/ezwel/ezmarketupload/";}
         	else if (obj.equals("review")) { path = "c:/ezwel/ezmarketupload/reviewimage";}
+        	else if (obj.equals("brand")) { path = "c:/ezwel/ezmarketupload/brandlogo/";}
         } else {
             if (obj.equals("product")) { path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/";}
         	else if (obj.equals("review")) { path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage";}
+        	else if (obj.equals("brand")) { path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/brandlogo/";}
         }
         
         // 파일을 열기
@@ -198,7 +201,7 @@ public class BoardController {
 	    @RequestParam(required = false) Boolean newProduct,
 	    @RequestParam(defaultValue = "latest") String sortType,
 	    @RequestParam(defaultValue = "1") int page,
-	    @RequestParam(defaultValue = "10") int limit
+	    @RequestParam(defaultValue = "12") int limit
 	) {
 	    int offset = (page - 1) * limit;
 	        
@@ -229,15 +232,34 @@ public class BoardController {
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/getitemsforrandom")
-	public ArrayList<BoardDTO> GetRandomItems(){
-		ArrayList<BoardDTO> dtoList = boardService.getAllItems();
-		Collections.shuffle(dtoList);
-	    ArrayList<BoardDTO> randomList = new ArrayList<>();
-	    for (int i = 0; i < 6 && i < dtoList.size(); i++) {
-	        randomList.add(dtoList.get(i));
-	    }
-		return randomList;
+	public Map<String, Object> GetRandomItems(){
+	    //모든 상품 가져오기
+	    ArrayList<BoardDTO> allItems = boardService.getAllItems();
+
+	    //랜덤 상품 목록 만들기 (6개)
+	    ArrayList<BoardDTO> randomList = new ArrayList<>(allItems);
+	    Collections.shuffle(randomList);
+	    randomList = new ArrayList<>(randomList.subList(0, Math.min(6, randomList.size())));
+
+//	    //인기순 Top 6 가져오기 
+//	    ArrayList<BoardDTO> popularItems = new ArrayList<>(allItems);
+//	    popularItems.sort((a, b) -> Double.compare(b.getRating(), a.getRating()));  // 평점 높은 순
+//	    popularItems = new ArrayList<>(popularItems.subList(0, Math.min(6, popularItems.size())));
+//
+//	    //신상품 Top 6 가져오기
+//	    ArrayList<BoardDTO> newItems = new ArrayList<>(allItems);
+//	    newItems.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));  // 최신 등록순
+//	    newItems = new ArrayList<>(newItems.subList(0, Math.min(6, newItems.size())));
+
+	    //JSON 형식으로 반환
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("random", randomList);
+//	    response.put("popular", popularItems);
+//	    response.put("new", newItems);
+
+	    return response;
 	}
+
 
 
 	@CrossOrigin(origins = "http://localhost:3000")
@@ -257,7 +279,7 @@ public class BoardController {
 	    @RequestParam(required = false) Boolean newProduct,
 	    @RequestParam(defaultValue = "latest") String sortType,
 	    @RequestParam(defaultValue = "1") int page,
-	    @RequestParam(defaultValue = "10") int limit
+	    @RequestParam(defaultValue = "12") int limit
 	) {
 	    int offset = (page - 1) * limit;
 

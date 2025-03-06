@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 public interface BoardMapper {
 
 	BoardDTO getItemDetail(int product_id);
+	
+	boolean viewCount(int product_id);
 
 	ArrayList<BoardDTO> getAllItems();
 
