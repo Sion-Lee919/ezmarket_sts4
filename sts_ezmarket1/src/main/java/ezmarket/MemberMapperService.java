@@ -150,7 +150,7 @@ public class MemberMapperService implements MemberService {
 		
 		//브랜드주소가져오기
 		@Override
-		public ArrayList<String> getBrandAddr() {
+		public ArrayList<MemberDTO> getBrandAddr() {
 			
 			return mapper.getBrandAddr();
 		}
