@@ -32,6 +32,8 @@ public class BoardDTO {
 	int view_count;
 	String brandname;
 	
+	String brandname; // from brand
+
 	String searchKeyword; 
     int offset;            
     int limit;

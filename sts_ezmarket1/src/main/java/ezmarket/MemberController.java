@@ -1,5 +1,7 @@
 package ezmarket;
 
+
+import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -240,6 +242,13 @@ public class MemberController {
 		public BrandDTO getBrandInfo(@RequestParam("memberid") Integer member_id) {
 			BrandDTO dto = memberService.getBrand(member_id);
 			return dto;
+		}
+		
+		// 판매자 주소 가져오기
+		@GetMapping("/brandaddress")
+		public ArrayList<String> getBrandAddr() {
+			ArrayList<String> addrList = memberService.getBrandAddr();
+			return addrList;
 		}
 		
 		//판매자 신청
