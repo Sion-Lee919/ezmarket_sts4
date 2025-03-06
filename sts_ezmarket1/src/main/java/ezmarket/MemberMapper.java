@@ -1,5 +1,6 @@
 package ezmarket;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -67,4 +68,7 @@ public interface MemberMapper {
         //판매자 거절
         void sellApplicationRefuse(long brand_id, String brand_refusal_comment);
         void sellApplicationRefuseAuthor(long brand_id, String brand_refusal_comment);
+        
+        //판매자 주소 가져오기
+		ArrayList<String> getBrandAddr();
 }

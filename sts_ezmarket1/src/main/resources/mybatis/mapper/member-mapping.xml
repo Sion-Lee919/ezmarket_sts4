@@ -148,4 +148,8 @@
 		where br.member_id = #{member_id}
 	</select>
 	
+	<select id="getBrandAddr" resultType="String">
+	select m.address from brand b join member m on b.member_id = m.member_id where b.brand_status = '승인'
+	</select>
+	
 </mapper>

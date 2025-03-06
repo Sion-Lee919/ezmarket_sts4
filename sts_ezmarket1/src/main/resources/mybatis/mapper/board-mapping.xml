@@ -4,10 +4,19 @@
   
 <mapper namespace="ezmarket.BoardMapper">
   <select id="getItemDetail" resultType="boarddto" parameterType="int">
-  	select *
-  	from product
+
+  	select p.*, b.brandname
+  	from product p
+  	join brand b on b.brand_id = p.brand_id
   	where product_id=#{product_id}
+
   </select>
+  
+	<update id="viewCount">
+		UPDATE product 
+		SET view_count = view_count + 1 
+		WHERE product_id = #{product_id}
+	</update>
   
   <select id="getAllItems" resultType="boarddto" >
   	select *
@@ -48,52 +57,86 @@
 
 <!-- 필터기능 -->
 <select id="getFilteredItems" resultType="boarddto">
-    SELECT * FROM product
-    WHERE 1=1
-    
-    <if test="searchKeyword != null and searchKeyword != ''">
-        AND (name LIKE '%' || #{searchKeyword} || '%' OR description LIKE '%' || #{searchKeyword} || '%')
-    </if>
-    <if test="bigcategory != null and bigcategory != ''">
-        AND bigcategory = #{bigcategory}
-    </if>
-    <if test="subcategories != null and subcategories.size() > 0">
-        <foreach item="sub" collection="subcategories" open="AND (" separator=" AND " close=")">
-            subcategory = #{sub}
-        </foreach>
-    </if>
+    SELECT p.*, 
+       COALESCE(v.view_count, 0) AS view_count,
+       COALESCE(r.avg_rating, 0) AS avg_rating,
+       COALESCE(r.review_count, 0) AS review_count,
+       (COALESCE(v.view_count, 0) * 0.4) + 
+       (COALESCE(r.avg_rating, 0) * 20 * 0.3) + 
+       (COALESCE(r.review_count, 0) * 5 * 0.2) + 
+       (COALESCE(r.recent_review_score, 0) * 0.1) AS popularity_score 
+		FROM product p
+		
+		LEFT JOIN (
+		    -- 조회수 계산
+		    SELECT product_id, SUM(view_count) AS view_count
+		    FROM product
+		    GROUP BY product_id
+		) v ON p.product_id = v.product_id
+		
+		LEFT JOIN (
+		    -- 평점, 리뷰 개수, 최근 트렌드 반영
+		    SELECT r.product_id, 
+		           AVG(r.rating) AS avg_rating, 
+		           COUNT(r.review_id) AS review_count,
+		           SUM(CASE 
+		                WHEN r.review_date >= TRUNC(SYSDATE) - 7 THEN 3  
+		                WHEN r.review_date >= TRUNC(SYSDATE) - 30 THEN 2  
+		                ELSE 1 
+		           END) AS recent_review_score
+		    FROM review r
+		    GROUP BY r.product_id
+		) r ON p.product_id = r.product_id
+		
+		WHERE 1=1
 
-    <if test="regions != null and regions.size() > 0">
-        <foreach item="region" collection="regions" open="AND (" separator=" OR " close=")">
-            product_region LIKE '%' || #{region} || '%'
-        </foreach>
-    </if>
+<if test="searchKeyword != null and searchKeyword != ''">
+    AND (p.name LIKE '%' || #{searchKeyword} || '%' OR p.description LIKE '%' || #{searchKeyword} || '%')
+</if>
+<if test="bigcategory != null and bigcategory != ''">
+    AND p.bigcategory = #{bigcategory}
+</if>
+<if test="subcategories != null and subcategories.size() > 0">
+    <foreach item="sub" collection="subcategories" open="AND (" separator=" AND " close=")">
+        p.subcategory = #{sub}
+    </foreach>
+</if>
 
-    <if test="newProduct != null and newProduct">
-        AND created_at >= ADD_MONTHS(SYSDATE, -3)
-    </if>
-    
-    <choose>
-        <when test="sortType == 'latest'">
-            ORDER BY created_at DESC
-        </when>
-        <when test="sortType == 'oldest'">
-            ORDER BY created_at ASC
-        </when>
-        <when test="sortType == 'lowPrice'">
-            ORDER BY price ASC
-        </when>
-        <when test="sortType == 'highPrice'">
-            ORDER BY price DESC
-        </when>
-        <otherwise>
-            ORDER BY created_at DESC
-        </otherwise>
-    </choose>
-    
-    <if test="limit != null and offset != null">
-        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-    </if>
+<if test="regions != null and regions.size() > 0">
+    <foreach item="region" collection="regions" open="AND (" separator=" OR " close=")">
+        p.product_region LIKE '%' || #{region} || '%'
+    </foreach>
+</if>
+
+<if test="newProduct != null and newProduct">
+    AND p.created_at >= ADD_MONTHS(TRUNC(SYSDATE), -3)
+</if>
+
+<choose>
+    <when test="sortType == 'latest'">
+        ORDER BY p.created_at DESC
+    </when>
+    <when test="sortType == 'oldest'">
+        ORDER BY p.created_at ASC
+    </when>
+    <when test="sortType == 'lowPrice'">
+        ORDER BY p.price ASC
+    </when>
+    <when test="sortType == 'highPrice'">
+        ORDER BY p.price DESC
+    </when>
+    <when test="sortType == 'popular'">
+        ORDER BY popularity_score DESC
+    </when>
+    <otherwise>
+        ORDER BY p.created_at DESC
+    </otherwise>
+</choose>
+
+<if test="limit != null and offset != null">
+    OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+</if>
+
 </select>
 
 <!-- 필터 페이지네이션 -->

@@ -1,5 +1,7 @@
 package ezmarket;
 
+
+import java.util.ArrayList;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -65,4 +67,6 @@ public interface MemberService {
 		
 		//판매자 거절
 		void sellRefuse(long brand_id, String brand_refusal_comment);
+
+		ArrayList<String> getBrandAddr();
 }
