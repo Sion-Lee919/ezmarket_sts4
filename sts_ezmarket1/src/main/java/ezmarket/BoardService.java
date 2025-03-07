@@ -29,5 +29,8 @@ public interface BoardService {
 	List<BoardDTO> getBrand(BoardDTO filterCriteria);
 	
 	int getBrandItemsCount(BoardDTO filterCriteria);
+	
+	Map<String, List<BoardDTO>> getItemsByType();
+
 }
 

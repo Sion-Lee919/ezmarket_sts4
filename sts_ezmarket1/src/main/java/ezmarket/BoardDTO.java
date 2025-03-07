@@ -31,7 +31,6 @@ public class BoardDTO {
 	MultipartFile image;
 	int view_count;
 	
-	String brandname; // from brand
 
 	String searchKeyword; 
     int offset;            
@@ -41,4 +40,6 @@ public class BoardDTO {
     List<String> regions;
     Boolean newProduct;
     String sortType;
+    
+    String category;
 }
