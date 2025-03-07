@@ -44,7 +44,7 @@ public class OrderController {
             if (token != null && token.startsWith("Bearer")) {
                 token = token.substring(7);
 
-                String memberId = JWTUtil.validateAndGetUserId(token); 
+                String memberId = JWTUtil.validateAndGetUserId(token);
                 if (memberId != null) {
                     System.out.println("토큰 파싱 회원 아이디: " + memberId);
                     
