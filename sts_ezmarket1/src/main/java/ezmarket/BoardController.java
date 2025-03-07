@@ -105,11 +105,11 @@ public class BoardController {
         // 운영체제에 맞는 파일 경로 설정
         if (osName.contains("win")) {
         	if (obj.equals("product")) { path = "c:/ezwel/ezmarketupload/";}
-        	else if (obj.equals("review")) { path = "c:/ezwel/ezmarketupload/reviewimage";}
+        	else if (obj.equals("review")) { path = "c:/ezwel/ezmarketupload/reviewimage/";}
         	else if (obj.equals("brand")) { path = "c:/ezwel/ezmarketupload/brandlogo/";}
         } else {
             if (obj.equals("product")) { path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/";}
-        	else if (obj.equals("review")) { path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage";}
+        	else if (obj.equals("review")) { path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage/";}
         	else if (obj.equals("brand")) { path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/brandlogo/";}
         }
         
