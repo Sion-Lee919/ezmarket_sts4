@@ -39,19 +39,21 @@ public class OrderController {
         try {
             String token = request.getHeader("Authorization");
             System.out.println("token: " + token);
+            System.out.println("주문 요청 받음: " + order);
 
             if (token != null && token.startsWith("Bearer")) {
                 token = token.substring(7);
 
                 String memberId = JWTUtil.validateAndGetUserId(token); 
                 if (memberId != null) {
+                    System.out.println("토큰 파싱 회원 아이디: " + memberId);
                     
-                    // 상품 정보
+                    // 상품 정보 검증
                     if (order.getProductInfo() == null || order.getProductInfo().isEmpty()) {
                         return ResponseEntity.badRequest().body("상품 정보가 없습니다.");
                     }
                     
-                    // 배송 정보
+                    // 배송 정보 검증
                     if (order.getShippingAddress() == null || order.getShippingAddress().isEmpty()) {
                         return ResponseEntity.badRequest().body("배송지 정보가 없습니다.");
                     }
@@ -69,6 +71,7 @@ public class OrderController {
                         }
                         myPds.get(i).setPrice(item.getPrice());
                     }
+                    System.out.println("가격 저장 후: " + order);
                     
                     orderMapperService.createOrders(order, memberId);
                     
@@ -87,6 +90,7 @@ public class OrderController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
         } catch (Exception e) {
+            System.err.println("주문 처리 중 오류 발생: " + e.getMessage());
             e.printStackTrace();
             
             Map<String, String> errorResponse = new HashMap<>();
@@ -100,14 +104,18 @@ public class OrderController {
     public ResponseEntity<?> getMyOrders(HttpServletRequest request) {
         try {
             String token = request.getHeader("Authorization");
+            System.out.println("token: " + token);
 
             if (token != null && token.startsWith("Bearer")) {
                 token = token.substring(7);
 
                 String memberId = JWTUtil.validateAndGetUserId(token);
                 if (memberId != null) {
+                    System.out.println("주문 조회 요청 받음. memberId: " + memberId);
                     List<OrderDTO> orders = orderMapperService.getOrdersByMemberId(memberId);
+                    System.out.println("조회된 주문 수: " + orders.size());
                     
+                    // 각 주문의 상품 정보 로깅
                     for (OrderDTO order : orders) {
                         System.out.println("주문 ID: " + order.getOrderId() + ", 상품 정보: " + order.getProductInfo());
                     }
@@ -124,6 +132,7 @@ public class OrderController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
         } catch (Exception e) {
+            System.err.println("주문 조회 중 오류 발생: " + e.getMessage());
             e.printStackTrace();
             
             Map<String, String> errorResponse = new HashMap<>();
