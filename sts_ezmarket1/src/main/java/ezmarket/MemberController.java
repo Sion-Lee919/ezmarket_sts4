@@ -87,9 +87,11 @@ public class MemberController {
 	    public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO, HttpServletResponse response) {
 	        MemberDTO dto = memberService.getMember(memberDTO.getUsername());
 	        
-	        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	        //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	        
-	        if (dto != null && passwordEncoder.matches(memberDTO.getPassword(), dto.getPassword())) {
+	       // if (dto != null && passwordEncoder.matches(memberDTO.getPassword(), dto.getPassword())) {
+	        	
+	        if (dto != null && dto.getPassword().equals(memberDTO.getPassword())) {
 	        	
 	        	//회원 탈퇴 -> 로그인 불가
 	        	if(!"정상".equals(dto.getMember_status())) {

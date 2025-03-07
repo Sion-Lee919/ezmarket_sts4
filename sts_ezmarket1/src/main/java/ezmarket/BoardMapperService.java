@@ -1,7 +1,9 @@
 package ezmarket;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,6 +77,26 @@ public class BoardMapperService implements BoardService {
 	public int getBrandItemsCount(BoardDTO filterCriteria) {
 		return mapper.getBrandItemsCount(filterCriteria);
 	}
+
+	@Override
+	public Map<String, List<BoardDTO>> getItemsByType() {
+		List<BoardDTO> allItems = mapper.getItemsByType();
+
+        // 데이터를 category 기준으로 분류
+        Map<String, List<BoardDTO>> groupedItems = new HashMap<>();
+        groupedItems.put("popular", new java.util.ArrayList<>());
+        groupedItems.put("new", new java.util.ArrayList<>());
+        groupedItems.put("random", new java.util.ArrayList<>());
+
+        for (BoardDTO item : allItems) {
+            if (groupedItems.containsKey(item.getCategory())) {
+                groupedItems.get(item.getCategory()).add(item);
+            }
+        }
+        return groupedItems;
+	}
+	
+	
 
 
 

@@ -34,6 +34,8 @@ public interface BoardMapper {
 	List<BoardDTO> getBrand(BoardDTO filterCriteria);
 	
 	int getBrandItemsCount(BoardDTO filterCriteria);
+	
+	List<BoardDTO> getItemsByType();
 }
 
 

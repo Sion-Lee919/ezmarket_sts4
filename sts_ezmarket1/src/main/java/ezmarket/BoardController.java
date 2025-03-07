@@ -233,31 +233,8 @@ public class BoardController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/getitemsforrandom")
 	public Map<String, Object> GetRandomItems(){
-	    //모든 상품 가져오기
-	    ArrayList<BoardDTO> allItems = boardService.getAllItems();
-
-	    //랜덤 상품 목록 만들기 (6개)
-	    ArrayList<BoardDTO> randomList = new ArrayList<>(allItems);
-	    Collections.shuffle(randomList);
-	    randomList = new ArrayList<>(randomList.subList(0, Math.min(6, randomList.size())));
-
-//	    //인기순 Top 6 가져오기 
-//	    ArrayList<BoardDTO> popularItems = new ArrayList<>(allItems);
-//	    popularItems.sort((a, b) -> Double.compare(b.getRating(), a.getRating()));  // 평점 높은 순
-//	    popularItems = new ArrayList<>(popularItems.subList(0, Math.min(6, popularItems.size())));
-//
-//	    //신상품 Top 6 가져오기
-//	    ArrayList<BoardDTO> newItems = new ArrayList<>(allItems);
-//	    newItems.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));  // 최신 등록순
-//	    newItems = new ArrayList<>(newItems.subList(0, Math.min(6, newItems.size())));
-
-	    //JSON 형식으로 반환
-	    Map<String, Object> response = new HashMap<>();
-	    response.put("random", randomList);
-//	    response.put("popular", popularItems);
-//	    response.put("new", newItems);
-
-	    return response;
+		Map<String, List<BoardDTO>> items = boardService.getItemsByType();
+        return new HashMap<>(items);
 	}
 
 
