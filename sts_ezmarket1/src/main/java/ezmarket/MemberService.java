@@ -68,5 +68,5 @@ public interface MemberService {
 		//판매자 거절
 		void sellRefuse(long brand_id, String brand_refusal_comment);
 
-		ArrayList<String> getBrandAddr();
+		ArrayList<MemberDTO> getBrandAddr();
 }
