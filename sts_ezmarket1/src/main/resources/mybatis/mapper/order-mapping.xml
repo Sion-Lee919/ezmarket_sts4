@@ -21,7 +21,7 @@
 
 	<insert id="insertOrder" parameterType="OrderDTO">
 	    INSERT INTO orders (MEMBER_ID, PRODUCT_INFO, TOTAL_AMOUNT, STATUS, SHIPPING_ADDRESS, SHIPPING_MESSAGE, PAYMENT_METHOD, RECEIVER_NAME, RECEIVER_PHONE, RECEIVER_EMAIL, ORDER_DATE)
-	    VALUES (#{memberId}, #{productInfo, typeHandler=ezmarket.OrderProductTypeHandler}, #{totalAmount}, '처리 중', #{shippingAddress}, #{shippingMessage}, #{paymentMethod}, #{receiverName}, #{receiverPhone}, #{receiverEmail}, SYSDATE)
+	    VALUES (#{memberId, jdbcType=NUMERIC}, #{productInfo, typeHandler=ezmarket.OrderProductTypeHandler}, #{totalAmount}, '처리 중', #{shippingAddress}, #{shippingMessage}, #{paymentMethod}, #{receiverName}, #{receiverPhone}, #{receiverEmail}, SYSDATE)
 	</insert>
 
 	<select id="getOrdersByMemberId" resultMap="orderDTOResultMap">
