@@ -39,8 +39,7 @@ public class OrderMapperService {
         try {
             List<OrderDTO> orders = orderMapper.getOrdersByMemberId(memberId);
             System.out.println("조회된 주문 수: " + orders.size());
-            
-            // 각 주문의 상품 정보 확인
+
             for (OrderDTO order : orders) {
                 System.out.println("주문 ID: " + order.getOrderId());
                 System.out.println("주문 상태: " + order.getStatus());
