@@ -90,6 +90,7 @@ public class MemberController {
 	        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	        
 	        if (dto != null && passwordEncoder.matches(memberDTO.getPassword(), dto.getPassword())) {
+	        //if (dto != null && dto.getPassword().equals(memberDTO.getPassword())) {
 	        	
 	        	//회원 탈퇴 -> 로그인 불가
 	        	if(!"정상".equals(dto.getMember_status())) {
@@ -254,8 +255,8 @@ public class MemberController {
 		
 		// 판매자 주소 가져오기
 		@GetMapping("/brandaddress")
-		public ArrayList<String> getBrandAddr() {
-			ArrayList<String> addrList = memberService.getBrandAddr();
+		public ArrayList<MemberDTO> getBrandAddr() {
+			ArrayList<MemberDTO> addrList = memberService.getBrandAddr();
 			return addrList;
 		}
 		

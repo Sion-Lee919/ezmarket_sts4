@@ -70,5 +70,5 @@ public interface MemberMapper {
         void sellApplicationRefuseAuthor(long brand_id, String brand_refusal_comment);
         
         //판매자 주소 가져오기
-		ArrayList<String> getBrandAddr();
+		ArrayList<MemberDTO> getBrandAddr();
 }
