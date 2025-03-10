@@ -70,7 +70,7 @@
        (COALESCE(r.review_count, 0) * 5 * 0.2) + 
        (COALESCE(r.recent_review_score, 0) * 0.1) AS popularity_score 
 		FROM product p
-		
+		--조회수 0.4, 평균평점 0.3, 리뷰개수 0.2, 최근 리뷰반영 0.1
 		LEFT JOIN (
 		    -- 조회수 계산
 		    SELECT product_id, SUM(view_count) AS view_count

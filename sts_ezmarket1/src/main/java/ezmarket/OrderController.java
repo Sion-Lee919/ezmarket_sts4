@@ -79,7 +79,7 @@ public class OrderController {
                         dbMemberId = userId;
                     } catch (NumberFormatException e) {
                         // userId가 숫자가 아니라면 토큰에서 추출되는 고정 ID 사용
-                        dbMemberId = "23113647";
+                        dbMemberId = "101";
                     }
                     
                     orderMapperService.createOrders(order, dbMemberId);
