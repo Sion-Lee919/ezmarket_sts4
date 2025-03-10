@@ -90,7 +90,6 @@ public class BoardController {
 			file1.transferTo( new java.io.File(savePath +  newfilename1));
 			dto.setImage_url(newfilename1);
 		}
-		System.out.println(dto);
 		boolean result = boardService.registerItem(dto);
 	    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 	}
