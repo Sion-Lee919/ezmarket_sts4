@@ -267,7 +267,7 @@
     SELECT * FROM (
         -- 인기순 6개
         SELECT 'popular' AS category, 
-            p.product_id, p.name, p.price, p.created_at, p.image_url, 
+            p.product_id, p.name, p.price, p.created_at, p.image_url, p.brand_id,
             COALESCE(v.view_count, 0) AS view_count, 
             COALESCE(r.avg_rating, 0) AS avg_rating, 
             COALESCE(r.review_count, 0) AS review_count, 
@@ -295,13 +295,14 @@
         ) r ON p.product_id = r.product_id
         ORDER BY popularity_score DESC
         FETCH FIRST 6 ROWS ONLY
-
     ) 
+
     UNION ALL
+
     SELECT * FROM (
         -- 최신순 6개
         SELECT 'new' AS category, 
-            p.product_id, p.name, p.price, p.created_at, p.image_url, 
+            p.product_id, p.name, p.price, p.created_at, p.image_url, p.brand_id, 
             0 AS view_count, 
             0 AS avg_rating, 
             0 AS review_count, 
@@ -312,10 +313,11 @@
     )
 
     UNION ALL
+
     SELECT * FROM (
         -- 랜덤 6개
         SELECT 'random' AS category, 
-            p.product_id, p.name, p.price, p.created_at, p.image_url, 
+            p.product_id, p.name, p.price, p.created_at, p.image_url, p.brand_id, 
             0 AS view_count, 
             0 AS avg_rating, 
             0 AS review_count, 
@@ -325,6 +327,7 @@
         FETCH FIRST 6 ROWS ONLY
     )
 </select>
+
 
 
 
