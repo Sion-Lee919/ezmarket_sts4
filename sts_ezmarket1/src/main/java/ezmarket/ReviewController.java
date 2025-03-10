@@ -40,10 +40,10 @@ public class ReviewController {
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {
 
-        	savePath = "c:/ezwel/ezmarketupload/reviewimage";
+        	savePath = "c:/ezwel/ezmarketupload/reviewimage/";
 
         } else {
-        	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage";
+        	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage/";
         }
 		String newfilename1 = null;
 		MultipartFile file1 = dto.getImage();
@@ -76,10 +76,10 @@ public class ReviewController {
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {
 
-        	savePath = "c:/ezwel/ezmarketupload/reviewimage";
+        	savePath = "c:/ezwel/ezmarketupload/reviewimage/";
 
         } else {
-        	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage";
+        	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage/";
         }
 		String newfilename1 = null;
 		MultipartFile file1 = dto.getImage();

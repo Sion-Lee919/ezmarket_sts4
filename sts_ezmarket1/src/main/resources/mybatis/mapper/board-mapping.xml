@@ -24,14 +24,17 @@
   </select>
   
   <select id="getBrandItems" resultType="boarddto" parameterType="int">
-  select *
-  from product
-  where brand_id=#{brand_id}
+  select p.*, b.brandname
+  from product p 
+  join brand b on b.brand_id = p.brand_id
+  where p.brand_id=#{brand_id}
   </select>
   
   <insert id="registerItem" parameterType="boarddto">
-  	insert into product 
-  	values(#{product_id}, #{brand_id}, #{name} , #{description} , #{alcohol} ,#{volume}, #{price}, #{stock_quantity}, sysdate , sysdate ,#{product_ingredient} ,#{product_region},#{bigcategory} ,#{subcategory} , #{image_url})
+    INSERT INTO product 
+    (product_id, brand_id, name, description, alcohol, volume, price, stock_quantity, created_at, update_date, product_ingredient, product_region, bigcategory, subcategory, image_url) 
+    VALUES 
+    (#{product_id}, #{brand_id}, #{name}, #{description}, #{alcohol}, #{volume}, #{price}, #{stock_quantity}, SYSDATE, SYSDATE, #{product_ingredient}, #{product_region}, #{bigcategory}, #{subcategory}, #{image_url})
   </insert>
   
   <update id="updateItem" parameterType="boarddto">
@@ -44,6 +47,7 @@
 		price = #{price},
 		stock_quantity = #{stock_quantity},
 		product_ingredient = #{product_ingredient},
+		update_date = sysdate,
 		product_region = #{product_region},
 		bigcategory = #{bigcategory},
 		subcategory = #{subcategory},
