@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class OrderDTO {
     private int orderId;
-    private String memberId;
+    private int memberId;
 
     private List<OrderProductDTO> productInfo;
     private int totalAmount;

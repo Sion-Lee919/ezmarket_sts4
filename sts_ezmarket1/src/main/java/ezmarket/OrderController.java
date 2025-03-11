@@ -61,6 +61,9 @@ public class OrderController {
                         return ResponseEntity.badRequest().body("받는 사람 정보가 없습니다.");
                     }
                     
+                    MemberDTO mem = memberService.getMember(userId);
+                    System.out.println("구매 회원 정보" + mem);
+                    
                     // Product info 불러와서 가격 정보 order 안에 orderProduct에 가격 정보 저장
                     List<OrderProductDTO> myPds = order.getProductInfo();
                     for(var i = 0; i < myPds.size(); i++) {
@@ -70,19 +73,10 @@ public class OrderController {
                         }
                         myPds.get(i).setPrice(item.getPrice());
                     }
+                    
                     System.out.println("가격 저장 후: " + order);
-                    
-                    // 회원 ID가 숫자인지 확인하고 처리
-                    String dbMemberId;
-                    try {
-                        Integer.parseInt(userId);
-                        dbMemberId = userId;
-                    } catch (NumberFormatException e) {
-                        // userId가 숫자가 아니라면 토큰에서 추출되는 고정 ID 사용
-                        dbMemberId = "23113647";
-                    }
-                    
-                    orderMapperService.createOrders(order, dbMemberId);
+                                        
+                    orderMapperService.createOrders(order, mem.getMember_id());
                     
                     Map<String, Object> response = new HashMap<>();
                     response.put("result", "success");
@@ -122,23 +116,28 @@ public class OrderController {
                 if (userId != null) {
                     System.out.println("주문 조회 요청 받음. memberId: " + userId);
                     
-                    // 회원 ID가 숫자인지 확인하고 처리
-                    String dbMemberId;
-                    try {
-                        Integer.parseInt(userId);
-                        dbMemberId = userId;
-                    } catch (NumberFormatException e) {
-                        dbMemberId = "23113647";
-                    }
+                   MemberDTO mem = memberService.getMember(userId);
+                   System.out.println("멤버 정보 : " + mem);
                     
-                    List<OrderDTO> orders = orderMapperService.getOrdersByMemberId(dbMemberId);
-                    System.out.println("조회된 주문 수: " + orders.size());
-
-                    for (OrderDTO order : orders) {
-                        System.out.println("주문 ID: " + order.getOrderId() + ", 상품 정보: " + order.getProductInfo());
+                    List<OrderDTO> orders = orderMapperService.getOrdersByMemberId(mem.getMember_id());
+                    System.out.println("조회된 주문 수: " + orders);
+                    
+                    for(var j = 0; j < orders.size(); j++) {
+                    	OrderDTO order = orders.get(j);
+                        List<OrderProductDTO> myPds = order.getProductInfo();
+                        for(var i = 0; i < myPds.size(); i++) {
+                            BoardDTO item = boardService.getItemDetail(myPds.get(i).getProductId());
+                            if (item == null) {
+                                return ResponseEntity.badRequest().body("상품 ID " + myPds.get(i).getProductId() + "에 해당하는 상품이 없습니다.");
+                            }
+                            myPds.get(i).setName(item.getName());
+                            myPds.get(i).setImage_url(item.getImage_url());
+                            myPds.get(i).setBrandname(item.getBrandname());
+                        }
                     }
                     
                     return ResponseEntity.ok().body(orders);
+                    
                 } else {
                     Map<String, String> errorResponse = new HashMap<>();
                     errorResponse.put("message", "토큰이 유효하지 않습니다.");
@@ -148,7 +147,7 @@ public class OrderController {
                 Map<String, String> errorResponse = new HashMap<>();
                 errorResponse.put("message", "Authorization 헤더 오류.");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-            }
+            }            
         } catch (Exception e) {
             System.err.println("주문 조회 중 오류 발생: " + e.getMessage());
             e.printStackTrace();
