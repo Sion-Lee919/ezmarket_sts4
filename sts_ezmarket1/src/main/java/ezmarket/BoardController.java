@@ -5,11 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -19,13 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,7 +38,6 @@ public class BoardController {
     @Qualifier("boardmapperservice")
     BoardService boardService;
 	
-	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/item/{itemid}")
 	public BoardDTO GetItemDetail(@PathVariable("itemid") int product_id) {
 		boardService.viewCount(product_id);
@@ -51,7 +46,6 @@ public class BoardController {
 		
 	}
 	
-	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/getallitemsforsearch")
 	public ArrayList<BoardDTO> GetAllItems(){
 		ArrayList<BoardDTO> dtoList = boardService.getAllItems();
@@ -59,7 +53,6 @@ public class BoardController {
 	}
 
 	
-	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/getbranditems/{brandid}")
 	public ArrayList<BoardDTO> getBrandItems(@PathVariable("brandid") int brand_id) {
 		ArrayList<BoardDTO> dtoList = boardService.getBrandItems(brand_id);
@@ -67,18 +60,19 @@ public class BoardController {
 		
 	}
 	
-	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping(value="/brand/id/registeritem", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Boolean> registerItem(@ModelAttribute BoardDTO dto) throws IOException{
 				
 		String savePath = "";
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {
-
         	savePath = "c:/ezwel/ezmarketupload/";	
-
-        } else {
-        	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/";}
+        } else if (osName.contains("Mac")){
+        	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/";
+        } else { // linux
+        	savePath = "/home/" + System.getProperty("user.name") + "/mydir/ezmarketupload/";
+        }
+        
 		String newfilename1 = null;
 		MultipartFile file1 = dto.getImage();
 		if(!file1.isEmpty()) {
@@ -90,28 +84,31 @@ public class BoardController {
 			file1.transferTo( new java.io.File(savePath +  newfilename1));
 			dto.setImage_url(newfilename1);
 		}
-		System.out.println(dto);
 		boolean result = boardService.registerItem(dto);
 	    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 	}
 
 	
-	@CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/showimage")
     public void showImg(String filename, String obj, HttpServletResponse response) throws IOException {
 		//String obj = "product";
         String osName = System.getProperty("os.name").toLowerCase();
         String path = "";
         
+        
         // 운영체제에 맞는 파일 경로 설정
         if (osName.contains("win")) {
         	if (obj.equals("product")) { path = "c:/ezwel/ezmarketupload/";}
         	else if (obj.equals("review")) { path = "c:/ezwel/ezmarketupload/reviewimage/";}
         	else if (obj.equals("brand")) { path = "c:/ezwel/ezmarketupload/brandlogo/";}
-        } else {
+        }  else if (osName.contains("Mac")){
             if (obj.equals("product")) { path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/";}
         	else if (obj.equals("review")) { path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage/";}
         	else if (obj.equals("brand")) { path = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/brandlogo/";}
+        } else { // linux
+            if (obj.equals("product")) { path = "/home/" + System.getProperty("user.name") + "/mydir/ezmarketupload/";}
+        	else if (obj.equals("review")) { path = "/home/" + System.getProperty("user.name") + "/mydir/ezmarketupload/reviewimage/";}
+        	else if (obj.equals("brand")) { path = "/home/" + System.getProperty("user.name") + "/mydir/ezmarketupload/brandlogo/";}
         }
         
         // 파일을 열기
@@ -141,7 +138,6 @@ public class BoardController {
     
 
 
-	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping(value="/brand/id/updateitem", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Boolean> updateItem(@ModelAttribute BoardDTO dto) throws IOException{
 		
@@ -149,8 +145,10 @@ public class BoardController {
 		    String osName = System.getProperty("os.name").toLowerCase();
 		    if (osName.contains("win")) {
 		        savePath = "c:/ezwel/ezmarketupload/";
-		    } else {
+		    } else if (osName.contains("Mac")){
 		        savePath = "/Users/minsu/Documents/ezwel/ezmarketupload/";
+		    } else { // linux
+		        savePath = "/home/" + System.getProperty("user.name") + "/mydir/ezmarketupload/";
 		    }
 		    
 		    BoardDTO existingItem = boardService.getItemDetail(dto.getProduct_id());
@@ -184,7 +182,6 @@ public class BoardController {
 		    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 	}
 	
-	@CrossOrigin(origins = "http://localhost:3000")
 	@DeleteMapping("/brand/{brandid}/delete/{productid}")
 	public ResponseEntity<Boolean> deleteItem(@PathVariable("brandid") int brand_id, @PathVariable("productid") int product_id) {
 	    boolean result = boardService.deleteItem(product_id);
@@ -192,7 +189,6 @@ public class BoardController {
 	}
 	
 	//필터
-	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> getFilteredItems(
 	    @RequestParam(required = false) String searchKeyword,
@@ -231,7 +227,6 @@ public class BoardController {
 
 
 
-	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/getitemsforrandom")
 	public Map<String, Object> GetRandomItems(){
 		Map<String, List<BoardDTO>> items = boardService.getItemsByType();
@@ -240,14 +235,11 @@ public class BoardController {
 
 
 
-	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping(value = "/searchitems", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ArrayList<BoardDTO> getsearchItems(@RequestParam String searchKeyword){
-		//System.out.println(searchKeyword);
 		return boardService.getsearchItems(searchKeyword);
 	}
 	
-	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping(value = "/brandItems", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> getBrandFilteredItems(
 	    @RequestParam int brand_id,
