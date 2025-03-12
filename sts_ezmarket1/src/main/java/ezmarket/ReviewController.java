@@ -39,11 +39,11 @@ public class ReviewController {
 		String savePath = "";
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {
-
         	savePath = "c:/ezwel/ezmarketupload/reviewimage/";
-
-        } else {
-        	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage/";
+        } else if (osName.contains("Mac")){
+        	savePath = "/Users/minsu/Documents/ezwel/Desktop/ezmarketupload/reviewimage/";
+        } else { // linux
+        	savePath = "/home/" + System.getProperty("user.name") + "/mydir/ezmarketupload/reviewimage/";
         }
 		String newfilename1 = null;
 		MultipartFile file1 = dto.getImage();
@@ -75,11 +75,11 @@ public class ReviewController {
 		String savePath = "";
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {
-
         	savePath = "c:/ezwel/ezmarketupload/reviewimage/";
-
-        } else {
-        	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage/";
+        } else if (osName.contains("Mac")){
+        	savePath = "/Users/minsu/Documents/ezwel/Desktop/ezmarketupload/reviewimage/";
+        } else { // linux
+        	savePath = "/home/" + System.getProperty("user.name") + "/mydir/ezmarketupload/reviewimage/";
         }
 		String newfilename1 = null;
 		MultipartFile file1 = dto.getImage();
