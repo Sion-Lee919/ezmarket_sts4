@@ -8,7 +8,12 @@ import java.util.List;
 public interface OrderMapper {
     void insertOrder(OrderDTO order);
 
-    List<OrderDTO> getOrdersByMemberId(@Param("memberId") String memberId);
+    List<OrderDTO> getOrdersByMemberId(@Param("memberId") int memberId);
 
-    OrderDTO getOrderByMemberId(@Param("memberId") String memberId, @Param("orderId") Long orderId);
+    OrderDTO getLastOrderByMemberId(@Param("memberId") int memberId);
+
+    OrderDTO getOrderByMemberId(@Param("memberId") int memberId, @Param("orderId") int orderId);
+    
+    //Member Part
+    int getOrderCountByStatus(@Param("status") String status);
 }

@@ -2,6 +2,7 @@ package ezmarket;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +40,11 @@ public class ReviewController {
 		String savePath = "";
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {
-
-        	savePath = "c:/ezwel/ezmarketupload/reviewimage";
-
-        } else {
-        	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage";
+        	savePath = "c:/ezwel/ezmarketupload/reviewimage/";
+        } else if (osName.contains("Mac")){
+        	savePath = "/Users/minsu/Documents/ezwel/Desktop/ezmarketupload/reviewimage/";
+        } else { // linux
+        	savePath = "/home/" + System.getProperty("user.name") + "/mydir/ezmarketupload/reviewimage/";
         }
 		String newfilename1 = null;
 		MultipartFile file1 = dto.getImage();
@@ -75,11 +76,11 @@ public class ReviewController {
 		String savePath = "";
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("win")) {
-
-        	savePath = "c:/ezwel/ezmarketupload/reviewimage";
-
-        } else {
-        	savePath = "/Users/minsu/Documents/ezwel/Desktop/downloaded_images/reviewimage";
+        	savePath = "c:/ezwel/ezmarketupload/reviewimage/";
+        } else if (osName.contains("Mac")){
+        	savePath = "/Users/minsu/Documents/ezwel/Desktop/ezmarketupload/reviewimage/";
+        } else { // linux
+        	savePath = "/home/" + System.getProperty("user.name") + "/mydir/ezmarketupload/reviewimage/";
         }
 		String newfilename1 = null;
 		MultipartFile file1 = dto.getImage();
@@ -99,6 +100,11 @@ public class ReviewController {
 	    return result ? ResponseEntity.ok(true) : ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 	}
 	
-	
+	//Member Part
+    @GetMapping("/getUserReviews")
+    public ResponseEntity<List<ReviewDTO>> getUserReviews() {
+        List<ReviewDTO> userReviews = reviewService.getUserReviews();
+        return ResponseEntity.ok(userReviews);
+    }
 	
 }

@@ -1,6 +1,7 @@
 package ezmarket;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,13 @@ public class ReviewMapperService implements ReviewService {
 	public boolean updateReview(ReviewDTO dto) {
 		// TODO Auto-generated method stub
 		return mapper.updateReview(dto);
+	}
+	
+	//Member Part
+	@Override
+	public List<ReviewDTO> getUserReviews() {
+		List<ReviewDTO> userReviews = mapper.getUserAllReviews(); 
+		return userReviews;
 	}
 
 }

@@ -1,6 +1,7 @@
 package ezmarket;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,6 @@ public interface ReviewMapper {
 
 	boolean updateReview(ReviewDTO dto);
 
+	//Member Part
+    List<ReviewDTO> getUserAllReviews();
 }

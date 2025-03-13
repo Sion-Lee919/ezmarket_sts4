@@ -90,8 +90,8 @@ public class MemberController {
 	        //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	        
 
-	        if (dto != null && passwordEncoder.matches(memberDTO.getPassword(), dto.getPassword())) {
-	        //if (dto != null && dto.getPassword().equals(memberDTO.getPassword())) {
+	        //if (dto != null && passwordEncoder.matches(memberDTO.getPassword(), dto.getPassword())) {
+	        if (dto != null && dto.getPassword().equals(memberDTO.getPassword())) {
 
 	        	
 	        	//회원 탈퇴 -> 로그인 불가
@@ -105,7 +105,7 @@ public class MemberController {
 	        	
 	            Cookie cookie = new Cookie("jwt_token", token);
 	            cookie.setPath("/"); 
-	            cookie.setMaxAge(60 * 60); 
+	            cookie.setMaxAge(60 * 60 * 24 * 3); 
 	            response.addCookie(cookie);
 
 	            Map<String, String> responseBody = new HashMap<>();
