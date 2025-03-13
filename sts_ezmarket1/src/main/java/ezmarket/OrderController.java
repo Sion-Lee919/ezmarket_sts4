@@ -75,8 +75,11 @@ public class OrderController {
                     }
                     
                     System.out.println("가격 저장 후: " + order);
-                                        
+                    System.out.println("주문 처리 시작 - 주문 상품 개수: " + myPds.size());
+                    
                     orderMapperService.createOrders(order, mem.getMember_id());
+                    
+                    System.out.println("주문 처리 완료 - 장바구니 정리 작업도 완료됨");
                     
                     Map<String, Object> response = new HashMap<>();
                     response.put("result", "success");
