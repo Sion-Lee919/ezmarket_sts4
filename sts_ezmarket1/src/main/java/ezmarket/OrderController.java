@@ -73,6 +73,7 @@ public class OrderController {
                         }
                         myPds.get(i).setPrice(item.getPrice());
                     }
+
                     
                     System.out.println("가격 저장 후: " + order);
                     System.out.println("주문 처리 시작 - 주문 상품 개수: " + myPds.size());
@@ -80,6 +81,7 @@ public class OrderController {
                     orderMapperService.createOrders(order, mem.getMember_id());
                     
                     System.out.println("주문 처리 완료 - 장바구니 정리 작업도 완료됨");
+
                     
                     Map<String, Object> response = new HashMap<>();
                     response.put("result", "success");
@@ -161,4 +163,16 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
+    
+    //Member Part
+    	@GetMapping("/orderFlowCount")
+    	public ResponseEntity<Map<String, Integer>> orderFlowCount() {
+    		Map<String, Integer> counts = new HashMap<>();
+    		counts.put("pay", orderMapperService.getOrderCountByStatus("결제 완료"));
+    		counts.put("preparing", orderMapperService.getOrderCountByStatus("상품 준비중"));
+    		counts.put("shipping", orderMapperService.getOrderCountByStatus("배송중"));
+    		counts.put("shipped", orderMapperService.getOrderCountByStatus("배송 완료"));
+    		
+    		return ResponseEntity.ok(counts);
+    	}
 }

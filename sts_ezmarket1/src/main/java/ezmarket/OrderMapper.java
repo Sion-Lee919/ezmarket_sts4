@@ -12,5 +12,10 @@ public interface OrderMapper {
 
     OrderDTO getLastOrderByMemberId(@Param("memberId") int memberId);
 
+    
+    //Member Part
+    int getOrderCountByStatus(@Param("status") String status);
+
     OrderDTO getOrderByMemberIdAndOrderId(@Param("memberId") int memberId, @Param("orderId") int orderId);
+
 }

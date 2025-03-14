@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class JWTUtil {
     private static final String SECRET = "Hd5HJsDA5d5SDd523adfDF4233AFHd5HJsDA5d5SDd523adfDF4233AFFssdf42124fADSFa";
-    private static final long EXPIRATION_TIME = 86400000;
+    private static final long EXPIRATION_TIME = 259200000;
     private static final Key SECRET_KEY = new SecretKeySpec(SECRET.getBytes(), SignatureAlgorithm.HS512.getJcaName());
 
     public static String generateToken(MemberDTO dto) {
@@ -38,6 +38,16 @@ public class JWTUtil {
                 .getBody();
 
         return claims.getSubject(); 
+    }
+    
+    public static Integer validateAndGetMemberId(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(SECRET_KEY)  
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.get("member_id", Integer.class);
     }
     
 }

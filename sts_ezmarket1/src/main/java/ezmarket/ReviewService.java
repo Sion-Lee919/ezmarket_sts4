@@ -1,6 +1,7 @@
 package ezmarket;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface ReviewService {
 
@@ -12,4 +13,6 @@ public interface ReviewService {
 
 	boolean updateReview(ReviewDTO dto);
 
+	//Member Part
+	List<ReviewDTO> getUserReviews(int member_id);
 }
