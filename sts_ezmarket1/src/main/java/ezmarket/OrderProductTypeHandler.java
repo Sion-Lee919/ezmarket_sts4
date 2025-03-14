@@ -17,14 +17,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 public class OrderProductTypeHandler extends BaseTypeHandler<List<OrderProductDTO>> {
-	
-	private final ObjectMapper objectMapper = new ObjectMapper();
+    
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final Gson gson = new Gson();
 
-	@Override
-	public void setNonNullParameter(PreparedStatement ps, int i, List<OrderProductDTO> parameter, JdbcType jdbcType)
-			throws SQLException {
-		try {
+    @Override
+    public void setNonNullParameter(PreparedStatement ps, int i, List<OrderProductDTO> parameter, JdbcType jdbcType)
+            throws SQLException {
+        try {
             String json = gson.toJson(parameter);
             System.out.println("주문 상품 정보 저장: " + json);
             ps.setString(i, json);
@@ -33,22 +33,22 @@ public class OrderProductTypeHandler extends BaseTypeHandler<List<OrderProductDT
             e.printStackTrace();
             ps.setString(i, "[]");
         }
-	}
+    }
 
-	@Override
-	public List<OrderProductDTO> getNullableResult(ResultSet rs, String columnName) throws SQLException {
-		return convertToList(rs.getString(columnName));
-	}
+    @Override
+    public List<OrderProductDTO> getNullableResult(ResultSet rs, String columnName) throws SQLException {
+        return convertToList(rs.getString(columnName));
+    }
 
-	@Override
-	public List<OrderProductDTO> getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
-		return convertToList(rs.getString(columnIndex));
-	}
+    @Override
+    public List<OrderProductDTO> getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+        return convertToList(rs.getString(columnIndex));
+    }
 
-	@Override
-	public List<OrderProductDTO> getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
-		return convertToList(cs.getString(columnIndex));
-	}
+    @Override
+    public List<OrderProductDTO> getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+        return convertToList(cs.getString(columnIndex));
+    }
     
     private List<OrderProductDTO> convertToList(String s) {
         if (!StringUtils.hasLength(s)) {
@@ -58,7 +58,6 @@ public class OrderProductTypeHandler extends BaseTypeHandler<List<OrderProductDT
         
         try {
             System.out.println("주문 상품 정보 파싱 시도: " + s);
-            // 먼저 Gson으로 시도
             try {
                 List<OrderProductDTO> result = gson.fromJson(s, new TypeReference<List<OrderProductDTO>>(){}.getType());
                 System.out.println("Gson 파싱 성공: " + result.size() + "개 상품");

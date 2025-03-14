@@ -8,8 +8,10 @@ public interface OrderService {
     void createOrders(List<OrderDTO> orders);
     List<OrderDTO> getOrdersByMemberId(int memberId);
     OrderDTO getLastOrderByMemberId(int memberId);
-    OrderDTO getOrderByMemberId(int memberId, int orderId);
     
     //Member Part
     Map<String, Integer> getOrderFlowCount();
+
+    OrderDTO getOrderByMemberIdAndOrderId(int memberId, int orderId);
+
 }

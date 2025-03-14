@@ -24,14 +24,17 @@
   </select>
   
   <select id="getBrandItems" resultType="boarddto" parameterType="int">
-  select *
-  from product
-  where brand_id=#{brand_id}
+  select p.*, b.brandname
+  from product p 
+  join brand b on b.brand_id = p.brand_id
+  where p.brand_id=#{brand_id}
   </select>
   
   <insert id="registerItem" parameterType="boarddto">
-  	insert into product 
-  	values(#{product_id}, #{brand_id}, #{name} , #{description} , #{alcohol} ,#{volume}, #{price}, #{stock_quantity}, sysdate , sysdate ,#{product_ingredient} ,#{product_region},#{bigcategory} ,#{subcategory} , #{image_url})
+    INSERT INTO product 
+    (product_id, brand_id, name, description, alcohol, volume, price, stock_quantity, created_at, update_date, product_ingredient, product_region, bigcategory, subcategory, image_url) 
+    VALUES 
+    (#{product_id}, #{brand_id}, #{name}, #{description}, #{alcohol}, #{volume}, #{price}, #{stock_quantity}, SYSDATE, SYSDATE, #{product_ingredient}, #{product_region}, #{bigcategory}, #{subcategory}, #{image_url})
   </insert>
   
   <update id="updateItem" parameterType="boarddto">
@@ -44,6 +47,7 @@
 		price = #{price},
 		stock_quantity = #{stock_quantity},
 		product_ingredient = #{product_ingredient},
+		update_date = sysdate,
 		product_region = #{product_region},
 		bigcategory = #{bigcategory},
 		subcategory = #{subcategory},
@@ -66,7 +70,7 @@
        (COALESCE(r.review_count, 0) * 5 * 0.2) + 
        (COALESCE(r.recent_review_score, 0) * 0.1) AS popularity_score 
 		FROM product p
-		
+		--조회수 0.4, 평균평점 0.3, 리뷰개수 0.2, 최근 리뷰반영 0.1
 		LEFT JOIN (
 		    -- 조회수 계산
 		    SELECT product_id, SUM(view_count) AS view_count
@@ -267,7 +271,7 @@
     SELECT * FROM (
         -- 인기순 6개
         SELECT 'popular' AS category, 
-            p.product_id, p.name, p.price, p.created_at, p.image_url, 
+            p.product_id, p.name, p.price, p.created_at, p.image_url, p.brand_id,
             COALESCE(v.view_count, 0) AS view_count, 
             COALESCE(r.avg_rating, 0) AS avg_rating, 
             COALESCE(r.review_count, 0) AS review_count, 
@@ -295,13 +299,14 @@
         ) r ON p.product_id = r.product_id
         ORDER BY popularity_score DESC
         FETCH FIRST 6 ROWS ONLY
-
     ) 
+
     UNION ALL
+
     SELECT * FROM (
         -- 최신순 6개
         SELECT 'new' AS category, 
-            p.product_id, p.name, p.price, p.created_at, p.image_url, 
+            p.product_id, p.name, p.price, p.created_at, p.image_url, p.brand_id, 
             0 AS view_count, 
             0 AS avg_rating, 
             0 AS review_count, 
@@ -312,10 +317,11 @@
     )
 
     UNION ALL
+
     SELECT * FROM (
         -- 랜덤 6개
         SELECT 'random' AS category, 
-            p.product_id, p.name, p.price, p.created_at, p.image_url, 
+            p.product_id, p.name, p.price, p.created_at, p.image_url, p.brand_id, 
             0 AS view_count, 
             0 AS avg_rating, 
             0 AS review_count, 
@@ -325,6 +331,7 @@
         FETCH FIRST 6 ROWS ONLY
     )
 </select>
+
 
 
 

@@ -4,40 +4,41 @@
 
 <mapper namespace="ezmarket.OrderMapper">
 
-	<resultMap id="orderDTOResultMap" type="OrderDTO">
-		<id column="ORDER_ID" property="orderId"/>
-		<result column="MEMBER_ID" property="memberId"/>
-		<result column="ORDER_DATE" property="orderDate"/>
-		<result column="TOTAL_AMOUNT" property="totalAmount"/>
-		<result column="STATUS" property="status"/>
-		<result column="SHIPPING_MESSAGE" property="shippingMessage"/>
-		<result column="SHIPPING_ADDRESS" property="shippingAddress"/>
-		<result column="RECEIVER_NAME" property="receiverName"/>
-		<result column="RECEIVER_PHONE" property="receiverPhone"/>
-		<result column="RECEIVER_EMAIL" property="receiverEmail"/>
-		<result column="PAYMENT_METHOD" property="paymentMethod"/>
-		<result column="PRODUCT_INFO" property="productInfo" javaType="java.util.ArrayList" jdbcType="VARCHAR" typeHandler="ezmarket.OrderProductTypeHandler"/>
+    <resultMap id="orderDTOResultMap" type="OrderDTO">
+        <id column="ORDER_ID" property="orderId"/>
+        <result column="MEMBER_ID" property="memberId"/>
+        <result column="ORDER_DATE" property="orderDate"/>
+        <result column="TOTAL_AMOUNT" property="totalAmount"/>
+        <result column="STATUS" property="status"/>
+        <result column="SHIPPING_MESSAGE" property="shippingMessage"/>
+        <result column="SHIPPING_ADDRESS" property="shippingAddress"/>
+        <result column="RECEIVER_NAME" property="receiverName"/>
+        <result column="RECEIVER_PHONE" property="receiverPhone"/>
+        <result column="RECEIVER_EMAIL" property="receiverEmail"/>
+        <result column="PAYMENT_METHOD" property="paymentMethod"/>
+        <result column="PRODUCT_INFO" property="productInfo" javaType="java.util.ArrayList" jdbcType="VARCHAR" typeHandler="ezmarket.OrderProductTypeHandler"/>
     </resultMap>
 
-	<insert id="insertOrder" parameterType="OrderDTO">
-	    INSERT INTO orders (MEMBER_ID, PRODUCT_INFO, TOTAL_AMOUNT, STATUS, SHIPPING_ADDRESS, SHIPPING_MESSAGE, PAYMENT_METHOD, RECEIVER_NAME, RECEIVER_PHONE, RECEIVER_EMAIL, ORDER_DATE)
-	    VALUES (#{memberId}, #{productInfo, typeHandler=ezmarket.OrderProductTypeHandler}, #{totalAmount}, '처리 중', #{shippingAddress}, #{shippingMessage}, #{paymentMethod}, #{receiverName}, #{receiverPhone}, #{receiverEmail}, SYSDATE)
-	</insert>
-
-	<select id="getOrdersByMemberId" resultMap="orderDTOResultMap">
-   		SELECT * FROM orders WHERE MEMBER_ID = #{memberId} ORDER BY ORDER_ID DESC
-	</select>
-
-	<select id="getLastOrderByMemberId" resultMap="orderDTOResultMap" parameterType="int">
-   		SELECT * FROM orders WHERE MEMBER_ID = #{memberId} ORDER BY ORDER_ID DESC FETCH FIRST 1 ROW ONLY
-	</select>
-
-	<select id="getOrderByMemberId" resultMap="orderDTOResultMap">
-   		SELECT * FROM orders WHERE MEMBER_ID = #{memberId} AND ORDER_ID = #{orderId}
-	</select>
-	
 	<!-- Member Part -->
 	<select id="getOrderCountByStatus" resultType="int">
         select count(*) from orders where status = #{status}
     </select>
+
+    <insert id="insertOrder" parameterType="OrderDTO">
+        INSERT INTO orders (MEMBER_ID, PRODUCT_INFO, TOTAL_AMOUNT, STATUS, SHIPPING_ADDRESS, SHIPPING_MESSAGE, PAYMENT_METHOD, RECEIVER_NAME, RECEIVER_PHONE, RECEIVER_EMAIL, ORDER_DATE)
+        VALUES (#{memberId}, #{productInfo, typeHandler=ezmarket.OrderProductTypeHandler}, #{totalAmount}, '처리 중', #{shippingAddress}, #{shippingMessage}, #{paymentMethod}, #{receiverName}, #{receiverPhone}, #{receiverEmail}, SYSDATE)
+    </insert>
+
+    <select id="getOrdersByMemberId" resultMap="orderDTOResultMap">
+        SELECT * FROM orders WHERE MEMBER_ID = #{memberId} ORDER BY ORDER_ID DESC
+    </select>
+
+    <select id="getLastOrderByMemberId" resultMap="orderDTOResultMap" parameterType="int">
+        SELECT * FROM orders WHERE MEMBER_ID = #{memberId} ORDER BY ORDER_ID DESC FETCH FIRST 1 ROW ONLY
+    </select>
+
+    <select id="getOrderByMemberIdAndOrderId" resultMap="orderDTOResultMap">
+        SELECT * FROM orders WHERE MEMBER_ID = #{memberId} AND ORDER_ID = #{orderId}
+    </select>
+    
 </mapper>
