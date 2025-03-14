@@ -40,4 +40,14 @@ public class JWTUtil {
         return claims.getSubject(); 
     }
     
+    public static Integer validateAndGetMemberId(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(SECRET_KEY)  
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.get("member_id", Integer.class);
+    }
+    
 }

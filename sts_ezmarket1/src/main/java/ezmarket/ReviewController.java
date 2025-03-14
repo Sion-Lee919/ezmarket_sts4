@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.ezmarket.cookie.JWTUtil;
 
 @RestController
 public class ReviewController {
@@ -102,8 +105,10 @@ public class ReviewController {
 	
 	//Member Part
     @GetMapping("/getUserReviews")
-    public ResponseEntity<List<ReviewDTO>> getUserReviews() {
-        List<ReviewDTO> userReviews = reviewService.getUserReviews();
+    public ResponseEntity<List<ReviewDTO>> getUserReviews(@RequestHeader("Authorization") String token) {
+    	int member_id = JWTUtil.validateAndGetMemberId(token.replace("Bearer ", ""));
+    	
+        List<ReviewDTO> userReviews = reviewService.getUserReviews(member_id);
         return ResponseEntity.ok(userReviews);
     }
 	

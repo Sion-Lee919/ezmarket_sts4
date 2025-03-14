@@ -82,7 +82,7 @@
 	<!--  관리자 -->
 		<!-- 회원 목록 가져오기 -->
 		<select id="getAllUsersMember" resultType="memberdto">
-			select member_id, username, realname, nickname, email, phone, address, member_status, member_kick_comment, join_date, update_date from member
+			select member_id, userauthor, username, realname, nickname, email, phone, address, member_status, member_kick_comment, join_date, update_date from member
 		</select>
 		
 		<!-- 회원 강퇴 -->

@@ -36,8 +36,8 @@ public class ReviewMapperService implements ReviewService {
 	
 	//Member Part
 	@Override
-	public List<ReviewDTO> getUserReviews() {
-		List<ReviewDTO> userReviews = mapper.getUserAllReviews(); 
+	public List<ReviewDTO> getUserReviews(int member_id) {
+		List<ReviewDTO> userReviews = mapper.getUserAllReviews(member_id); 
 		return userReviews;
 	}
 

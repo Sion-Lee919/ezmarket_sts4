@@ -19,5 +19,5 @@ public interface ReviewMapper {
 	boolean updateReview(ReviewDTO dto);
 
 	//Member Part
-    List<ReviewDTO> getUserAllReviews();
+    List<ReviewDTO> getUserAllReviews(int member_id);
 }

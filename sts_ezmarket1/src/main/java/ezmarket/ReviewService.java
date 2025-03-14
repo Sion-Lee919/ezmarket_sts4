@@ -14,5 +14,5 @@ public interface ReviewService {
 	boolean updateReview(ReviewDTO dto);
 
 	//Member Part
-	List<ReviewDTO> getUserReviews();
+	List<ReviewDTO> getUserReviews(int member_id);
 }
