@@ -81,15 +81,7 @@ public class OrderMapperService {
             e.printStackTrace();
             throw e;
         }
-    }
-
-
-
-    public OrderDTO getLastOrderByMemberId(int memberId) {
-        try {
-            OrderDTO order = orderMapper.getLastOrderByMemberId(memberId);
-            System.out.println("조회된 주문 수: " + order);
-            
+    }  
 
     private void removeOrderedItemsFromCart(List<OrderProductDTO> orderedProducts, int memberId) {
         try {
