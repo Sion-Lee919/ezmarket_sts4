@@ -25,5 +25,11 @@ public class ChatMapperService implements ChatService {
 	public ArrayList<ChatDTO> getChatHistory(String channelId) {
 		return mapper.getChatHistory(channelId);
 	}
+	
+	//Member Part
+	@Override
+	public ArrayList<ChatDTO> getMyChat(int member_id) {
+		return mapper.getMyChat(member_id);
+	}
 
 }

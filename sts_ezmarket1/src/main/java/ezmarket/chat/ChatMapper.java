@@ -14,5 +14,7 @@ public interface ChatMapper {
 	ArrayList<ChatDTO> getMemberListInChatRoom(int product_id);
 
 	ArrayList<ChatDTO> getChatHistory(String channelId);
-
+	
+	//Member Part
+	ArrayList<ChatDTO> getMyChat(int member_id);
 }

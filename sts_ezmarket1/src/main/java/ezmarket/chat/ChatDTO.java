@@ -17,4 +17,7 @@ public class ChatDTO {
     
     private String writernickname; // from member 작성자 별명
     private String membernickname; // from member 구매자 별명
+    
+	String name; //from product
+	String image_url;
 }

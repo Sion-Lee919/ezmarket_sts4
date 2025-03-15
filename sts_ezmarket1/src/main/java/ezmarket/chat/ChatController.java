@@ -11,8 +11,11 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ezmarket.cookie.JWTUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,6 +50,14 @@ public class ChatController {
     	ArrayList<ChatDTO> chatHistory = chatservice.getChatHistory(channelId);
         return ResponseEntity.ok(chatHistory);
     }
-
+    
+    //Member Part
+    @GetMapping("/getMyChat")
+    public ResponseEntity<ArrayList<ChatDTO>> getMyChat(@RequestHeader("Authorization") String token) {
+    	int member_id = JWTUtil.validateAndGetMemberId(token.replace("Bearer ", ""));
+    	
+    	ArrayList<ChatDTO> myChat = chatservice.getMyChat(member_id);
+    	return ResponseEntity.ok(myChat);
+    }
     
 }
