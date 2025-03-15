@@ -174,7 +174,7 @@ public class OrderController {
     		counts.put("preparing", orderMapperService.getOrderCountByStatus("처리 중", member_id));
     		counts.put("shipping", orderMapperService.getOrderCountByStatus("배송 중", member_id));
     		counts.put("shipped", orderMapperService.getOrderCountByStatus("배송 완료", member_id));
-    		counts.put("return", orderMapperService.getOrderCountByStatus("반품 중", member_id));
+    		counts.put("return", orderMapperService.getOrderCountByStatus("반품중", member_id));
     		
     		return ResponseEntity.ok(counts);
     	}

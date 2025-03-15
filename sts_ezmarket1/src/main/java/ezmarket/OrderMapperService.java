@@ -188,7 +188,7 @@ public class OrderMapperService {
         counts.put("preparing", orderMapper.getOrderCountByStatus("처리 중", member_id));
         counts.put("shipping", orderMapper.getOrderCountByStatus("배송 중", member_id));
         counts.put("shipped", orderMapper.getOrderCountByStatus("배송 완료", member_id));
-        counts.put("return", orderMapper.getOrderCountByStatus("반품 중", member_id));
+        counts.put("return", orderMapper.getOrderCountByStatus("반품중", member_id));
         return counts;
     }
 }
