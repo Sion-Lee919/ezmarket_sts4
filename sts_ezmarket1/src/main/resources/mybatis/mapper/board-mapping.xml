@@ -32,9 +32,9 @@
   
   <insert id="registerItem" parameterType="boarddto">
     INSERT INTO product 
-    (product_id, brand_id, name, description, alcohol, volume, price, stock_quantity, created_at, update_date, product_ingredient, product_region, bigcategory, subcategory, image_url) 
+    (product_id, brand_id, name, description, alcohol, volume, price, stock_quantity, created_at, update_date, product_ingredient, product_region, bigcategory, subcategory, sweetness, sourness, carbonation, body, image_url) 
     VALUES 
-    (#{product_id}, #{brand_id}, #{name}, #{description}, #{alcohol}, #{volume}, #{price}, #{stock_quantity}, SYSDATE, SYSDATE, #{product_ingredient}, #{product_region}, #{bigcategory}, #{subcategory}, #{image_url})
+    (#{product_id}, #{brand_id}, #{name}, #{description}, #{alcohol}, #{volume}, #{price}, #{stock_quantity}, SYSDATE, SYSDATE, #{product_ingredient}, #{product_region}, #{bigcategory}, #{subcategory},#{sweetness}, #{sourness}, #{carbonation}, #{body}, #{image_url})
   </insert>
   
   <update id="updateItem" parameterType="boarddto">
@@ -51,6 +51,10 @@
 		product_region = #{product_region},
 		bigcategory = #{bigcategory},
 		subcategory = #{subcategory},
+		sweetness = #{sweetness},
+	    sourness = #{sourness},
+	    carbonation = #{carbonation},
+	    body = #{body},
 		image_url = #{image_url}
         where product_id = #{product_id}
     </update>
@@ -94,52 +98,80 @@
 		
 		WHERE 1=1
 
-<if test="searchKeyword != null and searchKeyword != ''">
-    AND (p.name LIKE '%' || #{searchKeyword} || '%' OR p.description LIKE '%' || #{searchKeyword} || '%')
-</if>
-<if test="bigcategory != null and bigcategory != ''">
-    AND p.bigcategory = #{bigcategory}
-</if>
-<if test="subcategories != null and subcategories.size() > 0">
-    <foreach item="sub" collection="subcategories" open="AND (" separator=" AND " close=")">
-        p.subcategory = #{sub}
-    </foreach>
-</if>
+	<if test="searchKeyword != null and searchKeyword != ''">
+	    AND (p.name LIKE '%' || #{searchKeyword} || '%' OR p.description LIKE '%' || #{searchKeyword} || '%')
+	</if>
+	<if test="bigcategory != null and bigcategory != ''">
+	    AND p.bigcategory = #{bigcategory}
+	</if>
+	<if test="subcategories != null and subcategories.size() > 0">
+	    <foreach item="sub" collection="subcategories" open="AND (" separator=" AND " close=")">
+	        p.subcategory = #{sub}
+	    </foreach>
+	</if>
+	
+	<if test="regions != null and regions.size() > 0">
+	    <foreach item="region" collection="regions" open="AND (" separator=" OR " close=")">
+	        p.product_region LIKE '%' || #{region} || '%'
+	    </foreach>
+	</if>
+	
+	<if test="newProduct != null and newProduct">
+	    AND p.created_at >= ADD_MONTHS(TRUNC(SYSDATE), -3)
+	</if>
 
-<if test="regions != null and regions.size() > 0">
-    <foreach item="region" collection="regions" open="AND (" separator=" OR " close=")">
-        p.product_region LIKE '%' || #{region} || '%'
-    </foreach>
-</if>
 
-<if test="newProduct != null and newProduct">
-    AND p.created_at >= ADD_MONTHS(TRUNC(SYSDATE), -3)
-</if>
+    <if test="sweetnesss != null and sweetnesss.size() > 0">
+        <foreach item="s" collection="sweetnesss" open="AND p.sweetness IN (" separator="," close=")">
+            #{s}
+        </foreach>
+    </if>
 
-<choose>
-    <when test="sortType == 'latest'">
-        ORDER BY p.created_at DESC
-    </when>
-    <when test="sortType == 'oldest'">
-        ORDER BY p.created_at ASC
-    </when>
-    <when test="sortType == 'lowPrice'">
-        ORDER BY p.price ASC
-    </when>
-    <when test="sortType == 'highPrice'">
-        ORDER BY p.price DESC
-    </when>
-    <when test="sortType == 'popular'">
-        ORDER BY popularity_score DESC
-    </when>
-    <otherwise>
-        ORDER BY p.created_at DESC
-    </otherwise>
-</choose>
+ 
+    <if test="sournesss != null and sournesss.size() > 0">
+        <foreach item="s" collection="sournesss" open="AND p.sourness IN (" separator="," close=")">
+            #{s}
+        </foreach>
+    </if>
 
-<if test="limit != null and offset != null">
-    OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
-</if>
+ 
+    <if test="carbonations != null and carbonations.size() > 0">
+        <foreach item="c" collection="carbonations" open="AND p.carbonation IN (" separator="," close=")">
+            #{c}
+        </foreach>
+    </if>
+
+
+    <if test="bodys != null and bodys.size() > 0">
+        <foreach item="b" collection="bodys" open="AND p.body IN (" separator="," close=")">
+            #{b}
+        </foreach>
+    </if>
+
+	<choose>
+	    <when test="sortType == 'latest'">
+	        ORDER BY p.created_at DESC
+	    </when>
+	    <when test="sortType == 'oldest'">
+	        ORDER BY p.created_at ASC
+	    </when>
+	    <when test="sortType == 'lowPrice'">
+	        ORDER BY p.price ASC
+	    </when>
+	    <when test="sortType == 'highPrice'">
+	        ORDER BY p.price DESC
+	    </when>
+	    <when test="sortType == 'popular'">
+	        ORDER BY popularity_score DESC
+	    </when>
+	    <otherwise>
+	        ORDER BY p.created_at DESC
+	    </otherwise>
+	</choose>
+	
+	<if test="limit != null and offset != null">
+	    OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+	</if>
 
 </select>
 
@@ -168,6 +200,33 @@
 
     <if test="newProduct != null and newProduct">
         AND created_at >= ADD_MONTHS(SYSDATE, -3)
+    </if>
+    
+    <if test="sweetnesss != null and sweetnesss.size() > 0">
+        <foreach item="s" collection="sweetnesss" open="AND sweetness IN (" separator="," close=")">
+            #{s}
+        </foreach>
+    </if>
+
+ 
+    <if test="sournesss != null and sournesss.size() > 0">
+        <foreach item="s" collection="sournesss" open="AND sourness IN (" separator="," close=")">
+            #{s}
+        </foreach>
+    </if>
+
+ 
+    <if test="carbonations != null and carbonations.size() > 0">
+        <foreach item="c" collection="carbonations" open="AND carbonation IN (" separator="," close=")">
+            #{c}
+        </foreach>
+    </if>
+
+
+    <if test="bodys != null and bodys.size() > 0">
+        <foreach item="b" collection="bodys" open="AND body IN (" separator="," close=")">
+            #{b}
+        </foreach>
     </if>
 </select>
 

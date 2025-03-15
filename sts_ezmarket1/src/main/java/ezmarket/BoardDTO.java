@@ -31,10 +31,19 @@ public class BoardDTO {
 	MultipartFile image;
 	int view_count;
 	String brandname;
+	int sweetness;
+    int sourness;
+    int carbonation;
+    int body;
 
 	String searchKeyword; 
     int offset;            
     int limit;
+    
+    List<Integer> sweetnesss;
+    List<Integer> sournesss;
+    List<Integer> carbonations;
+    List<Integer> bodys;
 	
 	List<String> subcategories;
     List<String> regions;
