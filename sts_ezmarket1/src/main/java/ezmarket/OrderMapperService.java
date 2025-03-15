@@ -195,16 +195,16 @@ public class OrderMapperService {
 }
 
     //Member Part
-    public int getOrderCountByStatus(String status) {
-        return orderMapper.getOrderCountByStatus(status);
+    public int getOrderCountByStatus(String status, int memberId) {
+        return orderMapper.getOrderCountByStatus(status, memberId);
     }
 
-    public Map<String, Integer> getOrderFlowCount() {
+    public Map<String, Integer> getOrderFlowCount(int member_id) {
         Map<String, Integer> counts = new HashMap<>();
-        counts.put("pay", orderMapper.getOrderCountByStatus("결제 완료"));
-        counts.put("preparing", orderMapper.getOrderCountByStatus("상품 준비중"));
-        counts.put("shipping", orderMapper.getOrderCountByStatus("배송중"));
-        counts.put("shipped", orderMapper.getOrderCountByStatus("배송 완료"));
+        counts.put("preparing", orderMapper.getOrderCountByStatus("처리 중", member_id));
+        counts.put("shipping", orderMapper.getOrderCountByStatus("배송 중", member_id));
+        counts.put("shipped", orderMapper.getOrderCountByStatus("배송 완료", member_id));
+        counts.put("return", orderMapper.getOrderCountByStatus("반품중", member_id));
         return counts;
     }
 }

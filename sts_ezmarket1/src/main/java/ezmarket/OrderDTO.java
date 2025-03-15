@@ -24,4 +24,6 @@ public class OrderDTO {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private Date orderDate;
 	private Long usedPoints;
+	
+	int member_id;
 }

@@ -31,7 +31,7 @@ public interface MemberService {
         
     //내정보
         //회원정보수정
-        void modify(String username, String password, String nickname, String address);
+        void modify(String username, String password, String nickname, String phone, String address);
         
         //회원 탈퇴
         void resign(String member_status);

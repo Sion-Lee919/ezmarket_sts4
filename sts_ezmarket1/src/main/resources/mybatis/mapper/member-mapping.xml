@@ -55,7 +55,7 @@
 	<!--  내정보 -->
 		<!-- 회원 정보 수정 -->
 		<update id="modifyInfo" parameterType="memberdto">
-			update member set password = #{password}, nickname = #{nickname}, address = #{address}, update_date = sysdate where username = #{username}
+			update member set password = #{password}, nickname = #{nickname}, phone = #{phone}, address = #{address}, update_date = sysdate where username = #{username}
 		</update>
 		
 		<!-- 회원 탈퇴 -->

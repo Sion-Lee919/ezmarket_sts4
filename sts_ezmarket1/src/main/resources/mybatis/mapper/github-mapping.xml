@@ -7,6 +7,10 @@
     <select id="countByGithubId" parameterType="string" resultType="int">
         SELECT COUNT(*) FROM member WHERE username = #{githubId}
     </select>
+    
+    <select id="getMemberId" resultType="int">
+    	select member_id from member where username = #{githubId}
+    </select>
 
     <insert id="saveUser" >
 	    INSERT INTO member (member_id, username, realname, password, email, nickname, phone, social)
