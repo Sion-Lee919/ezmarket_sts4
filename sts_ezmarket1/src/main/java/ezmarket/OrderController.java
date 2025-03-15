@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -165,6 +166,56 @@ public class OrderController {
         }
     }
     
+
+    @PostMapping("/return/{orderId}")
+    public ResponseEntity<?> requestReturn(HttpServletRequest request, @PathVariable int orderId) {
+        try {
+            String token = request.getHeader("Authorization");
+            System.out.println("반품 요청 토큰: " + token);
+
+            if (token != null && token.startsWith("Bearer")) {
+                token = token.substring(7);
+
+                String userId = JWTUtil.validateAndGetUserId(token);
+                if (userId != null) {
+                    System.out.println("반품 요청 받음. memberId: " + userId + ", orderId: " + orderId);
+                    
+                    MemberDTO mem = memberService.getMember(userId);
+                    System.out.println("회원 정보: " + mem);
+
+                    OrderDTO order = orderMapperService.getOrderByMemberIdAndOrderId(mem.getMember_id(), orderId);
+                    if (order == null) {
+                        return ResponseEntity.badRequest().body("해당 주문을 찾을 수 없습니다.");
+                    }
+                    
+                    orderMapperService.updateOrderStatus(orderId, "반품중");
+                    System.out.println("주문 상태가 반품중으로 업데이트되었습니다. orderId: " + orderId);
+                    
+                    Map<String, Object> response = new HashMap<>();
+                    response.put("result", "success");
+                    response.put("message", "반품 요청이 성공적으로 처리되었습니다.");
+                    return ResponseEntity.ok().body(response);
+                } else {
+                    Map<String, String> errorResponse = new HashMap<>();
+                    errorResponse.put("message", "토큰이 유효하지 않습니다.");
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                }
+            } else {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message", "Authorization 헤더 오류.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            }
+        } catch (Exception e) {
+            System.err.println("반품 처리 중 오류 발생: " + e.getMessage());
+            e.printStackTrace();
+            
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("result", "fail");
+            errorResponse.put("message", "반품 처리 중 오류가 발생했습니다: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
     //Member Part
     	@GetMapping("/orderFlowCount")
     	public ResponseEntity<Map<String, Integer>> orderFlowCount(@RequestHeader("Authorization") String token) {
@@ -178,4 +229,5 @@ public class OrderController {
     		
     		return ResponseEntity.ok(counts);
     	}
+
 }
