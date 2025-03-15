@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class ReviewDTO {
 	String review_id;
 	String product_id;
-	String member_id;
+	int member_id;
 	String comments;
 	String review_date;
 	String update_date;
@@ -21,4 +21,7 @@ public class ReviewDTO {
 	int rating;
 	
 	String nickname; //from member
+	
+	String name; //from product
+	String product_image_url;
 }

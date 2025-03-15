@@ -105,7 +105,7 @@ public class MemberController {
 	        	
 	            Cookie cookie = new Cookie("jwt_token", token);
 	            cookie.setPath("/"); 
-	            cookie.setMaxAge(60 * 60); 
+	            cookie.setMaxAge(60 * 60 * 24 * 3); 
 	            response.addCookie(cookie);
 
 	            Map<String, String> responseBody = new HashMap<>();

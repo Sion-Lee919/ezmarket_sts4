@@ -198,7 +198,11 @@ public class BoardController {
 	    @RequestParam(required = false) Boolean newProduct,
 	    @RequestParam(defaultValue = "latest") String sortType,
 	    @RequestParam(defaultValue = "1") int page,
-	    @RequestParam(defaultValue = "12") int limit
+	    @RequestParam(defaultValue = "12") int limit,
+	    @RequestParam(required = false) List<Integer> sweetnesss,
+	    @RequestParam(required = false) List<Integer> sournesss,
+	    @RequestParam(required = false) List<Integer> carbonations,
+	    @RequestParam(required = false) List<Integer> bodys
 	) {
 	    int offset = (page - 1) * limit;
 	        
@@ -212,6 +216,11 @@ public class BoardController {
 	    
 	    filterCriteria.setOffset(offset);
 	    filterCriteria.setLimit(limit);
+	    
+	    filterCriteria.setSweetnesss(sweetnesss);
+	    filterCriteria.setSournesss(sournesss);
+	    filterCriteria.setCarbonations(carbonations);
+	    filterCriteria.setBodys(bodys);
 
 	    List<BoardDTO> items = boardService.getFilteredItems(filterCriteria);
 	    int totalCount = boardService.getFilteredItemsCount(filterCriteria);

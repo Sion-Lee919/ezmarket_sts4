@@ -64,7 +64,6 @@ public class UserService {
                     picture = "https://ssl.pstatic.net/static/pwe/address/img_profile.png";
                 }
                 
-                System.out.println(username);
                 if (naverUserMapper.countByNaverId(username) > 0) {
                     logger.info("기존 사용자, 업데이트 진행");
                     int updatedRows = naverUserMapper.updateUser(username, email, realname, picture);

@@ -30,12 +30,19 @@
 	  <update id="updateReview" parameterType="reviewdto">
         update review
         set
-        comments = #{comments},
+        comments = #{comments}, 
         rating = #{rating},
 		image_url = #{image_url}
         where review_id = #{review_id}
     </update>
-
+	
+	<!-- Member Part -->
+	<select id="getUserAllReviews" resultType="reviewdto" parameterType="int">
+		select r.*, p.name, p.product_id, p.image_url as product_image_url
+		from review r
+		join product p on r.product_id = p.product_id
+		where member_id = #{member_id}
+	</select>
 </mapper>
 
 
