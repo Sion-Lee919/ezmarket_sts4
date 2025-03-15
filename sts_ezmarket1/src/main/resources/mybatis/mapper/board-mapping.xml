@@ -328,7 +328,7 @@
 
 <select id="getItemsByType" resultType="boarddto">
     SELECT * FROM (
-        -- 인기순 6개
+        -- 인기순 8개
         SELECT 'popular' AS category, 
             p.product_id, p.name, p.price, p.created_at, p.image_url, p.brand_id,
             COALESCE(v.view_count, 0) AS view_count, 
@@ -357,13 +357,13 @@
             GROUP BY r.product_id
         ) r ON p.product_id = r.product_id
         ORDER BY popularity_score DESC
-        FETCH FIRST 6 ROWS ONLY
+        FETCH FIRST 8 ROWS ONLY
     ) 
 
     UNION ALL
 
     SELECT * FROM (
-        -- 최신순 6개
+        -- 최신순 8개
         SELECT 'new' AS category, 
             p.product_id, p.name, p.price, p.created_at, p.image_url, p.brand_id, 
             0 AS view_count, 
@@ -372,13 +372,13 @@
             0 AS popularity_score  -- 인기순과 컬럼 개수 맞추기
         FROM product p
         ORDER BY p.created_at DESC
-        FETCH FIRST 6 ROWS ONLY
+        FETCH FIRST 8 ROWS ONLY
     )
 
     UNION ALL
 
     SELECT * FROM (
-        -- 랜덤 6개
+        -- 랜덤 8개
         SELECT 'random' AS category, 
             p.product_id, p.name, p.price, p.created_at, p.image_url, p.brand_id, 
             0 AS view_count, 
@@ -387,7 +387,7 @@
             0 AS popularity_score  -- 인기순과 컬럼 개수 맞추기
         FROM product p
         ORDER BY DBMS_RANDOM.VALUE
-        FETCH FIRST 6 ROWS ONLY
+        FETCH FIRST 8 ROWS ONLY
     )
 </select>
 
