@@ -68,6 +68,7 @@ public class OrderMapperService {
                 jdbcTemplate.update(updateSql, newPoints + awardPoints, newEzpay, memberId);
             }
 
+            System.out.println("DB에 저장될 OrderDTO: " + order);
             orderMapper.insertOrder(order);
             System.out.println("주문 저장 완료: " + order.getMemberId());
             
@@ -166,6 +167,19 @@ public class OrderMapperService {
             return orderMapper.getOrderByMemberIdAndOrderId(memberId, orderId);
         } catch (Exception e) {
             System.err.println("주문 상세 조회 중 오류 발생: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+    
+    @Transactional
+    public void updateOrderStatus(int orderId, String status) {
+        try {
+            System.out.println("주문 상태 업데이트 시작: orderId=" + orderId + ", 새 상태=" + status);
+            orderMapper.updateOrderStatus(orderId, status);
+            System.out.println("주문 상태 업데이트 완료");
+        } catch (Exception e) {
+            System.err.println("주문 상태 업데이트 중 오류 발생: " + e.getMessage());
             e.printStackTrace();
             throw e;
         }

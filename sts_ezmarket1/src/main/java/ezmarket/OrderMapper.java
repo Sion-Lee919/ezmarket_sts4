@@ -13,4 +13,6 @@ public interface OrderMapper {
     OrderDTO getLastOrderByMemberId(@Param("memberId") int memberId);
 
     OrderDTO getOrderByMemberIdAndOrderId(@Param("memberId") int memberId, @Param("orderId") int orderId);
+    
+    void updateOrderStatus(@Param("orderId") int orderId, @Param("status") String status);
 }
