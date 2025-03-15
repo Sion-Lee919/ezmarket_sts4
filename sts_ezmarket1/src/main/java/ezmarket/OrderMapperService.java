@@ -185,10 +185,10 @@ public class OrderMapperService {
 
     public Map<String, Integer> getOrderFlowCount(int member_id) {
         Map<String, Integer> counts = new HashMap<>();
-        counts.put("pay", orderMapper.getOrderCountByStatus("결제 완료", member_id));
-        counts.put("preparing", orderMapper.getOrderCountByStatus("상품 준비중", member_id));
-        counts.put("shipping", orderMapper.getOrderCountByStatus("배송중", member_id));
+        counts.put("preparing", orderMapper.getOrderCountByStatus("처리 중", member_id));
+        counts.put("shipping", orderMapper.getOrderCountByStatus("배송 중", member_id));
         counts.put("shipped", orderMapper.getOrderCountByStatus("배송 완료", member_id));
+        counts.put("return", orderMapper.getOrderCountByStatus("반품 중", member_id));
         return counts;
     }
 }

@@ -171,10 +171,10 @@ public class OrderController {
     		int member_id = JWTUtil.validateAndGetMemberId(token.replace("Bearer ", ""));
     		
     		Map<String, Integer> counts = new HashMap<>();
-    		counts.put("pay", orderMapperService.getOrderCountByStatus("결제 완료", member_id));
-    		counts.put("preparing", orderMapperService.getOrderCountByStatus("상품 준비중", member_id));
-    		counts.put("shipping", orderMapperService.getOrderCountByStatus("배송중", member_id));
+    		counts.put("preparing", orderMapperService.getOrderCountByStatus("처리 중", member_id));
+    		counts.put("shipping", orderMapperService.getOrderCountByStatus("배송 중", member_id));
     		counts.put("shipped", orderMapperService.getOrderCountByStatus("배송 완료", member_id));
+    		counts.put("return", orderMapperService.getOrderCountByStatus("반품 중", member_id));
     		
     		return ResponseEntity.ok(counts);
     	}
