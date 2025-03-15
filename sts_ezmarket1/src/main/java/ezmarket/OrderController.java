@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -166,12 +167,14 @@ public class OrderController {
     
     //Member Part
     	@GetMapping("/orderFlowCount")
-    	public ResponseEntity<Map<String, Integer>> orderFlowCount() {
+    	public ResponseEntity<Map<String, Integer>> orderFlowCount(@RequestHeader("Authorization") String token) {
+    		int member_id = JWTUtil.validateAndGetMemberId(token.replace("Bearer ", ""));
+    		
     		Map<String, Integer> counts = new HashMap<>();
-    		counts.put("pay", orderMapperService.getOrderCountByStatus("결제 완료"));
-    		counts.put("preparing", orderMapperService.getOrderCountByStatus("상품 준비중"));
-    		counts.put("shipping", orderMapperService.getOrderCountByStatus("배송중"));
-    		counts.put("shipped", orderMapperService.getOrderCountByStatus("배송 완료"));
+    		counts.put("pay", orderMapperService.getOrderCountByStatus("결제 완료", member_id));
+    		counts.put("preparing", orderMapperService.getOrderCountByStatus("상품 준비중", member_id));
+    		counts.put("shipping", orderMapperService.getOrderCountByStatus("배송중", member_id));
+    		counts.put("shipped", orderMapperService.getOrderCountByStatus("배송 완료", member_id));
     		
     		return ResponseEntity.ok(counts);
     	}
