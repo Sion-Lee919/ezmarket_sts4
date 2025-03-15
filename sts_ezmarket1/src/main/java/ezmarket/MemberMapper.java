@@ -29,7 +29,7 @@ public interface MemberMapper {
         
     //내정보
         //회원정보수정
-        void modifyInfo(String username, String password, String nickname, String address);
+        void modifyInfo(String username, String password, String nickname, String phone, String address);
         
         //회원 탈퇴
         void resignMember(String member_status);

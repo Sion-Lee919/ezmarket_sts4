@@ -87,12 +87,10 @@ public class MemberController {
 	    public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO, HttpServletResponse response) {
 	        MemberDTO dto = memberService.getMember(memberDTO.getUsername());
 	        
-	        //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	        
 
-	        //if (dto != null && passwordEncoder.matches(memberDTO.getPassword(), dto.getPassword())) {
-	        if (dto != null && dto.getPassword().equals(memberDTO.getPassword())) {
-
+	        if (dto != null && passwordEncoder.matches(memberDTO.getPassword(), dto.getPassword())) {
 	        	
 	        	//회원 탈퇴 -> 로그인 불가
 	        	if(!"정상".equals(dto.getMember_status())) {
@@ -179,7 +177,10 @@ public class MemberController {
             String username = requestBody.get("username");
             String newPassword = requestBody.get("newPassword");
             
-            boolean isUpdated = memberService.resetPw(username, newPassword);
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashedPassword = passwordEncoder.encode(newPassword);
+            
+            boolean isUpdated = memberService.resetPw(username, hashedPassword);
             
             if (isUpdated) {
                 Map<String, String> responseBody = new HashMap<>();
@@ -221,12 +222,17 @@ public class MemberController {
 		@PostMapping("/modify")
 		public ResponseEntity<?> modify(@RequestBody MemberDTO memberDTO, HttpServletRequest request) {
 			String token = request.getHeader("Authorization");
+			
 		    if (token != null && token.startsWith("Bearer")) {
 		        token = token.substring(7);
 		        String username = JWTUtil.validateAndGetUserId(token);
 
 		        if (username != null && memberDTO.getUsername().equals(username)) {
-		            memberService.modify(memberDTO.getUsername(), memberDTO.getPassword(), memberDTO.getNickname(), memberDTO.getAddress());
+		        	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		            String hashedPassword = passwordEncoder.encode(memberDTO.getPassword());
+		            memberDTO.setPassword(hashedPassword);
+		                  
+		            memberService.modify(memberDTO.getUsername(), memberDTO.getPassword(), memberDTO.getNickname(), memberDTO.getPhone(), memberDTO.getAddress());
 		            return ResponseEntity.ok("회원 정보가 수정되었습니다.");
 		        } else {
 		            Map<String, String> errorResponse = new HashMap<>();
@@ -238,6 +244,7 @@ public class MemberController {
 		        errorResponse.put("message", "Authorization 헤더 오류.");
 		        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
 		    }
+		    
 		}
 		
 		//회원 탈퇴 요청

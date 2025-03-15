@@ -70,8 +70,8 @@ public class MemberMapperService implements MemberService {
     //내정보
         //회원정보수정
         @Override
-        public void modify(String username, String password, String nickname, String address) {
-        	mapper.modifyInfo(username, password, nickname, address);
+        public void modify(String username, String password, String nickname, String phone, String address) {
+        	mapper.modifyInfo(username, password, nickname, phone, address);
         }
         
         //회원 탈퇴
