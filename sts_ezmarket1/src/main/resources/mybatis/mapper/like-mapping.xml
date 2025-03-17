@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="ezmarket.like.LikeMapper">
+
+  <insert id="like" parameterType="likedto">
+	insert into likes (member_id, product_id, like_date) 
+	values (#{member_id}, #{product_id}, sysdate)
+  </insert>
+  
+  <delete id="unlike" parameterType="likedto">
+	delete from likes where member_id = #{member_id} and product_id = #{product_id}
+  </delete>
+  
+  <select id="getLike" resultType="likedto">
+  	select l.*, p.name, p.price, p.image_url, p.alcohol, p.volume, p.description
+  	from product p
+    join likes l ON p.product_id = l.product_id
+    where l.member_id = #{member_id}
+   </select>
+   
+   <select id="checkLike" resultType="int">
+    select count(*) from likes where member_id = #{member_id} and product_id = #{product_id}
+   </select>
+  
+</mapper>

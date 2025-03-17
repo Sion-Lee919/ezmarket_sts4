@@ -12,6 +12,7 @@
 		<typeAlias type="ezmarket.QnaDTO" alias="qnadto"/>
 		<typeAlias type="ezmarket.ReviewDTO" alias="reviewdto"/>
 		<typeAlias type="ezmarket.chat.ChatDTO" alias="chatdto"/>
+		<typeAlias type="ezmarket.like.LikeDTO" alias="likedto"/>
 	</typeAliases>
 </configuration>
 
