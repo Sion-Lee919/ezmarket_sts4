@@ -192,7 +192,7 @@ public class OrderMapperService {
             throw e;
         }
     }
-}
+
 
     //Member Part
     public int getOrderCountByStatus(String status, int memberId) {
@@ -206,6 +206,16 @@ public class OrderMapperService {
         counts.put("shipped", orderMapper.getOrderCountByStatus("배송 완료", member_id));
         counts.put("return", orderMapper.getOrderCountByStatus("반품중", member_id));
         return counts;
+    }
+    
+    public void calculateRequest(int request_money, int brand_id) {
+    	orderMapper.calculateRequest(request_money, brand_id);
+    }
+    public void calculateRefuse(int request_money, int brand_id) {
+    	orderMapper.calculateRefuse(request_money, brand_id);
+    }
+    public void calculateSuccess(int request_money, int brand_id) {
+    	orderMapper.calculateSuccess(request_money, brand_id);
     }
 }
 

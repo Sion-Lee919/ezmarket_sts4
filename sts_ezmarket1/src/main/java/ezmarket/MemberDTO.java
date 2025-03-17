@@ -38,4 +38,7 @@ public class MemberDTO {
 	String brand_refusal_comment;
 	String brand_join_date;
 	String brand_update_date;
+	int calculated_money;
+	int calculating_money;
+	int calculate_possible;
 }

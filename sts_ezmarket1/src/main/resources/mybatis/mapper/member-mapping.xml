@@ -97,7 +97,7 @@
 		
 		<!-- 판매자 목록 가져오기 -->
 		<select id="getAllBrandsMember" resultType="memberdto">
-			select b.brand_id, b.brandname, b.brandlogo_url, b.brand_number, b.brandlicense_url, b.brand_status, b.brand_refusal_comment, b.brand_join_date, b.brand_update_date, m.username, m.realname
+			select b.brand_id, b.brandname, b.brandlogo_url, b.brand_number, b.brandlicense_url, b.brand_status, b.brand_refusal_comment, b.brand_join_date, b.brand_update_date, b.calculate_possible, b.calculating_money, b.calculated_money, m.username, m.realname
 			from brand b 
 			join member m on b.member_id = m.member_id
 		</select>

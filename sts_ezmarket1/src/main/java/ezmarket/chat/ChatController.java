@@ -31,6 +31,10 @@ public class ChatController {
 
     @MessageMapping("/chat")
     public void sendMessage(ChatDTO chatDto, SimpMessageHeaderAccessor accessor) {
+    	System.out.println("채팅 내용: " + chatDto.getChat());  // 채팅 메시지
+        System.out.println("채팅 생성 시간: " + chatDto.getCreated_at());  // 생성 시간
+        System.out.println("채널 ID: " + chatDto.getChannel_id());  // 채널 ID
+        
     	boolean result = chatservice.registerChat(chatDto);
     	String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         chatDto.setCreated_at(currentTime);  // ChatDTO에 현재 시간을 설정

@@ -42,10 +42,21 @@
 	<select id="getOrderCountByStatus" resultType="int">
         select count(*) from orders where status = #{status} and member_id = #{member_id}
     </select>
+    
+    <update id="calculateRequest">
+    	UPDATE orders SET calculate_possible -= request_money, calculating_money += request_money where brand_id = #{brand_id}
+    </update>
+    
+    <update id="calculateRefuse">
+    	UPDATE orders SET calculate_possible += request_money, calculating_money -= request_money where brand_id = #{brand_id}
+    </update>
+    
+    <update id="calculateSuccess">
+    	UPDATE orders SET calculated_money += request_money, calculating_money -= request_money where brand_id = #{brand_id}
+    </update>
 
     <update id="updateOrderStatus">
         UPDATE orders SET STATUS = #{status} WHERE ORDER_ID = #{orderId}
     </update>
-    
 
 </mapper>

@@ -33,7 +33,7 @@
   	</select>
   	
   	<select id="getMyChat" resultType="chatdto" parameterType="int">
-  	  select c.*, p.image_url, p.name
+  	  select c.*, p.image_url, p.name, p.brand_id
   	  from chat c 
   	  join product p on c.product_id = p.product_id 
   	  where c.writer_id = #{member_id}
