@@ -26,4 +26,5 @@ public class OrderDTO {
 	private Long usedPoints;
 	
 	int member_id;
+	int brand_id;
 }
