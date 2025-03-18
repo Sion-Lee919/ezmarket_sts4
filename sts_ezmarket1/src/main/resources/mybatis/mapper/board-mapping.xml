@@ -150,10 +150,10 @@
 
 	<choose>
 	    <when test="sortType == 'latest'">
-	        ORDER BY p.created_at DESC
+	        ORDER BY p.created_at ASC
 	    </when>
 	    <when test="sortType == 'oldest'">
-	        ORDER BY p.created_at ASC
+	        ORDER BY p.created_at DESC
 	    </when>
 	    <when test="sortType == 'lowPrice'">
 	        ORDER BY p.price ASC
@@ -273,10 +273,10 @@
     
     <choose>
         <when test="sortType == 'latest'">
-            ORDER BY created_at DESC
+            ORDER BY created_at ASC
         </when>
         <when test="sortType == 'oldest'">
-            ORDER BY created_at ASC
+            ORDER BY created_at DESC
         </when>
         <when test="sortType == 'lowPrice'">
             ORDER BY price ASC
@@ -371,7 +371,7 @@
             0 AS review_count, 
             0 AS popularity_score  -- 인기순과 컬럼 개수 맞추기
         FROM product p
-        ORDER BY p.created_at DESC
+        ORDER BY p.created_at ASC
         FETCH FIRST 8 ROWS ONLY
     )
 
