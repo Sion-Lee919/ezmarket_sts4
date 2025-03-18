@@ -20,4 +20,5 @@ public class ChatDTO {
     
 	String name; //from product
 	String image_url;
+	int brand_id;
 }

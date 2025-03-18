@@ -24,7 +24,7 @@
   </select>
   
   <select id="getBrandItems" resultType="boarddto" parameterType="int">
-  select p.*, b.brandname
+  select p.*, b.brandname, b.calculated_money, b.calculating_money, b.calculate_possible
   from product p 
   join brand b on b.brand_id = p.brand_id
   where p.brand_id=#{brand_id}

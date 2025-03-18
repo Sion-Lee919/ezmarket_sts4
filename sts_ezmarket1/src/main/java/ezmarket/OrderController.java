@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ezmarket.cookie.JWTUtil;
@@ -229,5 +230,23 @@ public class OrderController {
     		
     		return ResponseEntity.ok(counts);
     	}
+    	
+    	@PostMapping("/calculateRequest")
+        public String calculateRequest(@RequestParam int request_money, @RequestParam int brand_id) {
+            orderMapperService.calculateRequest(request_money, brand_id);
+            return "Calculation request processed successfully.";
+        }
+
+        @PostMapping("/calculateRefuse")
+        public String calculateRefuse(@RequestParam int request_money, @RequestParam int brand_id) {
+            orderMapperService.calculateRefuse(request_money, brand_id);
+            return "Calculation refuse processed successfully.";
+        }
+
+        @PostMapping("/calculateSuccess")
+        public String calculateSuccess(@RequestParam int request_money, @RequestParam int brand_id) {
+            orderMapperService.calculateSuccess(request_money, brand_id);
+            return "Calculation success processed successfully.";
+        }
 
 }

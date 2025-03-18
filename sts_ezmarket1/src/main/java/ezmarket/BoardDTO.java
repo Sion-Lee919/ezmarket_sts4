@@ -51,4 +51,8 @@ public class BoardDTO {
     String sortType;
     
     String category;
+    
+    int calculated_money;
+    int calculating_money;
+    int calculate_possible;
 }
