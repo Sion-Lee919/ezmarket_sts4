@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface KakaoUserMapper {
 	int getMemberId(String kakaoId);
+	String getPhone(String kakaoId);
     int countByKakaoId(@Param("kakaoId") String kakaoId);
     int saveKakaoUser(@Param("kakaoId") String kakaoId, @Param("email") String email,
                   @Param("name") String name, @Param("picture") String profile_image);

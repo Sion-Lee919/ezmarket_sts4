@@ -38,6 +38,7 @@ public class UserService {
             String realname;
             String picture;
             Integer memberId = null;
+            String phone = null;
             
             if ("google".equals(provider)) {
                username = oauth2User.getAttribute("sub");
@@ -50,11 +51,13 @@ public class UserService {
                     int updatedRows = userMapper.updateUser(username, email, realname, picture);
                     logger.info("업데이트된 행 수: {}", updatedRows);
                     memberId = userMapper.getMemberId(username);
+                    phone = userMapper.getPhone(username);
                 } else {
                     logger.info(" 신규 사용자, 데이터 삽입");
                     int insertedRows = userMapper.saveUser(username, email, realname, picture);
                     logger.info("삽입된 행 수: {}", insertedRows);
                     memberId = userMapper.getMemberId(username);
+                    phone = userMapper.getPhone(username);
                 }
             } else if ("naver".equals(provider)) {
                Map<String, Object> response = (Map<String, Object>) oauth2User.getAttribute("response");
@@ -72,11 +75,13 @@ public class UserService {
                     int updatedRows = naverUserMapper.updateUser(username, email, realname, picture);
                     logger.info("업데이트된 행 수: {}", updatedRows);
                     memberId = userMapper.getMemberId(username);
+                    phone = userMapper.getPhone(username);
                 } else {
                     logger.info(" 신규 사용자, 데이터 삽입");
                     int insertedRows = naverUserMapper.saveUser(username, email, realname, picture);
                     logger.info("삽입된 행 수: {}", insertedRows);
                     memberId = userMapper.getMemberId(username);
+                    phone = userMapper.getPhone(username);
                 }
             } else if ("kakao".equals(provider)){
                Map<String, Object> kakaoAccount = (Map<String, Object>) oauth2User.getAttribute("kakao_account");
@@ -91,10 +96,12 @@ public class UserService {
                     logger.info("기존 Kakao 사용자, 업데이트 진행");
                     kakaoUserMapper.updateKakaoUser(username, email, realname, picture);
                     memberId = userMapper.getMemberId(username);
+                    phone = userMapper.getPhone(username);
                 } else {
                     logger.info("신규 Kakao 사용자, 데이터 삽입");
                     kakaoUserMapper.saveKakaoUser(username, email, realname, picture);
                     memberId = userMapper.getMemberId(username);
+                    phone = userMapper.getPhone(username);
                 }
             } else if ("github".equals(provider)){
 
@@ -116,11 +123,13 @@ public class UserService {
                     int updatedRows = githubUserMapper.updateUser(username, email, realname, picture);
                     logger.info("업데이트된 행 수: {}", updatedRows);
                     memberId = userMapper.getMemberId(username);
+                    phone = userMapper.getPhone(username);
                 } else {
                     logger.info(" 신규 사용자, 데이터 삽입");
                     int insertedRows = githubUserMapper.saveUser(username, email, realname, picture);
                     logger.info("삽입된 행 수: {}", insertedRows);
                     memberId = userMapper.getMemberId(username);
+                    phone = userMapper.getPhone(username);
                 }
 
             } else {
@@ -134,6 +143,7 @@ public class UserService {
             memberDTO.setEmail(email);
             memberDTO.setRealname(realname);
             memberDTO.setMember_id(memberId);
+            memberDTO.setPhone(phone);
             //memberDTO.setPicture(picture);
             
             String token = JWTUtil.generateToken(memberDTO);

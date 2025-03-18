@@ -24,6 +24,7 @@ public class JWTUtil {
                 .setSubject(dto.getUsername()) 
                 .claim("member_id", dto.getMember_id())
                 .claim("brand_id", dto.getBrand_id())
+                .claim("phone", dto.getPhone())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS512)  
